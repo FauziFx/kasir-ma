@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script>
+      function getCookie(name) {
+        var v = document.cookie.match("(^|;) ?" + name + "=([^;]*)(;|$)");
+        return v ? v[2] : null;
+      }
+      if (!getCookie("user-token")) {
+        window.location.href = "login.html";
+      }
+    </script>
+    <meta charset="UTF-8" />
+    <link
+      rel="shortcut icon"
+      href="assets/img/icon192x192.png"
+      type="image/x-icon"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kasir MA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/sweetalert2.min.css" />
+  </head>
+
+  <body>
+    <div class="progress progress-striped rounded-0 active">
+      <div class="progress-bar progress-bar-success" style="width: 0%"></div>
+    </div>
+    <!-- <?php include("./component/FixedSidebar.php") ?> -->
+    <!-- Fixed sidebar -->
+    <div
+      class="d-flex flex-column flex-shrink-0 bg-body-tertiary sidenav"
+      style="width: 4.5rem"
+    >
+      <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
+        <li class="nav-item">
+          <a
+            href="index.html"
+            class="btn btn-outline-dark active py-3 border-bottom ps-1 rounded-0 fs-4"
+            aria-current="page"
+            title="Home"
+            data-bs-toggle="tooltip"
+            data-bs-placement="right"
+          >
+            <i class="bi-grid"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            href="nota.html"
+            class="btn btn-outline-dark border-0 py-3 border-bottom ps-1 rounded-0 fs-4"
+            aria-current="page"
+            title="Home"
+            data-bs-toggle="tooltip"
+            data-bs-placement="right"
+          >
+            <i class="bi-receipt"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            href="laporan.html"
+            class="btn btn-outline-dark border-0 py-3 border-bottom ps-1 rounded-0 fs-4"
+            aria-current="page"
+            title="Home"
+            data-bs-toggle="tooltip"
+            data-bs-placement="right"
+          >
+            <i class="bi-printer"></i>
+          </a>
+        </li>
+      </ul>
+      <div>
+        <a
+          id="btn-menu-mobile"
+          class="nav-link px-4 py-2 fs-3"
+          data-bs-toggle="offcanvas"
+          href="#offcanvasExample"
+          role="button"
+          aria-controls="offcanvasExample"
+        >
+          <i class="bi-justify"></i>
+        </a>
+      </div>
+    </div>
+    <!-- ./Fixed sidebar -->
+    <div class="container-fluid vh-100">
+      <div class="main row h-100">
+        <div class="col col-md-7 h-100 px-0">
+          <div class="card h-100">
+            <div class="input-group">
+              <input
+                type="text"
+                id="search_box"
+                class="form-control rounded-bottom-0"
+                placeholder="Cari..."
+                aria-label="Recipient's username"
+                aria-describedby="basic-addon2"
+              />
+              <span class="input-group-text rounded-bottom-0" id="basic-addon2">
+                <i class="bi-search"></i>
+              </span>
+            </div>
+            <div class="btn-group overflow-x-scroll rounded-0">
+              <button
+                type="button"
+                data-id="semua"
+                data-nama="Semua Produk"
+                class="btn-kategori btn btn-outline-dark rounded-0 active"
+                id="all-kategori"
+                data-bs-toggle="button"
+              >
+                Semua
+              </button>
+              <button
+                type="button"
+                data-id="0"
+                data-nama="Uncategorized"
+                class="btn-kategori btn btn-outline-dark rounded-0"
+                data-bs-toggle="button"
+              >
+                Uncategorized
+              </button>
+            </div>
+            <span class="text-center fw-semibold mt-1" id="title-produk"></span>
+            <div class="overflow-y-auto px-2 pb-2">
+              <table class="table table-hover">
+                <tbody id="tabel-produk"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- <?php include("./component/RightPanel.php") ?> -->
+        <!-- Right panel / cart / keranjang -->
+        <div class="col col-md-5 h-100">
+          <div class="card h-100">
+            <div class="card-header p-0">
+              <div
+                class="btn-group d-flex"
+                role="group"
+                aria-label="Basic example"
+                style="height: 60px"
+              >
+                <button
+                  type="button"
+                  class="btn w-25 btn-outline-secondary rounded-bottom-0"
+                  id="btn-list-bill"
+                >
+                  <i class="bi-receipt d-block fs-5" style="height: 16px"></i>
+                  <small clas>Daftar Bill</small>
+                </button>
+                <button
+                  type="button"
+                  id="nama-pelanggan"
+                  class="btn w-100 btn-outline-secondary fs-5 rounded-bottom-0"
+                >
+                  + Tambah Pelanggan
+                </button>
+              </div>
+            </div>
+            <div class="card-header p-0">
+              <div class="btn-group d-flex">
+                <button
+                  type="button"
+                  id="jenis-transaksi"
+                  class="btn btn-default dropdown-toggle w-100 rounded-top-0 py-1"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Umum
+                </button>
+                <ul class="dropdown-menu w-100">
+                  <li>
+                    <a class="dropdown-item" href="#" data-jenis="umum">Umum</a>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#" data-jenis="magrup"
+                      >Ma Grup</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="card-body overflow-auto px-2">
+              <table class="table table-sm table-hover" style="font-size: 14px">
+                <tbody id="cart-active"></tbody>
+              </table>
+            </div>
+            <div class="card-footer p-0 bg-dark-subtle">
+              <div
+                class="btn-group d-flex"
+                role="group"
+                aria-label="Basic example"
+                style="height: 50px"
+              >
+                <button
+                  type="button"
+                  class="btn w-25 btn-outline-dark rounded-0 border-bottom-0"
+                  id="btn-simpan"
+                >
+                  <i class="bi-floppy"></i>
+                  Simpan
+                </button>
+                <button
+                  type="button"
+                  class="btn w-25 btn-outline-dark rounded-0 border-bottom-0"
+                  id="btn-print-bill"
+                >
+                  <i class="bi-printer"></i>
+                  Cetak
+                </button>
+              </div>
+            </div>
+            <div class="card-footer p-0">
+              <div
+                class="btn-group d-flex"
+                role="group"
+                aria-label="Basic example"
+                style="height: 70px"
+              >
+                <button
+                  type="button"
+                  class="btn w-25 btn-outline-dark rounded-top-0"
+                  id="btn-modal-pisah-bill"
+                >
+                  <i
+                    class="bi-receipt-cutoff d-block fs-5"
+                    style="height: 16px"
+                  ></i>
+                  <small clas>Pisah Bill</small>
+                </button>
+                <button
+                  type="button"
+                  class="btn w-100 btn-dark fs-4 rounded-top-0"
+                  id="btn-bayar"
+                >
+                  Bayar : <b id="bayar"></b>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ./Right panel / cart / keranjang -->
+      </div>
+    </div>
+
+    <?php include("./component/Sidebar.php") ?>
+    <!-- Sidebar off canvas -->
+    <!-- Sidebar -->
+    <div
+      class="sidebar-mobile offcanvas offcanvas-start"
+      tabindex="-1"
+      id="offcanvasExample"
+      style="width: 280px"
+      aria-labelledby="offcanvasExampleLabel"
+    >
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">KASIR MA</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="offcanvas-body sidebar-body">
+        <div class="img-profile">
+          <div class="avatar-profile">
+            <img
+              class="rounded-circle"
+              src="https://picsum.photos/128"
+              width="64px"
+            />
+          </div>
+          <p class="mb-0 mt-3">Username</p>
+        </div>
+        <nav class="mt-3">
+          <ul class="nav nav-pills flex-column">
+            <li class="nav-item">
+              <button
+                type="button"
+                class="link-dark p-3 w-100 text-start btn btn-outline-secondary"
+                id="btn-logout"
+              >
+                <i class="bi-box-arrow-right me-2"></i>Logout
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <!-- ./Sidebar off canvas -->
+
+    <!-- Modal Click Produk Varian -->
+    <!-- <?php include("./component/ModalVarian.php") ?> -->
+    <div id="ModalVarian"></div>
+
+    <!-- Modal tambah pelanggan -->
+    <!-- <?php include("./component/ModalPelanggan.php") ?> -->
+    <div id="ModalPelanggan"></div>
+
+    <!-- Modal Bayar -->
+    <!-- <?php include("./component/ModalBayar.php") ?> -->
+    <div id="ModalBayar"></div>
+
+    <!-- Modal transaksi berhasil -->
+    <!-- <?php include("./component/ModalTransaksiBerhasil.php") ?> -->
+    <div id="ModalTransaksiBerhasil"></div>
+
+    <!-- Modal Simpan Bill -->
+    <!-- <?php include("./component/ModalSimpanBill.php") ?> -->
+    <div id="ModalSimpanBill"></div>
+
+    <!-- Modal List Bill -->
+    <!-- <?php include("./component/ModalListBill.php") ?> -->
+    <div id="ModalListBill"></div>
+
+    <!-- Modal alert -->
+    <!-- <?php include("./component/ModalAlert.php") ?> -->
+    <div id="ModalAlert"></div>
+
+    <!-- Modal Pisah Bill -->
+    <!-- <?php include("./component/ModalPisahBill.php") ?> -->
+    <div id="ModalPisahBill"></div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/sweetalert2.all.min.js"></script>
+    <script>
+      $("#ModalVarian").load("component/ModalVarian.html");
+      $("#ModalPelanggan").load("component/ModalPelanggan.html");
+      $("#ModalBayar").load("component/ModalBayar.html");
+      $("#ModalTransaksiBerhasil").load(
+        "component/ModalTransaksiBerhasil.html"
+      );
+      $("#ModalSimpanBill").load("component/ModalSimpanBill.html");
+      $("#ModalListBill").load("component/ModalListBill.html");
+      $("#ModalAlert").load("component/ModalAlert.html");
+      $("#ModalPisahBill").load("component/ModalPisahBill.html");
+    </script>
+    <script src="assets/js/js.cookie.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/moment.min.js"></script>
+    <script src="assets/js/moment-with-locales.min.js"></script>
+    <script src="assets/js/moment-timezone-with-data.js"></script>
+    <script src="assets/js/index.js"></script>
+    <script src="assets/js/AjaxProduk.js"></script>
+    <script src="assets/js/AjaxCart.js"></script>
+    <script src="assets/js/AjaxBill.js"></script>
+  </body>
+</html>

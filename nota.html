@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script>
+      function getCookie(name) {
+        var v = document.cookie.match("(^|;) ?" + name + "=([^;]*)(;|$)");
+        return v ? v[2] : null;
+      }
+      if (!getCookie("user-token")) {
+        window.location.href = "login.html";
+      }
+    </script>
+    <meta charset="UTF-8" />
+    <link
+      rel="shortcut icon"
+      href="assets/img/icon192x192.png"
+      type="image/x-icon"
+    />
+    <link rel="manifest" href="web.webmanifest" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kasir MA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/sweetalert2.min.css" />
+  </head>
+
+  <body>
+    <div class="progress progress-striped rounded-0 active">
+      <div class="progress-bar progress-bar-success" style="width: 0%"></div>
+    </div>
+    <!-- <?php include("./component/FixedSidebar.php") ?> -->
+    <!-- Fixed sidebar -->
+    <div
+      class="d-flex flex-column flex-shrink-0 bg-body-tertiary sidenav"
+      style="width: 4.5rem"
+    >
+      <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
+        <li class="nav-item">
+          <a
+            href="index.html"
+            class="btn btn-outline-dark border-0 py-3 border-bottom ps-1 rounded-0 fs-4"
+            aria-current="page"
+            title="Home"
+            data-bs-toggle="tooltip"
+            data-bs-placement="right"
+          >
+            <i class="bi-grid"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            href="nota.html"
+            class="btn btn-outline-dark active border-0 py-3 border-bottom ps-1 rounded-0 fs-4"
+            aria-current="page"
+            title="Home"
+            data-bs-toggle="tooltip"
+            data-bs-placement="right"
+          >
+            <i class="bi-receipt"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            href="laporan.html"
+            class="btn btn-outline-dark border-0 py-3 border-bottom ps-1 rounded-0 fs-4"
+            aria-current="page"
+            title="Home"
+            data-bs-toggle="tooltip"
+            data-bs-placement="right"
+          >
+            <i class="bi-printer"></i>
+          </a>
+        </li>
+      </ul>
+      <div>
+        <a
+          id="btn-menu-mobile"
+          class="nav-link px-4 py-2 fs-3"
+          data-bs-toggle="offcanvas"
+          href="#offcanvasExample"
+          role="button"
+          aria-controls="offcanvasExample"
+        >
+          <i class="bi-justify"></i>
+        </a>
+      </div>
+    </div>
+    <!-- ./Fixed sidebar -->
+    <div class="container-fluid vh-100">
+      <div class="main row h-100">
+        <div class="col col-md-5 h-100 px-0">
+          <div class="card h-100">
+            <h4 class="text-center mt-2">Transaksi</h4>
+            <hr style="margin: 0" />
+            <div class="overflow-y-auto">
+              <table class="table table-hover" id="list"></table>
+            </div>
+          </div>
+        </div>
+        <div class="col col-md-7 h-100">
+          <div class="card h-100 p-3 overflow-y-scroll">
+            <div id="detail-transaksi">
+              <div class="text-center mt-2 mb-3">
+                <button class="btn btn-dark" id="btn-print-nota">
+                  <i class="bi-printer"></i> Print Nota
+                </button>
+              </div>
+
+              <span class="ps-3 fw-semibold">Detail</span>
+              <hr style="margin: 0 0 0.5em 0" />
+              <table class="table table-sm">
+                <tbody>
+                  <tr>
+                    <td
+                      class="align-middle text-center"
+                      id="detail-icon-metode_pembayaran"
+                    ></td>
+                    <td class="align-middle">Metode Pembayaran</td>
+                    <td
+                      class="text-end align-middle"
+                      id="detail-metode_pembayaran"
+                    ></td>
+                  </tr>
+                  <tr>
+                    <td class="align-middle text-center">
+                      <i class="bi-receipt fs-4 text-secondary"></i>
+                    </td>
+                    <td class="align-middle">No Nota</td>
+                    <td class="text-end align-middle" id="detail-no_nota"></td>
+                  </tr>
+                  <tr>
+                    <td class="align-middle text-center">
+                      <i class="bi-person fs-4 text-secondary"></i>
+                    </td>
+                    <td class="align-middle">Nama</td>
+                    <td
+                      class="text-end align-middle"
+                      id="detail-nama_pelanggan"
+                    ></td>
+                  </tr>
+                  <tr>
+                    <td class="align-middle text-center">
+                      <i class="bi-clock fs-4 text-secondary"></i>
+                    </td>
+                    <td class="align-middle">Tanggal Transaksi</td>
+                    <td class="text-end align-middle" id="detail-tanggal"></td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="ps-3 fw-semibold">item</span>
+              <hr style="margin: 0 0 0.5em 0" />
+              <table class="table table-sm">
+                <tbody id="detail-item"></tbody>
+                <tbody>
+                  <tr>
+                    <td></td>
+                    <td class="fw-bold">Total</td>
+                    <td class="text-end fw-bold" id="detail-total"></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>Bayar</td>
+                    <td class="text-end" id="detail-bayar"></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>Kembalian</td>
+                    <td class="text-end" id="detail-kembalian"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="sidebar-mobile offcanvas offcanvas-start"
+      tabindex="-1"
+      id="offcanvasExample"
+      style="width: 280px"
+      aria-labelledby="offcanvasExampleLabel"
+    >
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">KASIR MA</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="offcanvas-body sidebar-body">
+        <div class="img-profile">
+          <div class="avatar-profile">
+            <img
+              class="rounded-circle"
+              src="https://picsum.photos/128"
+              width="64px"
+            />
+          </div>
+          <p class="mb-0 mt-3">Username</p>
+        </div>
+        <nav class="mt-3">
+          <ul class="nav nav-pills flex-column">
+            <li class="nav-item">
+              <button
+                type="button"
+                class="link-dark p-3 w-100 text-start btn btn-outline-secondary"
+                id="btn-logout"
+              >
+                <i class="bi-box-arrow-right me-2"></i>Logout
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <!-- ./Sidebar off canvas -->
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/js.cookie.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/moment.min.js"></script>
+    <script src="assets/js/moment-with-locales.min.js"></script>
+    <script src="assets/js/moment-timezone-with-data.js"></script>
+    <script src="assets/js/index.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#detail-transaksi").hide();
+        moment.locale("id");
+        const API = "http://localhost:5000/";
+        const URL = API + "api/laporan/transaksi?mobile=y";
+        $.ajax({
+          url: URL,
+          method: "GET",
+          headers: {
+            Authorization: Cookies.get("user-token"),
+          },
+          success: function (data) {
+            const datas = data.data;
+            let html = "";
+            datas.map((item) => {
+              html +=
+                `<thead>
+                    <tr>
+                        <th style="background: #e9e9e9" colspan="3">` +
+                moment(item.tanggal).tz("Asia/Jakarta").format("LL") +
+                `</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+              item.transaksi.map((items) => {
+                let icon = "";
+                if (items.metode_pembayaran == "transfer") {
+                  icon = `<i class="bi-currency-exchange fs-4"></i>`;
+                } else if (items.metode_pembayaran == "qris") {
+                  icon = `<i class="bi-qr-code-scan fs-4"></i>`;
+                } else if (items.metode_pembayaran == "edc") {
+                  icon = `<i class="bi-credit-card-2-back fs-4"></i>`;
+                } else {
+                  icon = `<i class="bi-cash fs-4"></i>`;
+                }
+                html +=
+                  `<tr class="transaksi" data-id="` +
+                  items.id +
+                  `">
+                    <td class="text-center">
+                        ` +
+                  icon +
+                  `
+                    </td>
+                        <td>` +
+                  formatRupiah(items.total) +
+                  `</br><span class="text-secondary">#` +
+                  items.no_nota +
+                  `</span></td>
+                  <td class="text-end">` +
+                  items.waktu +
+                  `</td>
+                    </tr>`;
+              });
+              html += `</tbody>`;
+            });
+
+            $("#list").html(html);
+          },
+        });
+
+        $(document).on("click", ".transaksi", function () {
+          const id = $(this).data("id");
+          const URL = API + "api/laporan/transaksi/" + id;
+          $("#detail-transaksi").show();
+          $("#btn-print-nota").data("id", id);
+          $.ajax({
+            url: URL,
+            method: "GET",
+            headers: {
+              Authorization: Cookies.get("user-token"),
+            },
+            success: function (data) {
+              const datas = data.data;
+              if (datas.metode_pembayaran == "transfer") {
+                icon = `<i class="bi-currency-exchange fs-4 text-secondary"></i>`;
+              } else if (datas.metode_pembayaran == "qris") {
+                icon = `<i class="bi-qr-code-scan fs-4 text-secondary"></i>`;
+              } else if (datas.metode_pembayaran == "edc") {
+                icon = `<i class="bi-credit-card-2-back fs-4 text-secondary"></i>`;
+              } else {
+                icon = `<i class="bi-cash fs-4 text-secondary"></i>`;
+              }
+
+              $("#detail-icon-metode_pembayaran").html(icon);
+              $("#detail-metode_pembayaran").html(
+                datas.metode_pembayaran.toUpperCase()
+              );
+              $("#detail-no_nota").html(datas.no_nota);
+              $("#detail-nama_pelanggan").html(datas.nama_pelanggan || "-");
+              $("#detail-tanggal").html(
+                moment(datas.tanggal).tz("Asia/Jakarta").format("lll")
+              );
+              $("#detail-total").html(formatRupiah(datas.total));
+              $("#detail-bayar").html(formatRupiah(datas.bayar));
+              $("#detail-kembalian").html(formatRupiah(datas.kembalian));
+
+              let html = "";
+              datas.transaksi_detail.map((item) => {
+                html +=
+                  `<tr>
+                          <td class="align-middle text-center">
+                            <i class="bi-box text-secondary fs-5"></i>
+                          </td>
+                          <td>
+                            <span>` +
+                  item.nama_produk +
+                  `</span><br />
+                            <span class="text-secondary"
+                              >` +
+                  item.nama_varian +
+                  ` <b> x` +
+                  item.qty +
+                  `</b></span
+                            >
+                          </td>
+                          <td class="text-end align-middle">` +
+                  formatRupiah(item.subtotal) +
+                  `</td>
+                        </tr>`;
+              });
+              $("#detail-item").html(html);
+            },
+          });
+        });
+
+        $(document).on("click", "#btn-print-nota", function () {
+          window.open(
+            "print-nota.html?id=" + $(this).data("id"),
+            "notaPenjualan",
+            "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
+          );
+        });
+      });
+    </script>
+  </body>
+</html>

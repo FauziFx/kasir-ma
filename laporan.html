@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script>
+      function getCookie(name) {
+        var v = document.cookie.match("(^|;) ?" + name + "=([^;]*)(;|$)");
+        return v ? v[2] : null;
+      }
+      if (!getCookie("user-token")) {
+        window.location.href = "login.html";
+      }
+    </script>
+    <meta charset="UTF-8" />
+    <link
+      rel="shortcut icon"
+      href="assets/img/icon192x192.png"
+      type="image/x-icon"
+    />
+    <link rel="manifest" href="web.webmanifest" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kasir MA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/sweetalert2.min.css" />
+    <link rel="stylesheet" href="assets/css/jquery-ui.css" />
+  </head>
+
+  <body>
+    <div class="progress progress-striped rounded-0 active">
+      <div class="progress-bar progress-bar-success" style="width: 0%"></div>
+    </div>
+    <!-- <?php include("./component/FixedSidebar.php") ?> -->
+    <!-- Fixed sidebar -->
+    <div
+      class="d-flex flex-column flex-shrink-0 bg-body-tertiary sidenav"
+      style="width: 4.5rem"
+    >
+      <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
+        <li class="nav-item">
+          <a
+            href="index.html"
+            class="btn btn-outline-dark border-0 py-3 border-bottom ps-1 rounded-0 fs-4"
+            aria-current="page"
+            title="Home"
+            data-bs-toggle="tooltip"
+            data-bs-placement="right"
+          >
+            <i class="bi-grid"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            href="nota.html"
+            class="btn btn-outline-dark border-0 py-3 border-bottom ps-1 rounded-0 fs-4"
+            aria-current="page"
+            title="Home"
+            data-bs-toggle="tooltip"
+            data-bs-placement="right"
+          >
+            <i class="bi-receipt"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            href="laporan.html"
+            class="btn btn-outline-dark active border-0 py-3 border-bottom ps-1 rounded-0 fs-4"
+            aria-current="page"
+            title="Home"
+            data-bs-toggle="tooltip"
+            data-bs-placement="right"
+          >
+            <i class="bi-printer"></i>
+          </a>
+        </li>
+      </ul>
+      <div>
+        <a
+          id="btn-menu-mobile"
+          class="nav-link px-4 py-2 fs-3"
+          data-bs-toggle="offcanvas"
+          href="#offcanvasExample"
+          role="button"
+          aria-controls="offcanvasExample"
+        >
+          <i class="bi-justify"></i>
+        </a>
+      </div>
+    </div>
+    <!-- ./Fixed sidebar -->
+    <div class="container-fluid vh-100">
+      <div class="main row h-100">
+        <div class="col col-md-5 h-100 px-0">
+          <div class="card h-100 pt-4">
+            <i class="bi-printer text-center" style="font-size: 100px"></i>
+            <button
+              class="btn btn-outline-dark rounded-0 py-3 active"
+              id="btn-hari-ini"
+            >
+              Laporan Hari Ini
+            </button>
+            <div class="input-group mt-2">
+              <input
+                type="text"
+                class="form-control rounded-0 text-center py-3 border border-dark fs-5"
+                id="datepicker"
+                readonly
+              />
+              <span
+                class="input-group-text rounded-0 border border-black"
+                id="basic-addon1"
+                ><i class="bi-calendar-event fs-4 mx-2"></i
+              ></span>
+            </div>
+          </div>
+        </div>
+        <div class="col col-md-7 h-100 px-0">
+          <div class="card h-100 overflow-y-auto px-4">
+            <div class="text-center mt-3">
+              <button class="btn btn-dark" id="btn-tutup-laporan">
+                <i class="bi-printer"></i> Cetak Laporan
+              </button>
+            </div>
+            <h3 class="text-center">Laporan Harian</h3>
+            <table class="table table-sm mt-2">
+              <tbody>
+                <tr>
+                  <td>Nama Toko</td>
+                  <td>:</td>
+                  <td>UD MURTI AJI</td>
+                </tr>
+                <tr>
+                  <td>Tanggal</td>
+                  <td>:</td>
+                  <td id="tanggal"></td>
+                </tr>
+              </tbody>
+            </table>
+            <span class="text-center fs-5">Tunai</span>
+            <hr style="margin: 0" />
+            <table class="table table-sm mt-2 table-hover">
+              <tbody>
+                <tr>
+                  <td>Pembayaran Tunai</td>
+                  <td class="text-end" id="pembayaran-tunai">Rp. 0</td>
+                </tr>
+                <tr>
+                  <td>Item Terjual</td>
+                  <td class="text-end" id="btn-item-terjual">
+                    <span id="item-terjual">0</span>
+                    Item<i class="bi-chevron-right"></i>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Pemasukan</td>
+                  <td class="text-end" id="pemasukan">
+                    Rp. 0 <i class="bi-chevron-right"></i>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Pengeluaran</td>
+                  <td class="text-end" id="pengeluaran">
+                    Rp. 0 <i class="bi-chevron-right"></i>
+                  </td>
+                </tr>
+                <tr class="fw-bold">
+                  <td>Total uang tunai</td>
+                  <td class="text-end" id="total-uang-diharapkan">Rp. 0</td>
+                </tr>
+              </tbody>
+            </table>
+            <span class="text-center fs-5">MA Grup</span>
+            <hr style="margin: 0" />
+            <table class="table table-sm">
+              <tbody>
+                <tr>
+                  <td>Total</td>
+                  <td class="text-end" id="total-magrup">Rp .0</td>
+                </tr>
+              </tbody>
+            </table>
+            <span class="text-center fs-5">Lainnya</span>
+            <hr style="margin: 0" />
+            <table class="table table-sm mt-2">
+              <tbody>
+                <tr>
+                  <td>TRANSFER</td>
+                  <td class="text-end" id="transfer">Rp. 0</td>
+                </tr>
+                <tr>
+                  <td>QRIS</td>
+                  <td class="text-end" id="qris">Rp. 0</td>
+                </tr>
+                <tr>
+                  <td>EDC</td>
+                  <td class="text-end" id="edc">Rp. 0</td>
+                </tr>
+                <tr class="fw-bold">
+                  <td>Total</td>
+                  <td class="text-end" id="total-lainnya">Rp. 0</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="sidebar-mobile offcanvas offcanvas-start"
+      tabindex="-1"
+      id="offcanvasExample"
+      style="width: 280px"
+      aria-labelledby="offcanvasExampleLabel"
+    >
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">KASIR MA</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="offcanvas-body sidebar-body">
+        <div class="img-profile">
+          <div class="avatar-profile">
+            <img
+              class="rounded-circle"
+              src="https://picsum.photos/128"
+              width="64px"
+            />
+          </div>
+          <p class="mb-0 mt-3">Username</p>
+        </div>
+        <nav class="mt-3">
+          <ul class="nav nav-pills flex-column">
+            <li class="nav-item">
+              <button
+                type="button"
+                class="link-dark p-3 w-100 text-start btn btn-outline-secondary"
+                id="btn-logout"
+              >
+                <i class="bi-box-arrow-right me-2"></i>Logout
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <!-- ./Sidebar off canvas -->
+
+    <!-- Modal Pemasukan -->
+    <div
+      class="modal fade"
+      id="modal-masuk"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header d-flex justify-content-center py-1">
+            <h5 class="modal-title" id="modal-title-bayar">Pemasukan</h5>
+          </div>
+          <div class="modal-body px-4 py-4 mb-5">
+            <div class="row mb-3 form-input-kas">
+              <div class="col-3 mb-3">
+                <label for="" class="col-form-label">Total</label>
+              </div>
+              <div class="col-9">
+                <input
+                  type="number"
+                  class="form-control"
+                  name=""
+                  id="input-total-masuk"
+                  placeholder="Total"
+                />
+              </div>
+              <div class="col-3">
+                <label for="" class="col-form-label">Keterangan</label>
+              </div>
+              <div class="col-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  name=""
+                  id="input-keterangan-masuk"
+                  placeholder="Keterangan"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6 d-flex">
+                <button
+                  class="w-100 btn btn-outline-dark"
+                  data-bs-dismiss="modal"
+                >
+                  Batal
+                </button>
+              </div>
+              <div class="col-6 d-flex">
+                <button
+                  class="w-100 btn btn-dark btn-simpan-kas"
+                  data-jenis="masuk"
+                >
+                  Simpan
+                </button>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <table class="table">
+                <tbody id="list-data-masuk"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ./Modal Pemasukan -->
+
+    <!-- Modal Pengeluaran -->
+    <div
+      class="modal fade"
+      id="modal-keluar"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header d-flex justify-content-center py-1">
+            <h5 class="modal-title" id="modal-title-bayar">Pengeluaran</h5>
+          </div>
+          <div class="modal-body px-4 py-4 mb-5">
+            <div class="row mb-3 form-input-kas">
+              <div class="col-3 mb-3">
+                <label for="" class="col-form-label">Total</label>
+              </div>
+              <div class="col-9">
+                <input
+                  type="number"
+                  class="form-control"
+                  name=""
+                  id="input-total-keluar"
+                  placeholder="Total"
+                />
+              </div>
+              <div class="col-3">
+                <label for="" class="col-form-label">Keterangan</label>
+              </div>
+              <div class="col-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  name=""
+                  id="input-keterangan-keluar"
+                  placeholder="Keterangan"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6 d-flex">
+                <button
+                  class="w-100 btn btn-outline-dark"
+                  data-bs-dismiss="modal"
+                >
+                  Batal
+                </button>
+              </div>
+              <div class="col-6 d-flex">
+                <button
+                  class="w-100 btn btn-dark btn-simpan-kas"
+                  data-jenis="keluar"
+                >
+                  Simpan
+                </button>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <table class="table">
+                <tbody id="list-data-keluar"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ./Modal Pengeluaran -->
+
+    <!-- Modal Cetak -->
+    <div
+      class="modal fade"
+      id="modal-tutup-laporan"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header d-flex justify-content-center py-1">
+            <h5 class="modal-title" id="modal-title-bayar">Cetak laporan</h5>
+          </div>
+          <div class="modal-body px-4 py-4 mb-5">
+            <table class="table table-sm mt-2 table-hover">
+              <tbody>
+                <tr>
+                  <td>Pembayaran Tunai</td>
+                  <td class="text-end" id="ringkas-pembayaran-tunai">
+                    Rp. 100.000
+                  </td>
+                </tr>
+                <tr>
+                  <td>Pemasukan</td>
+                  <td class="text-end" id="ringkas-pemasukan">
+                    Rp. 0 <i class="bi-chevron-right"></i>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Pengeluaran</td>
+                  <td class="text-end" id="ringkas-pengeluaran">
+                    Rp. 0 <i class="bi-chevron-right"></i>
+                  </td>
+                </tr>
+                <tr class="fw-bold">
+                  <td>Total uang tunai</td>
+                  <td class="text-end" id="ringkas-total-diharapkan">Rp. 0</td>
+                </tr>
+              </tbody>
+            </table>
+            <input
+              type="number"
+              class="form-control fs-5"
+              name=""
+              id="input-total-didapatkan"
+              placeholder="Total uang yang didapatkan"
+            />
+            <table class="table">
+              <tr>
+                <td class="text-start">Selisih</td>
+                <td class="text-end" id="selisih">Rp. 0</td>
+              </tr>
+            </table>
+            <div class="row mt-3">
+              <div class="col-6 d-flex">
+                <button
+                  class="w-100 btn btn-outline-dark"
+                  data-bs-dismiss="modal"
+                >
+                  Batal
+                </button>
+              </div>
+              <div class="col-6 d-flex">
+                <button class="w-100 btn btn-dark" id="btn-cetak-laporan">
+                  <i class="bi-printer"></i> Cetak
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ./Modal Cetak -->
+
+    <!-- Modal Item terjual -->
+    <div
+      class="modal fade"
+      id="modal-item-terjual"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header d-flex justify-content-center py-1">
+            <h5 class="modal-title" id="modal-title-bayar">Item Terjual</h5>
+          </div>
+          <div class="modal-body px-4 py-4 mb-2">
+            <table class="table table-sm mt-2 table-hover">
+              <tbody id="list-item-terjual"></tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button class="w-100 btn btn-outline-dark" data-bs-dismiss="modal">
+              Tutup
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ./Modal Item terjual -->
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery-ui.min.js"></script>
+    <script src="assets/js/js.cookie.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/moment.min.js"></script>
+    <script src="assets/js/moment-with-locales.min.js"></script>
+    <script src="assets/js/moment-timezone-with-data.js"></script>
+    <script src="assets/js/index.js"></script>
+    <script src="assets/js/laporan.js"></script>
+  </body>
+</html>

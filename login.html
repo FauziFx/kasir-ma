@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script>
+      function getCookie(name) {
+        var v = document.cookie.match("(^|;) ?" + name + "=([^;]*)(;|$)");
+        return v ? v[2] : null;
+      }
+      if (getCookie("user-token")) {
+        window.location.href = "index.html";
+      }
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="assets/css/sweetalert2.min.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+
+  <body>
+    <div class="progress progress-striped rounded-0 active">
+      <div class="progress-bar progress-bar-success" style="width: 0%"></div>
+    </div>
+    <section class="h-100">
+      <div class="h-100 container">
+        <div class="justify-content-sm-center h-100 row">
+          <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
+            <div class="text-center my-5">
+              <h1>Kasir MA</h1>
+            </div>
+            <div class="shadow-lg card">
+              <div class="p-5 card-body">
+                <h1 class="fs-4 card-title fw-bold mb-4">Login</h1>
+                <form autocomplete="off" class="" id="formLogin">
+                  <div class="mb-3">
+                    <label class="mb-2 text-muted" for="username"
+                      >Username</label
+                    >
+                    <input
+                      id="username"
+                      type="text"
+                      class="form-control"
+                      id="username"
+                      name="username"
+                      required=""
+                      placeholder="Username"
+                    />
+                    <div class="invalid-feedback">Username is invalid</div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="text-muted" for="password">Password</label>
+                    <input
+                      id="password"
+                      type="password"
+                      class="form-control"
+                      id="password"
+                      name="password"
+                      required=""
+                      placeholder="******"
+                    />
+                    <div class="invalid-feedback">Password is required</div>
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <button type="button" class="btn btn-primary ms-auto">
+                      Login
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="text-center mt-3 text-muted">
+              By
+              <a
+                href="https://github.com/fauziFx"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Ahmad Fauzi</a
+              ><br />
+              © No Copyright. Hak Cipta hanya Milik Allah
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/js.cookie.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/sweetalert2.all.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("button[type=button]").on("click", function () {
+          const URL = "http://localhost:5000/api/login";
+          // const URL = "http://192.168.100.11:5000/api/login";
+          let username = $("#username").val();
+          let password = $("#password").val();
+
+          if (username.length == "") {
+            Swal.fire("Username Wajib diisi!");
+          } else if (password.length == "") {
+            Swal.fire("Password Wajib diisi!");
+          } else {
+            $(this).attr("disabled", true);
+            $(this)
+              .html(`<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                                <span role="status">Loading...</span>`);
+            $.ajax({
+              url: URL,
+              method: "POST",
+              data: {
+                username: username,
+                password: password,
+              },
+              success: function (data) {
+                Cookies.set("user-token", data.token, {
+                  expires: 30,
+                });
+              },
+              complete: function () {
+                progressBar("index.html");
+              },
+            });
+          }
+        });
+
+        progressBar();
+
+        function progressBar(url) {
+          $(".progress").show();
+          $(".progress-bar").animate(
+            {
+              width: "100%",
+            },
+            1000
+          );
+          setTimeout(function () {
+            $(".progress").hide();
+            $(".progress-bar").css("width", "0%");
+            if (url != undefined) {
+              window.location.href = url;
+            }
+          }, 1100);
+        }
+      });
+    </script>
+  </body>
+</html>

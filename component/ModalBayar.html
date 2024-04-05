@@ -1,0 +1,47 @@
+<div class="modal fade" id="modal-bayar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-between">
+                <button type="button" class="btn btn-outline-secondary py-2" data-bs-dismiss="modal" onclick="batalPisahBill();">Batal</button>
+                <h5 class="modal-title" id="modal-title-bayar"></h5>
+                <button type="button" class="btn btn-dark px-4 py-2" id="btn-bayar-transaksi">Bayar</button>
+            </div>
+            <div class="modal-body px-4 py-4 mb-5">
+                <span class="ps-3 fw-semibold">Pembayaran </span>
+                <hr style="margin: 0 0 0.5em 0">
+                <ul class="nav nav-pills px-4 row mb-3" role="tablist">
+                    <li class="nav-item col col-4 d-block px-1 mb-1 pt-2 fw-bold" role="presentation">
+                        Tunai
+                    </li>
+                    <li class="nav-item col col-4 d-block px-1 mb-1" role="presentation">
+                        <button class="btn btn-outline-dark w-100 border border-dark py-2 metode-pembayaran" data-pembayaran="tunai" id="bayar-pas" data-pembayaran="tunai" data-bs-toggle="tab" type="button" role="tab" aria-selected="true">
+                        </button><br>
+                        <div class="input-group mb-3 mt-2">
+                            <span class="input-group-text py-2 px-3">Rp .</span>
+                            <input type="number" id="input-bayar-tunai" class="form-control" min="0">
+                        </div>
+                    </li>
+                </ul>
+                <span class="ps-3 fw-semibold">Metode Pembayaran Lain </span>| <i class="text-secondary">Pilih satu</i>
+                <hr style="margin: 0 0 0.5em 0">
+                <ul class="nav nav-pills px-4 row" role="tablist">
+                    <li class="nav-item col col-4 d-flex px-1 mb-1" role="presentation">
+                        <button class="btn btn-outline-dark w-100 border border-dark py-2 metode-pembayaran" data-pembayaran="transfer" data-bs-toggle="tab" type="button" role="tab" aria-selected="true">
+                            <i class="bi-currency-exchange"></i> Transfer
+                        </button>
+                    </li>
+                    <li class="nav-item col col-4 d-flex px-1 mb-1" role="presentation">
+                        <button class="btn btn-outline-dark w-100 border border-dark py-2 metode-pembayaran" data-pembayaran="qris" data-bs-toggle="tab" type="button" role="tab" aria-selected="true">
+                            <i class="bi-qr-code-scan"></i> QRIS
+                        </button>
+                    </li>
+                    <li class="nav-item col col-4 d-flex px-1 mb-1" role="presentation">
+                        <button class="btn btn-outline-dark w-100 border border-dark py-2 metode-pembayaran" data-pembayaran="edc" data-bs-toggle="tab" type="button" role="tab" aria-selected="true">
+                            <i class="bi-credit-card-2-back"></i> EDC
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

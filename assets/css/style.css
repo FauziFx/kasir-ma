@@ -1,0 +1,61 @@
+body {
+  font-family: "Poppins", "open sans", "segoe ui", "arial";
+  font-weight: 400;
+  font-size: 15px !important;
+  background: #f1f4f6;
+}
+
+.sidenav {
+  height: 100%;
+  width: 65px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.sidenav a:hover {
+  background-color: #cfe2ff;
+}
+
+.main {
+  margin-left: 65px; /* Same as the width of the sidenav */
+  padding: 10px 0 10px 0;
+}
+
+small {
+  font-size: 0.6em;
+}
+
+.form-control:focus,
+.form-select:focus {
+  box-shadow: none;
+}
+
+.progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  height: 5px;
+}
+
+nav .navbar-nav li a {
+  color: white !important;
+}
+
+input.larger {
+  width: 25px;
+  height: 25px;
+  margin-top: 6px;
+}

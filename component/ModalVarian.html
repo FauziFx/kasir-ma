@@ -1,0 +1,82 @@
+<div
+  class="modal fade"
+  id="modal-produk"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-between">
+        <button
+          type="button"
+          class="btn btn-outline-secondary py-2"
+          data-bs-dismiss="modal"
+        >
+          Batal
+        </button>
+        <div class="modal-title d-flex justify-content-between">
+          <h5 class="" id="modal-title"></h5>
+          <h5 class="fw-light" id="varian-title"></h5>
+          <h5 class="fw-normal" id="varian-total"></h5>
+          <input type="hidden" id="isEdit" value="" />
+        </div>
+        <button type="button" class="btn btn-dark px-4 py-2" id="btn-tambah">
+          Tambah
+        </button>
+      </div>
+      <div class="modal-body px-4 py-4 mb-5">
+        <span class="ps-3 fw-semibold">Varian </span>|
+        <i class="text-secondary">Pilih satu</i>
+        <hr style="margin: 0 0 0.5em 0" />
+        <ul class="nav nav-pills px-4 row" id="list-varian" role="tablist"></ul>
+        <div class="row mt-2 mb-5">
+          <div class="col col-6">
+            <span class="ps-3 fw-semibold">Kuantitas</span>
+            <hr style="margin: 0 0 0.5em 0" />
+            <div class="input-group mb-3">
+              <button
+                class="btn btn-outline-dark input-group-text py-2 px-3 btn-increment"
+                data-increment="-1"
+              >
+                <i class="bi-dash-circle" style="font-size: 20px"></i>
+              </button>
+              <input
+                type="number"
+                class="form-control text-center"
+                value="1"
+                id="input-qty"
+                min="1"
+              />
+              <button
+                class="btn btn-outline-dark input-group-text py-2 px-3 btn-increment"
+                data-increment="1"
+              >
+                <i class="bi-plus-circle" style="font-size: 20px"></i>
+              </button>
+            </div>
+          </div>
+          <div class="col col-6">
+            <span class="ps-3 fw-semibold">Harga</span>
+            <hr style="margin: 0 0 0.5em 0" />
+            <div class="input-group mb-3">
+              <span class="input-group-text py-2 px-3" style="font-size: 20px"
+                >Rp .</span
+              >
+              <input
+                type="number"
+                class="form-control"
+                placeholder="Harga"
+                id="input-harga"
+                min="0"
+                value="0"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
