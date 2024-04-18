@@ -360,11 +360,29 @@
         });
 
         $(document).on("click", "#btn-print-nota", function () {
-          window.open(
-            "print-nota.html?id=" + $(this).data("id"),
-            "notaPenjualan",
-            "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
-          );
+          let is_mobile = /android|mobile/gi.test(navigator.userAgent);
+          let url = "print-nota.php?id=" + $(this).data("id");
+          if (is_mobile) {
+            console.log("ismobile");
+            let html_container =
+              "print://escpos.org/escpos/bt/print?srcTp=uri&srcObj=html&src='data:text/html,";
+            $.ajax({
+              url: url,
+              success: function (html) {
+                html_container += html;
+                window.location.href = html_container;
+              },
+              error: function () {
+                alert("Ajax Error, cek console browser");
+              },
+            });
+          } else {
+            window.open(
+              url,
+              "notaPenjualan",
+              "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
+            );
+          }
         });
       });
     </script>
