@@ -132,6 +132,7 @@ $(document).ready(function () {
       selisih: selisih,
     };
 
+    Cookies.set("laporan-ringkas", JSON.stringify(newData));
     localStorage.setItem("laporan-ringkas", JSON.stringify(newData));
 
     if ($(this).val().length == 0) {
@@ -143,11 +144,29 @@ $(document).ready(function () {
 
   $(document).on("click", "#btn-cetak-laporan", function () {
     bsModalTutuplaporan.hide();
-    window.open(
-      "print-laporan.html",
-      "Cetak Laporan",
-      "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
-    );
+    let is_mobile = /android|mobile/gi.test(navigator.userAgent);
+    let url = "print-laporan.php";
+    if (is_mobile) {
+      console.log("ismobile");
+      let html_container =
+        "print://escpos.org/escpos/bt/print?srcTp=uri&srcObj=html&src='data:text/html,";
+      $.ajax({
+        url: url,
+        success: function (html) {
+          html_container += html;
+          window.location.href = html_container;
+        },
+        error: function () {
+          alert("Ajax Error, cek console browser");
+        },
+      });
+    } else {
+      window.open(
+        url,
+        "Cetak laporan",
+        "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
+      );
+    }
   });
 
   $(document).on("click", ".btn-simpan-kas", function () {
