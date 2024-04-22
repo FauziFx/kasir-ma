@@ -10,7 +10,7 @@
     }
 
     body {
-      font-size: 11px !important;
+      font-size: 11px;
       filter: grayscale(100%);
       font-family: monospace;
     }
@@ -97,7 +97,6 @@ $data = json_decode($data);
 <body onload="window.print()">
   <div class="container">
     <header>
-      <img width="64px" alt="logo" src="assets/img/logo-ma.png" />
       <div class="nama-perusahaan">UD Murti Aji</div>
       <div>
         Jl. Karang Kencana No.51, Panjunan, Kec. Lemahwungkuk, Kota Cirebon,
@@ -219,6 +218,15 @@ $data = json_decode($data);
         <tr>
           <td colspan="3">
             <hr class="dash" />
+          </td>
+        </tr>
+        <tr class="text-bold">
+        <td colspan="2">Total</td>
+          <td class="text-right" id="total-lainnya">
+            <?php 
+            $total_semua = $data->total_diharapkan + $data->total_lainnya;
+            echo "Rp. " . number_format($total_semua, 0, ',', '.');
+            ?>
           </td>
         </tr>
       </table>

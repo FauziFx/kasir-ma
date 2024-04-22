@@ -49,7 +49,7 @@ function http_request($url)
 }
 
 $id = $_GET['id'];
-$url = "http://localhost:5000/api/laporan/transaksi/" . $id;
+$url = "http://192.168.100.99:5001/api/laporan/transaksi/" . $id;
 $data = http_request($url);
 
 // ubah string JSON menjadi array
@@ -149,7 +149,6 @@ $data = json_decode($data, TRUE)['data'];
 <body onload="window.print()">
     <div class="container">
         <header>
-            <img width="64px" alt="logo" src="assets/img/logo-ma.png" />
             <div class="nama-perusahaan">UD Murti Aji</div>
             <div>
                 Jl. Karang Kencana No.51, Panjunan, Kec. Lemahwungkuk, Kota Cirebon,
