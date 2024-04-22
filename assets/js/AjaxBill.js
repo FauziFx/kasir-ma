@@ -390,11 +390,14 @@ function hapusBill(index) {
 
 function setCartActive(dataBill) {
   const data = JSON.parse(localStorage.getItem("list-bill"));
-  localStorage.setItem("cart-active", JSON.stringify(data[0].cart));
-  localStorage.setItem("total", data[0].total);
+  localStorage.setItem(
+    "cart-active",
+    JSON.stringify(data[dataBill.indexBill].cart)
+  );
+  localStorage.setItem("total", data[dataBill.indexBill].total);
   localStorage.setItem(
     "data-pelanggan",
-    JSON.stringify(data[0].nama_pelanggan)
+    JSON.stringify(data[dataBill.indexBill].nama_pelanggan)
   );
   localStorage.setItem("indexbill", JSON.stringify(dataBill));
 
