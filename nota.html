@@ -224,7 +224,7 @@
       </div>
     </div>
     <!-- ./Sidebar off canvas -->
-
+    <script src="register.js"></script>
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/js.cookie.min.js"></script>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
@@ -236,7 +236,7 @@
       $(document).ready(function () {
         $("#detail-transaksi").hide();
         moment.locale("id");
-        const API = "http://localhost:5000/";
+        const API = "http://192.168.100.99:5001/";
         const URL = API + "api/laporan/transaksi?mobile=y";
         $.ajax({
           url: URL,
