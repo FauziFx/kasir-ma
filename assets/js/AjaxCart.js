@@ -168,6 +168,7 @@ $(document).ready(function () {
 
   // Btn bayar Transaksi
   $(document).on("click", "#btn-bayar-transaksi", function () {
+    $("#btn-bayar-transaksi").attr("disabled", true);
     let LScart = "";
     let LStotal = "";
     if (localStorage.getItem("pisah-bill")) {
