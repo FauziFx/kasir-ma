@@ -93,14 +93,14 @@
     </section>
     <script src="register.js"></script>
     <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/config.js"></script>
     <script src="assets/js/js.cookie.min.js"></script>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/sweetalert2.all.min.js"></script>
     <script>
       $(document).ready(function () {
         $("button[type=button]").on("click", function () {
-          // const URL = "http://localhost:5000/api/login";
-          const URL = "http://192.168.100.99:5001/api/login";
+          const URL = config.ENV_URL+"api/login";
           let username = $("#username").val();
           let password = $("#password").val();
 
@@ -124,6 +124,7 @@
                 Cookies.set("user-token", data.token, {
                   expires: 30,
                 });
+                console.log(data);
               },
               complete: function () {
                 progressBar("index.html");

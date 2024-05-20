@@ -1,4 +1,5 @@
 <?php
+include("config.php");
 function tgl_indo($tanggal)
 {
     $bulan = array(
@@ -49,7 +50,7 @@ function http_request($url)
 }
 
 $id = $_GET['id'];
-$url = "http://192.168.100.99:5001/api/laporan/transaksi/" . $id;
+$url = $URL_API."api/laporan/transaksi/" . $id;
 $data = http_request($url);
 
 // ubah string JSON menjadi array

@@ -7,7 +7,7 @@ $(function () {
   });
 });
 
-const API = "http://localhost:5000/";
+const API = config.ENV_URL;
 
 const modalMasuk = document.getElementById("modal-masuk");
 const inputMasuk = document.getElementById("input-total-masuk");

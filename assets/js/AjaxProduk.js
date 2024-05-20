@@ -1,8 +1,8 @@
 let modalProduk = new bootstrap.Modal($("#modal-produk"));
 // SELECTED Tambah ke keranjang
 let selectedVarian = {};
-const API = "http://localhost:5000/";
-// const API = "http://192.168.100.11:5000/";
+// const API = "http://localhost:5000/";
+const API = config.ENV_URL;
 $(document).ready(function () {
   // GET
   getKategori();
@@ -36,6 +36,7 @@ $(document).ready(function () {
     const id_kategori = $(this).data("id");
     getProduk(id_kategori, "");
     titleProduk.html($(this).data("nama"));
+    $("#search_box").val("")
   });
 
   // Click row produk
