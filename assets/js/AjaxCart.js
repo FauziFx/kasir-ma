@@ -168,6 +168,7 @@ $(document).ready(function () {
 
   // Btn bayar Transaksi
   $(document).on("click", "#btn-bayar-transaksi", function () {
+    $("#modal-bayar").LoadingOverlay("show");
     $("#btn-bayar-transaksi").attr("disabled", true);
     let LScart = "";
     let LStotal = "";
@@ -287,6 +288,7 @@ function createTransaksi(dataTransaksi) {
       $("#kembaliannya").html("Kembali" + formatRupiah(kembalian));
       bsModalBayar.hide();
       bsModalTransaksiBerhasil.show();
+      $("#modal-bayar").LoadingOverlay("hide", true);
     },
     error: function (error) {
       console.log(error);
