@@ -234,11 +234,10 @@
     <script src="assets/js/moment-timezone-with-data.js"></script>
     <script src="assets/js/index.js"></script>
     <script>
-      $(document).ready(function () {
-        $("#detail-transaksi").hide();
-        moment.locale("id");
+      function getData(pages){
+        let page = pages || 1;
         const API = config.ENV_URL;
-        const URL = API + "api/laporan/transaksi?mobile=y";
+        const URL = API + "api/laporan/transaksi?mobile=y&page="+page;
         $.ajax({
           url: URL,
           method: "GET",
@@ -290,13 +289,32 @@
               });
               html += `</tbody>`;
             });
+            html +=`<tr>
+                        <td colspan="3">
+                          <button class="btn btn-primary w-100 btn-loadmore-transaksi" data-page="${parseInt(data.page)+1}">Load More</button>
+                        </td>
+                      </tr>`
 
             $("#list").html(html);
           },
         });
+      }
+
+      $(document).ready(function () {
+        $("#detail-transaksi").hide();
+        moment.locale("id");
+        getData();
+
+        $(document).on("click", ".btn-loadmore-transaksi", function(){
+          let page = $(this).data("page")
+          getData(page)
+          const el = document.querySelector("#list");
+          el.scrollIntoView({block: "start", behavior: "smooth"});
+        })
 
         $(document).on("click", ".transaksi", function () {
           const id = $(this).data("id");
+          const API = config.ENV_URL;
           const URL = API + "api/laporan/transaksi/" + id;
           $("#detail-transaksi").show();
           $("#btn-print-nota").data("id", id);
