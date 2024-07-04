@@ -104,6 +104,10 @@ $(document).ready(function () {
       LStotal = "total";
     }
 
+    let jenis_transaksi =
+      $("#jenis-transaksi").html().trim() == "Umum" ? "Umum" : "MA Grup";
+    $("#info-jenis_transaksi").html(jenis_transaksi);
+
     const dataCart = JSON.parse(localStorage.getItem(LScart));
     if (dataCart.length > 0) {
       $("#modal-title-bayar").html(formatRupiah(localStorage.getItem(LStotal)));
