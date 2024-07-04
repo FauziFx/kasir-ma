@@ -36,7 +36,7 @@ $(document).ready(function () {
     const id_kategori = $(this).data("id");
     getProduk(id_kategori, "");
     titleProduk.html($(this).data("nama"));
-    $("#search_box").val("")
+    $("#search_box").val("");
   });
 
   // Click row produk

@@ -100,7 +100,7 @@
     <script>
       $(document).ready(function () {
         $("button[type=button]").on("click", function () {
-          const URL = config.ENV_URL+"api/login";
+          const URL = config.ENV_URL + "api/login";
           let username = $("#username").val();
           let password = $("#password").val();
 
@@ -121,10 +121,13 @@
                 password: password,
               },
               success: function (data) {
-                Cookies.set("user-token", data.token, {
-                  expires: 30,
-                });
-                console.log(data);
+                if (data.success) {
+                  Cookies.set("user-token", data.token, {
+                    expires: 30,
+                  });
+                } else if (data.succes == false) {
+                  alert(data.message);
+                }
               },
               complete: function () {
                 progressBar("index.html");
