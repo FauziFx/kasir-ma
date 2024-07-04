@@ -336,7 +336,6 @@ $(document).ready(function () {
           }
         : obj
     );
-    console.log(newData);
     let indexQty = JSON.parse(localStorage.getItem("indexqty"));
     indexQty[indexInput] = resultQty;
     localStorage.setItem("indexqty", JSON.stringify(indexQty));
@@ -355,12 +354,40 @@ $(document).ready(function () {
   // btn print bill
   $(document).on("click", "#btn-print-bill", function () {
     if (localStorage.getItem("indexbill")) {
-      const index = JSON.parse(localStorage.getItem("indexbill")).indexBill;
-      window.open(
-        "print-bill.html?index=" + index,
-        "notaPenjualan",
-        "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
+      const indexBill = JSON.parse(localStorage.getItem("indexbill")).indexBill;
+      Cookies.set(
+        "cetak-bill",
+        JSON.stringify(JSON.parse(localStorage.getItem("list-bill"))[indexBill])
       );
+      let is_mobile = /android|mobile/gi.test(navigator.userAgent);
+      let url = "print-bill.php";
+      if (is_mobile) {
+        console.log("ismobile");
+        let html_container =
+          "print://escpos.org/escpos/bt/print?srcTp=uri&srcObj=html&src='data:text/html,";
+        $.ajax({
+          url: url,
+          success: function (html) {
+            html_container += html;
+            window.location.href = html_container;
+          },
+          error: function () {
+            alert("Ajax Error, cek console browser");
+          },
+        });
+      } else {
+        window.open(
+          url,
+          "Cetak laporan",
+          "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
+        );
+      }
+      // const index = JSON.parse(localStorage.getItem("indexbill")).indexBill;
+      // window.open(
+      //   "print-bill.html?index=" + index,
+      //   "notaPenjualan",
+      //   "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
+      // );
     }
   });
 });
