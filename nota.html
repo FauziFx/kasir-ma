@@ -115,6 +115,7 @@
 
               <span class="ps-3 fw-semibold">Detail</span>
               <hr style="margin: 0 0 0.5em 0" />
+              <input type="hidden" name="" id="transaksi-id" />
               <table class="table table-sm">
                 <tbody>
                   <tr>
@@ -151,6 +152,21 @@
                     </td>
                     <td class="align-middle">Tanggal Transaksi</td>
                     <td class="text-end align-middle" id="detail-tanggal"></td>
+                  </tr>
+                  <tr>
+                    <td class="align-middle text-center">
+                      <i class="bi-cart fs-4 text-secondary"></i>
+                    </td>
+                    <td class="align-middle">Jenis Transaksi</td>
+                    <td
+                      class="text-end align-middle"
+                      id="detail-jenis_transaksi"
+                    >
+                      <select name="" id="select-jenis_transaksi">
+                        <option value="umum">Umum</option>
+                        <option value="magrup">Ma Grup</option>
+                      </select>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -234,10 +250,10 @@
     <script src="assets/js/moment-timezone-with-data.js"></script>
     <script src="assets/js/index.js"></script>
     <script>
-      function getData(pages){
+      function getData(pages) {
         let page = pages || 1;
         const API = config.ENV_URL;
-        const URL = API + "api/laporan/transaksi?mobile=y&page="+page;
+        const URL = API + "api/laporan/transaksi?mobile=y&page=" + page;
         $.ajax({
           url: URL,
           method: "GET",
@@ -257,8 +273,15 @@
                     </tr>
                 </thead>
                 <tbody>`;
-              item.transaksi.map((items) => {
+              const transaksi = item.transaksi.sort(
+                (a, b) => parseFloat(b.id) - parseFloat(a.id)
+              );
+              transaksi.map((items) => {
                 let icon = "";
+                let badge = "";
+                if (items.jenis_transaksi == "magrup") {
+                  badge = `<span class="badge bg-secondary">MA Grup</span>`;
+                }
                 if (items.metode_pembayaran == "transfer") {
                   icon = `<i class="bi-currency-exchange fs-4"></i>`;
                 } else if (items.metode_pembayaran == "qris") {
@@ -284,16 +307,20 @@
                   `</span></td>
                   <td class="text-end">` +
                   items.waktu +
+                  `</br>` +
+                  badge +
                   `</td>
                     </tr>`;
               });
               html += `</tbody>`;
             });
-            html +=`<tr>
+            html += `<tr>
                         <td colspan="3">
-                          <button class="btn btn-primary w-100 btn-loadmore-transaksi" data-page="${parseInt(data.page)+1}">Load More</button>
+                          <button class="btn btn-primary w-100 btn-loadmore-transaksi" data-page="${
+                            parseInt(data.page) + 1
+                          }">Load More</button>
                         </td>
-                      </tr>`
+                      </tr>`;
 
             $("#list").html(html);
           },
@@ -305,12 +332,12 @@
         moment.locale("id");
         getData();
 
-        $(document).on("click", ".btn-loadmore-transaksi", function(){
-          let page = $(this).data("page")
-          getData(page)
+        $(document).on("click", ".btn-loadmore-transaksi", function () {
+          let page = $(this).data("page");
+          getData(page);
           const el = document.querySelector("#list");
-          el.scrollIntoView({block: "start", behavior: "smooth"});
-        })
+          el.scrollIntoView({ block: "start", behavior: "smooth" });
+        });
 
         $(document).on("click", ".transaksi", function () {
           const id = $(this).data("id");
@@ -318,6 +345,7 @@
           const URL = API + "api/laporan/transaksi/" + id;
           $("#detail-transaksi").show();
           $("#btn-print-nota").data("id", id);
+          $("#transaksi-id").val(id);
           $.ajax({
             url: URL,
             method: "GET",
@@ -345,6 +373,8 @@
               $("#detail-tanggal").html(
                 moment(datas.tanggal).tz("Asia/Jakarta").format("lll")
               );
+              let element = document.getElementById("select-jenis_transaksi");
+              element.value = datas.jenis_transaksi;
               $("#detail-total").html(formatRupiah(datas.total));
               $("#detail-bayar").html(formatRupiah(datas.bayar));
               $("#detail-kembalian").html(formatRupiah(datas.kembalian));
@@ -402,6 +432,24 @@
               "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
             );
           }
+        });
+
+        $("#select-jenis_transaksi").on("change", function () {
+          const API = config.ENV_URL;
+          const id = $("#transaksi-id").val();
+          const jenis_transaksi = $(this).find(":selected").val();
+          const URL = API + "api/transaksi/" + id;
+          $.ajax({
+            url: URL,
+            method: "PUT",
+            data: { jenis_transaksi: jenis_transaksi },
+            headers: {
+              Authorization: Cookies.get("user-token"),
+            },
+            success: function (data) {
+              getData();
+            },
+          });
         });
       });
     </script>
