@@ -50,7 +50,7 @@ function http_request($url)
 }
 
 $id = $_GET['id'];
-$url = $URL_API."api/laporan/transaksi/" . $id;
+$url = $URL_API . "api/laporan/transaksi/" . $id;
 $data = http_request($url);
 
 // ubah string JSON menjadi array
@@ -177,6 +177,12 @@ $data = json_decode($data, TRUE)['data'];
                         $namaPelanggan = $data['nama_pelanggan'] == "" ? "-" : $data['nama_pelanggan'];
                         echo $namaPelanggan;
                         ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>No Nota</td>
+                    <td class="text-right" id="no_nota">
+                        #<?= $data['no_nota'] ?>
                     </td>
                 </tr>
             </table>
