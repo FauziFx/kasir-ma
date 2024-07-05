@@ -207,6 +207,33 @@ $(document).ready(function () {
     createTransaksi(dataTransaksi);
   });
 
+  // Print nota transaksi berhasil
+  $(document).on("click", "#print-notanya", function () {
+    let is_mobile = /android|mobile/gi.test(navigator.userAgent);
+    let url = "print-nota-bayar.php";
+    if (is_mobile) {
+      console.log("ismobile");
+      let html_container =
+        "print://escpos.org/escpos/bt/print?srcTp=uri&srcObj=html&src='data:text/html,";
+      $.ajax({
+        url: url,
+        success: function (html) {
+          html_container += html;
+          window.location.href = html_container;
+        },
+        error: function () {
+          alert("Ajax Error, cek console browser");
+        },
+      });
+    } else {
+      window.open(
+        url,
+        "Cetak laporan",
+        "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
+      );
+    }
+  });
+
   // ON hidden modal transaksi berhasil
   // const modalTransaksiBerhasil = document.getElementById(
   //   "modal-transaksi-berhasil"
@@ -283,7 +310,12 @@ function createTransaksi(dataTransaksi) {
     },
     success: function (data) {
       // localStorage.clear();
-      localStorage.setItem("transaksi-berhasil", JSON.stringify(dataTransaksi));
+      let dataTrx = {
+        ...dataTransaksi,
+        noNota: data.noNota,
+      };
+      Cookies.set("transaksi-berhasil", JSON.stringify(dataTrx));
+      localStorage.setItem("transaksi-berhasil", JSON.stringify(dataTrx));
       getCart();
       let kembalian =
         parseInt(dataTransaksi.bayar) - parseInt(dataTransaksi.total);
