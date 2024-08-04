@@ -9,23 +9,19 @@ const modalPisahBill = document.getElementById("modal-pisah-bill");
 const inputBill = document.getElementById("input-bill");
 
 moment.locale("id");
+
+// On Show Modal Simpan Bill
 modalSimpanBill.addEventListener("shown.bs.modal", () => {
   inputBill.focus();
 });
 
+// On hidden Modal Simpan Bill
 modalSimpanBill.addEventListener("hidden.bs.modal", () => {
   inputBill.value = "";
 });
 
-function batalPisahBill() {
-  localStorage.removeItem("pisah-bill");
-  localStorage.removeItem("total-pisah-bill");
-  localStorage.removeItem("indexqty");
-  $("#total-pisah-bill").html("Rp. 0");
-}
-
 $(document).ready(function () {
-  // Btn simpan
+  // Btn Simpan Cart
   $(document).on("click", "#btn-simpan", function () {
     const cartACtive = localStorage.getItem("cart-active");
     const indexBill = localStorage.getItem("indexbill");
@@ -99,7 +95,7 @@ $(document).ready(function () {
     }
   });
 
-  //   Open list BIll
+  //  Button Show Saved Bill / List Bill
   $(document).on("click", "#btn-list-bill", function () {
     const listBill = localStorage.getItem("list-bill");
     if (listBill) {
@@ -138,7 +134,7 @@ $(document).ready(function () {
     }
   });
 
-  // button pilih bill tersimpan / menampilkan bill terpilih
+  // Button pilih bill tersimpan / menampilkan bill terpilih
   $(document).on("click", ".btn-pilih-bill", function () {
     const indexBill = $(this).data("indexbill");
     const namaBill = $(this).data("namabill");
@@ -162,7 +158,7 @@ $(document).ready(function () {
     }
   });
 
-  //   btn hapus bill
+  // Button hapus Bill
   $(document).on("click", ".btn-hapus-bill", function () {
     const index = $(this).data("indexbill");
     const indexBill = localStorage.getItem("indexbill")
@@ -248,7 +244,8 @@ $(document).ready(function () {
   });
 
   let dataPisahBill;
-  // Toggle checkbox pisah
+  // Toggle checkbox pisah bill
+  // Select item untuk pisah bill
   $(document).on("click", ".checkbox-pisah", function () {
     const index = $(this).data("index");
     $(".btn-increment-" + index).attr("disabled", !this.checked);
@@ -351,7 +348,7 @@ $(document).ready(function () {
     $("#btn-bayar").click();
   });
 
-  // btn print bill
+  // Button print bill
   $(document).on("click", "#btn-print-bill", function () {
     if (localStorage.getItem("indexbill")) {
       const indexBill = JSON.parse(localStorage.getItem("indexbill")).indexBill;
@@ -382,12 +379,6 @@ $(document).ready(function () {
           "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
         );
       }
-      // const index = JSON.parse(localStorage.getItem("indexbill")).indexBill;
-      // window.open(
-      //   "print-bill.html?index=" + index,
-      //   "notaPenjualan",
-      //   "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
-      // );
     }
   });
 });
@@ -430,4 +421,12 @@ function setCartActive(dataBill) {
 
   bsModalListBill.hide();
   getCart();
+}
+
+// Batal Pisah Bill
+function batalPisahBill() {
+  localStorage.removeItem("pisah-bill");
+  localStorage.removeItem("total-pisah-bill");
+  localStorage.removeItem("indexqty");
+  $("#total-pisah-bill").html("Rp. 0");
 }
