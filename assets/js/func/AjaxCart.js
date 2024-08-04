@@ -10,12 +10,6 @@ $(document).ready(function () {
   let bsModalListPelanggan = new bootstrap.Modal($("#modal-list-pelanggan"));
   let bsModalPelanggan = new bootstrap.Modal($("#modal-pelanggan"));
 
-  // Onclick delete produk from cart
-  $(document).on("click", "#delete-produk", function () {
-    const index = $(this).data("index");
-    deleteProduct(index);
-  });
-
   // Change jenis transaksi
   $(document).on("click", ".dropdown-item", function () {
     let jenisTransaksi = $(this).data("jenis");
@@ -32,12 +26,6 @@ $(document).ready(function () {
     getPelanggan();
   });
 
-  // Search pelenggan
-  $("#search_pelanggan").keyup(function () {
-    var query = $("#search_pelanggan").val();
-    getPelanggan(query);
-  });
-
   // Show modal pelanggan
   $(document).on("click", "#nama-pelanggan", function () {
     if (localStorage.getItem("data-pelanggan")) {
@@ -50,12 +38,18 @@ $(document).ready(function () {
     }
   });
 
-  // Hapus pelanggan dari transaksi
-  $(document).on("click", "#hapus-pelanggan", function () {
-    localStorage.removeItem("data-pelanggan");
-    bsModalPelanggan.hide();
-    $("#nama-pelanggan").html("+ Tambah Pelanggan");
-    bsModalListPelanggan.show();
+  // Search pelenggan
+  $("#search_pelanggan").keyup(function () {
+    var query = $("#search_pelanggan").val();
+    getPelanggan(query);
+  });
+
+  // Btn pilih pelanggan
+  $(document).on("click", "#pilih-pelanggan", function () {
+    const dataPelanggan = $(this).data();
+    localStorage.setItem("data-pelanggan", JSON.stringify(dataPelanggan));
+    $("#nama-pelanggan").html(dataPelanggan.namaPelanggan);
+    bsModalListPelanggan.hide();
   });
 
   // set Nama Pelanggan
@@ -67,12 +61,18 @@ $(document).ready(function () {
     $("#nama-pelanggan").html("+ Tambah Pelanggan");
   }
 
-  // Btn pilih pelanggan
-  $(document).on("click", "#pilih-pelanggan", function () {
-    const dataPelanggan = $(this).data();
-    localStorage.setItem("data-pelanggan", JSON.stringify(dataPelanggan));
-    $("#nama-pelanggan").html(dataPelanggan.namaPelanggan);
-    bsModalListPelanggan.hide();
+  // Hapus pelanggan dari transaksi
+  $(document).on("click", "#hapus-pelanggan", function () {
+    localStorage.removeItem("data-pelanggan");
+    bsModalPelanggan.hide();
+    $("#nama-pelanggan").html("+ Tambah Pelanggan");
+    bsModalListPelanggan.show();
+  });
+
+  // Onclick delete produk from cart
+  $(document).on("click", "#delete-produk", function () {
+    const index = $(this).data("index");
+    deleteProduct(index);
   });
 
   // OnClick item cart
@@ -80,7 +80,7 @@ $(document).ready(function () {
     const data = JSON.parse(localStorage.getItem("cart-active"));
     const dataItem = data[$(this).data("indexCart")];
     getProdukById(dataItem.id_produk, dataItem, $(this).data("indexCart"));
-    modalProduk.show();
+    modalVarian.show();
     $("#btn-tambah").attr("disabled", false);
   });
 
@@ -91,7 +91,8 @@ $(document).ready(function () {
     $(".metode-pembayaran").removeClass("active").addClass("inactive");
   });
 
-  // Btn Bayar
+  // Btn Bayar Cart
+  // Cek apakah transaksi pisah bill atau bukan
   $("#btn-bayar-transaksi").attr("disabled", true);
   $(document).on("click", "#btn-bayar", function () {
     let LScart = "";
@@ -121,6 +122,7 @@ $(document).ready(function () {
   });
 
   // On select metode pembayaran
+  // Pilih Metode Pembayana
   $(document).on("click", ".metode-pembayaran", function () {
     $("#btn-bayar-transaksi").attr("disabled", false);
     const attrId = $(this).attr("id");
@@ -147,6 +149,7 @@ $(document).ready(function () {
   });
 
   // On change input bayar tunai
+  // Input Nominal Bayar tunai
   $("#input-bayar-tunai").keyup(function () {
     let LStotal = "";
     if (localStorage.getItem("pisah-bill")) {
@@ -171,6 +174,7 @@ $(document).ready(function () {
   });
 
   // Btn bayar Transaksi
+  // Input Transaksi
   $(document).on("click", "#btn-bayar-transaksi", function () {
     $("#modal-bayar").LoadingOverlay("show");
     $("#btn-bayar-transaksi").attr("disabled", true);
@@ -233,20 +237,6 @@ $(document).ready(function () {
       );
     }
   });
-
-  // ON hidden modal transaksi berhasil
-  // const modalTransaksiBerhasil = document.getElementById(
-  //   "modal-transaksi-berhasil"
-  // );
-  // modalTransaksiBerhasil.addEventListener("hide.bs.modal", (event) => {
-  //   // Hapus id ada bill tersimpan
-  //   if (localStorage.getItem("indexbill")) {
-  //     const indexBill = JSON.parse(localStorage.getItem("indexbill").indexBill);
-  //     hapusBill(indexBill);
-  //     localStorage.removeItem("indexbill");
-  //   }
-  //   localStorage.removeItem("transaksi-berhasil");
-  // });
 });
 
 function transaksiBaru() {
