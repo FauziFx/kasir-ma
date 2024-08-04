@@ -1,19 +1,19 @@
-let modalProduk = new bootstrap.Modal($("#modal-produk"));
+let modalVarian = new bootstrap.Modal($("#modal-varian"));
 // SELECTED Tambah ke keranjang
 let selectedVarian = {};
-// const API = "http://localhost:5000/";
 const API = config.ENV_URL;
 $(document).ready(function () {
   // GET
   getKategori();
   getProduk();
 
-  // Modal ID
-  // let modalProduk = new bootstrap.Modal($("#modal-produk"));
+  // Title Produk table
+  let titleProduk = $("#title-produk");
+  titleProduk.html("Semua Produk");
 
   // on hidden modal pilih varian
-  const myModalEl = document.getElementById("modal-produk");
-  myModalEl.addEventListener("hidden.bs.modal", (event) => {
+  const elModalVarian = document.getElementById("modal-varian");
+  elModalVarian.addEventListener("hidden.bs.modal", (event) => {
     $("#modal-title").html("");
     $("#varian-title").html("");
     $("#varian-total").html("");
@@ -23,10 +23,6 @@ $(document).ready(function () {
     $("#isEdit").val("");
     $("#btn-tambah").attr("disabled", true);
   });
-
-  // Title Produk table
-  let titleProduk = $("#title-produk");
-  titleProduk.html("Semua Produk");
 
   // List Kategori
   // Get By Kategori
@@ -41,14 +37,13 @@ $(document).ready(function () {
 
   // Click row produk
   // Select Produk
-  $(document).on("click", "#tabel-produk tr", function () {
+  $(document).on("click", "#table-produk tr", function () {
     getProdukById($(this).data("id"));
-    modalProduk.show();
+    modalVarian.show();
   });
 
   // btn tambah
   $("#btn-tambah").attr("disabled", true);
-
   // btn Tambah ke keranjang
   $(document).on("click", "#btn-tambah", function () {
     selectedVarian.harga = $("#input-harga").val();
@@ -78,7 +73,7 @@ $(document).ready(function () {
       }
     }
 
-    modalProduk.hide();
+    modalVarian.hide();
     getCart();
   });
 
@@ -111,9 +106,6 @@ $(document).ready(function () {
   // Input onchange HARGA
   $("#input-harga").keyup(function () {
     var harga = $("#input-harga").val();
-    // if (harga.length == 0) {
-    //   $("#input-harga").val(0);
-    // }
     let varianTotal = parseInt($("#input-qty").val()) * parseInt(harga);
     $("#varian-total").html("-" + formatRupiah(varianTotal));
   });
@@ -220,11 +212,11 @@ function getProduk(id_kategori, search_box) {
             ` Item</td>
                     </tr>`;
         }
-        $("#tabel-produk").removeClass("text-center");
-        $("#tabel-produk").html(html);
+        $("#table-produk").removeClass("text-center");
+        $("#table-produk").html(html);
       } else {
-        $("#tabel-produk").addClass("text-center");
-        $("#tabel-produk").html(
+        $("#table-produk").addClass("text-center");
+        $("#table-produk").html(
           `<i class="text-secondary text-center">Tidak ada Produk</>`
         );
       }
