@@ -70,8 +70,8 @@
                     <div class="invalid-feedback">Password is required</div>
                   </div>
                   <div class="d-flex align-items-center">
-                    <button type="button" class="btn btn-primary ms-auto">
-                      Login
+                    <button type="submit" class="btn btn-primary ms-auto">
+                      Masuk
                     </button>
                   </div>
                 </form>
@@ -92,14 +92,14 @@
       </div>
     </section>
     <script src="register.js"></script>
-    <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/config.js"></script>
+    <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/js.cookie.min.js"></script>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/sweetalert2.all.min.js"></script>
     <script>
       $(document).ready(function () {
-        $("button[type=button]").on("click", function () {
+        $("button[type=submit]").on("click", function () {
           const URL = config.ENV_URL + "api/login";
           let username = $("#username").val();
           let password = $("#password").val();

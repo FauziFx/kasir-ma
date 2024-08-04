@@ -35,7 +35,6 @@
     <div class="progress progress-striped rounded-0 active">
       <div class="progress-bar progress-bar-success" style="width: 0%"></div>
     </div>
-    <!-- <?php include("./component/FixedSidebar.php") ?> -->
     <!-- Fixed sidebar -->
     <div
       class="d-flex flex-column flex-shrink-0 bg-body-tertiary sidenav"
@@ -101,7 +100,7 @@
               <input
                 type="text"
                 id="search_box"
-                class="form-control rounded-bottom-0 fs-5 p-3"
+                class="form-control rounded-bottom-0"
                 placeholder="Cari..."
                 aria-label="Recipient's username"
                 aria-describedby="basic-addon2"
@@ -139,7 +138,7 @@
             </div>
           </div>
         </div>
-        <!-- <?php include("./component/RightPanel.php") ?> -->
+
         <!-- Right panel / cart / keranjang -->
         <div class="col col-md-5 h-100">
           <div class="card h-100">
@@ -256,9 +255,7 @@
       </div>
     </div>
 
-    <?php include("./component/Sidebar.php") ?>
     <!-- Sidebar off canvas -->
-    <!-- Sidebar -->
     <div
       class="sidebar-mobile offcanvas offcanvas-start"
       tabindex="-1"
@@ -304,36 +301,29 @@
     <!-- ./Sidebar off canvas -->
 
     <!-- Modal Click Produk Varian -->
-    <!-- <?php include("./component/ModalVarian.php") ?> -->
     <div id="ModalVarian"></div>
 
     <!-- Modal tambah pelanggan -->
-    <!-- <?php include("./component/ModalPelanggan.php") ?> -->
     <div id="ModalPelanggan"></div>
 
     <!-- Modal Bayar -->
-    <!-- <?php include("./component/ModalBayar.php") ?> -->
     <div id="ModalBayar"></div>
 
     <!-- Modal transaksi berhasil -->
-    <!-- <?php include("./component/ModalTransaksiBerhasil.php") ?> -->
     <div id="ModalTransaksiBerhasil"></div>
 
     <!-- Modal Simpan Bill -->
-    <!-- <?php include("./component/ModalSimpanBill.php") ?> -->
     <div id="ModalSimpanBill"></div>
 
     <!-- Modal List Bill -->
-    <!-- <?php include("./component/ModalListBill.php") ?> -->
     <div id="ModalListBill"></div>
 
     <!-- Modal alert -->
-    <!-- <?php include("./component/ModalAlert.php") ?> -->
     <div id="ModalAlert"></div>
 
     <!-- Modal Pisah Bill -->
-    <!-- <?php include("./component/ModalPisahBill.php") ?> -->
     <div id="ModalPisahBill"></div>
+
     <script src="register.js"></script>
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/loadingoverlay.min.js"></script>
@@ -356,9 +346,9 @@
     <script src="assets/js/moment.min.js"></script>
     <script src="assets/js/moment-with-locales.min.js"></script>
     <script src="assets/js/moment-timezone-with-data.js"></script>
-    <script src="assets/js/index.js"></script>
-    <script src="assets/js/AjaxProduk.js"></script>
-    <script src="assets/js/AjaxCart.js"></script>
-    <script src="assets/js/AjaxBill.js"></script>
+    <script src="assets/js/func/index.js"></script>
+    <script src="assets/js/func/AjaxProduk.js"></script>
+    <script src="assets/js/func/AjaxCart.js"></script>
+    <script src="assets/js/func/AjaxBill.js"></script>
   </body>
 </html>
