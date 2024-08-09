@@ -35,7 +35,7 @@ function addToCart(idVarian) {
     },
     success: function (data) {
       let datas = data.data;
-      let cartActive = JSON.parse(localStorage.getItem("cart-active"));
+      let cartActive = JSON.parse(localStorage.getItem("cart-active")) || [];
       let cart = {
         harga: datas.harga,
         id_produk: datas.id_produk,
