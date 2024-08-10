@@ -10,10 +10,14 @@ $(document).ready(function () {
   });
 
   $("#input-scan").on("keyup", function () {
-    if ($(this).val().length == 7) {
-      const kode = $(this).val();
+    if ($(this).val().includes("n")) {
       $(this).val("");
-      addToCart(kode);
+    } else {
+      if ($(this).val().length == 7) {
+        const kode = $(this).val();
+        $(this).val("");
+        addToCart(kode);
+      }
     }
   });
 });
@@ -25,7 +29,6 @@ function setInputScanFocus() {
 
 function addToCart(idVarian) {
   const URL = API + "api/produk/varian/" + idVarian;
-  console.log("add");
 
   $.ajax({
     url: URL,
@@ -55,12 +58,10 @@ function addToCart(idVarian) {
         oldCart = cartActive.filter(function (e) {
           return e.id_varian != cart.id_varian;
         });
-        let qty = parseInt(filter[0].qty) + 1;
-        cart.qty = qty;
-        cart.subtotal = qty * parseInt(cart.harga);
-
-        oldCart.push(cart);
-        localStorage.setItem("cart-active", JSON.stringify(oldCart));
+        let qty = { qty: parseInt(filter[0].qty) + 1 };
+        let subtotal = { subtotal: qty.qty * parseInt(cart.harga) };
+        const result = update(cartActive, cart.id_varian, qty, subtotal);
+        localStorage.setItem("cart-active", JSON.stringify(result));
       } else {
         cartActive.push(cart);
         localStorage.setItem("cart-active", JSON.stringify(cartActive));
@@ -71,4 +72,10 @@ function addToCart(idVarian) {
       console.log(error);
     },
   });
+}
+
+function update(arr, id, updateQty, updateSubtotal) {
+  return arr.map((item) =>
+    item.id_varian === id ? { ...item, ...updateQty, ...updateSubtotal } : item
+  );
 }
