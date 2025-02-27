@@ -30,9 +30,13 @@ $(document).ready(function () {
   $(document).on("click", "#nama-pelanggan", function () {
     if (localStorage.getItem("data-pelanggan")) {
       let data = JSON.parse(localStorage.getItem("data-pelanggan"));
-      $("#pelanggan-aktif h3").html(data.namaPelanggan);
-      $("#pelanggan-aktif span").html(data.nohpPelanggan);
-      bsModalPelanggan.show();
+      if (data != "") {
+        $("#pelanggan-aktif h3").html(data.namaPelanggan);
+        $("#pelanggan-aktif span").html(data.nohpPelanggan);
+        bsModalPelanggan.show();
+      } else {
+        bsModalListPelanggan.show();
+      }
     } else {
       bsModalListPelanggan.show();
     }
