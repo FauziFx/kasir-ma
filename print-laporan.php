@@ -106,6 +106,14 @@ $data = json_decode($data);
     </header>
     <h3 style="text-align: center; margin: 0">Laporan</h3>
     <hr class="dash" />
+    <table class="table">
+      <tr>
+        <td colspan="2">Tanggal</td>
+        <td class="text-right" id="item-terjual">
+          <?= date("d-m-Y") ?>
+        </td>
+      </tr>
+    </table>
     <h3 style="text-align: center; margin: 0">Tunai</h3>
     <div class="item-container">
       <table class="table">
