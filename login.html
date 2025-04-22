@@ -13,6 +13,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
+    <link
+      rel="shortcut icon"
+      href="assets/img/icon192x192.png"
+      type="image/x-icon"
+    />
     <link rel="manifest" href="web.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -52,7 +57,7 @@
                       id="username"
                       name="username"
                       required=""
-                      placeholder="Username"
+                      placeholder="Username/Email"
                     />
                     <div class="invalid-feedback">Username is invalid</div>
                   </div>
@@ -100,7 +105,7 @@
     <script>
       $(document).ready(function () {
         $("button[type=submit]").on("click", function () {
-          const URL = config.ENV_URL + "api/login";
+          const URL = config.ENV_URL + "/login";
           let username = $("#username").val();
           let password = $("#password").val();
 
@@ -117,20 +122,23 @@
               url: URL,
               method: "POST",
               data: {
-                username: username,
+                email: username,
                 password: password,
               },
               success: function (data) {
                 if (data.success) {
-                  Cookies.set("user-token", data.token, {
-                    expires: 30,
+                  Cookies.set("user-token", data.data.token, {
+                    expires: 90,
                   });
-                } else if (data.succes == false) {
-                  alert(data.message);
+                  progressBar("index.html");
+                } else {
+                  Swal.fire(data.message);
+                  $("button[type=submit]").attr("disabled", false);
+                  $("button[type=submit]").html(`Masuk`);
                 }
               },
-              complete: function () {
-                progressBar("index.html");
+              error: function (error) {
+                console.log(error);
               },
             });
           }
