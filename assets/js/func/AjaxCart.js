@@ -289,7 +289,6 @@ function createTransaction(dataTransaction) {
         ...dataTransaction,
         receipt: data.receipt,
       };
-      console.log(dataTrx);
 
       Cookies.set("transaction-successfull", JSON.stringify(dataTrx));
       localStorage.setItem("transaction-successfull", JSON.stringify(dataTrx));
