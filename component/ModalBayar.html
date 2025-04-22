@@ -1,6 +1,6 @@
 <div
   class="modal fade"
-  id="modal-bayar"
+  id="modal-payment"
   data-bs-backdrop="static"
   data-bs-keyboard="false"
   tabindex="-1"
@@ -18,18 +18,19 @@
         >
           Batal
         </button>
-        <h5 class="modal-title" id="modal-title-bayar"></h5>
+        <h5 class="modal-title" id="modal-title-payment"></h5>
         <button
           type="button"
           class="btn btn-dark px-4 py-2"
-          id="btn-bayar-transaksi"
+          id="btn-payment-transaction"
         >
           Bayar
         </button>
       </div>
       <div class="modal-body px-4 py-4 mb-5">
         <span class="ps-3 fw-semibold">Pembayaran :</span>
-        <span class="fw-bold" id="info-jenis_transaksi"></span>
+        <span class="fw-bold" id="info-customer"></span>
+        <span class="fw-bold" id="info-transaction-type"></span>
         <hr style="margin: 0 0 0.5em 0" />
         <ul class="nav nav-pills px-4 row mb-3" role="tablist">
           <li
@@ -40,10 +41,9 @@
           </li>
           <li class="nav-item col col-4 d-block px-1 mb-1" role="presentation">
             <button
-              class="btn btn-outline-dark w-100 border border-dark py-2 metode-pembayaran"
-              data-pembayaran="tunai"
+              class="btn btn-outline-dark w-100 border border-dark py-2 payment-method"
+              data-pembayaran="cash"
               id="bayar-pas"
-              data-pembayaran="tunai"
               data-bs-toggle="tab"
               type="button"
               role="tab"
@@ -67,7 +67,7 @@
         <ul class="nav nav-pills px-4 row" role="tablist">
           <li class="nav-item col col-4 d-flex px-1 mb-1" role="presentation">
             <button
-              class="btn btn-outline-dark w-100 border border-dark py-2 metode-pembayaran"
+              class="btn btn-outline-dark w-100 border border-dark py-2 payment-method"
               data-pembayaran="transfer"
               data-bs-toggle="tab"
               type="button"
@@ -79,7 +79,7 @@
           </li>
           <li class="nav-item col col-4 d-flex px-1 mb-1" role="presentation">
             <button
-              class="btn btn-outline-dark w-100 border border-dark py-2 metode-pembayaran"
+              class="btn btn-outline-dark w-100 border border-dark py-2 payment-method"
               data-pembayaran="qris"
               data-bs-toggle="tab"
               type="button"
@@ -91,7 +91,7 @@
           </li>
           <li class="nav-item col col-4 d-flex px-1 mb-1" role="presentation">
             <button
-              class="btn btn-outline-dark w-100 border border-dark py-2 metode-pembayaran"
+              class="btn btn-outline-dark w-100 border border-dark py-2 payment-method"
               data-pembayaran="edc"
               data-bs-toggle="tab"
               type="button"

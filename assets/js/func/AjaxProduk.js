@@ -58,11 +58,6 @@ $(document).ready(function () {
   $(document).on("click", "#list-variants li button", function () {
     $("#btn-add-to-cart").attr("disabled", false);
 
-    console.log($(this).data("productid"));
-    console.log($(this).data("variantid"));
-    console.log($(this).data("variantname"));
-    console.log($(this).data("price"));
-
     let varian = {
       productId: $(this).data("productid"),
       variantId: $(this).data("variantid"),
@@ -233,8 +228,8 @@ function getProdukById(productId, objVarian, indexCart = "") {
     success: function (data) {
       $("#modal-title").html(data.data.name);
       if (objVarian) {
-        $("#varian-title").html("-" + objVarian.name);
-        $("#varian-total").html("-" + formatRupiah(objVarian.subtotal));
+        $("#varian-title").html("-" + objVarian.variantName);
+        $("#varian-total").html(formatRupiah(objVarian.subtotal));
         $("#input-qty").val(objVarian.qty);
         $("#input-price").val(objVarian.price);
         $("#isEdit").val(indexCart);

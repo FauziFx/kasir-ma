@@ -1,42 +1,75 @@
 <!-- Modal List Pelanggan -->
-<div class="modal fade" id="modal-list-pelanggan" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header d-flex justify-content-between">
-                <button type="button" class="btn btn-outline-secondary py-2" data-bs-dismiss="modal">Batal</button>
-                <h5 class="modal-title">Tambah Pelanggan</h5>
-                <div></div>
-            </div>
-            <div class="modal-body pb-5 px-5">
-                <div class="input-group mb-3">
-                    <input type="text" id="search_pelanggan" class="form-control" placeholder="Cari..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-                    <span class="input-group-text rounded-bottom-0" id="basic-addon2">
-                        <i class="bi-search"></i>
-                    </span>
-                </div>
-                <table class="table mt-2 mb-5">
-                    <tbody id="list-pelanggan">
-
-                    </tbody>
-                </table>
-            </div>
+<div
+  class="modal fade"
+  id="modal-list-customers"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-between">
+        <button
+          type="button"
+          class="btn btn-outline-secondary py-2"
+          data-bs-dismiss="modal"
+        >
+          Batal
+        </button>
+        <h5 class="modal-title">Tambah Pelanggan</h5>
+        <div></div>
+      </div>
+      <div class="modal-body pb-5 px-5">
+        <div class="input-group mb-3">
+          <input
+            type="text"
+            id="search_customer"
+            class="form-control"
+            placeholder="Cari..."
+            aria-describedby="basic-addon2"
+          />
+          <span class="input-group-text rounded-bottom-0" id="basic-addon2">
+            <i class="bi-search"></i>
+          </span>
         </div>
+        <table class="table mt-2 mb-5">
+          <tbody id="list-customers"></tbody>
+        </table>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Modal Pelanggan -->
-<div class="modal fade" id="modal-pelanggan" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header text-start">
-                <button type="button" class="btn btn-outline-secondary py-2" data-bs-dismiss="modal">Batal</button>
-            </div>
-            <div class="modal-body pb-5 px-5 text-center" id="pelanggan-aktif">
-                <h3>Nama Pelanggan</h3>
-                <span>083274623948723</span>
-                <hr>
-                <button class="btn btn-block btn-dark" id="hapus-pelanggan">Hapus Dari Transaksi</button>
-            </div>
-        </div>
+<div
+  class="modal fade"
+  id="modal-customers"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header text-start">
+        <button
+          type="button"
+          class="btn btn-outline-secondary py-2"
+          data-bs-dismiss="modal"
+        >
+          Batal
+        </button>
+      </div>
+      <div class="modal-body pb-5 px-5 text-center">
+        <h3 id="active-customer">Nama Pelanggan</h3>
+        <hr />
+        <button class="btn btn-block btn-dark" id="delete-customer">
+          Hapus Dari Transaksi
+        </button>
+      </div>
     </div>
+  </div>
 </div>
