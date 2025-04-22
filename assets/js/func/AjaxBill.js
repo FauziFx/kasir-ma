@@ -209,189 +209,177 @@ $(document).ready(function () {
     }
   });
 
-  // // Btn pisah bill
-  // $(document).on("click", "#btn-modal-split-bill", function () {
-  //   if (localStorage.getItem("indexbill")) {
-  //     const dataCart = JSON.parse(localStorage.getItem("cart-active"));
-  //     let indexQty = [];
-  //     dataCart.map((item) => {
-  //       indexQty.push(0);
-  //     });
-  //     localStorage.setItem("indexqty", JSON.stringify(indexQty));
-  //     if (dataCart.length > 1) {
-  //       let html = "";
-  //       dataCart.map((item, index) => {
-  //         html +=
-  //           `<div class="col-7">
-  //                     <p class="mb-0">` +
-  //           item.nama_produk +
-  //           `</p>
-  //                     <p class="mt-0 fw-light text-secondary">` +
-  //           item.nama_varian +
-  //           `<span class="fw-semibold ms-2">` +
-  //           formatRupiah(item.subtotal) +
-  //           `</span></p>
-  //                 </div>
-  //                 <div class="col-3">
-  //                     <div class="input-group mb-3">
-  //                         <button class="btn btn-dark input-group-text btn-increment-pisah btn-increment-` +
-  //           index +
-  //           `" data-increment="-1" data-index="` +
-  //           index +
-  //           `" disabled>
-  //                             <i class="bi-dash-circle"></i>
-  //                         </button>
-  //                         <input type="number" class="form-control text-center" id="input-qty-pisah-` +
-  //           index +
-  //           `" value="` +
-  //           item.qty +
-  //           `" min="1" max="` +
-  //           item.qty +
-  //           `" readonly>
-  //                         <button class="btn btn-dark input-group-text btn-increment-pisah btn-increment-` +
-  //           index +
-  //           `" data-increment="1" data-index="` +
-  //           index +
-  //           `" disabled>
-  //                             <i class="bi-plus-circle"></i>
-  //                         </button>
-  //                     </div>
-  //                 </div>
-  //                 <div class="col-2 text-center">
-  //                     <input type="checkbox" class="larger checkbox-pisah" data-index="` +
-  //           index +
-  //           `">
-  //                 </div>
-  //                 <hr style="margin: 0 0 0.5em 0">`;
-  //       });
-  //       $("#list-split-bill").html(html);
-  //       bsModalSplitBill.show();
-  //     }
-  //   }
-  // });
+  // Btn pisah bill
+  $(document).on("click", "#btn-modal-split-bill", function () {
+    if (localStorage.getItem("indexbill")) {
+      const dataCart = JSON.parse(localStorage.getItem("cart-active"));
+      let indexQty = [];
+      dataCart.map((item) => {
+        indexQty.push(0);
+      });
 
-  // let dataPisahBill;
-  // // Toggle checkbox pisah bill
-  // // Select item untuk pisah bill
-  // $(document).on("click", ".checkbox-pisah", function () {
-  //   const index = $(this).data("index");
-  //   $(".btn-increment-" + index).attr("disabled", !this.checked);
+      localStorage.setItem("indexqty", JSON.stringify(indexQty));
+      if (dataCart.length > 1) {
+        let html = "";
+        dataCart.map((item, index) => {
+          html += `<div class="col-7">
+              <p class="mb-0">${item.productName}</p>
+              <p class="mt-0 fw-light text-secondary">
+                ${item.variantName}
+                <span class="fw-semibold ms-2">
+                  ${formatRupiah(item.subtotal)}
+                </span>
+              </p>
+            </div>
+            <div class="col-3">
+              <div class="input-group mb-3">
+                <button class="btn btn-dark input-group-text btn-increment-split btn-increment-${index}" data-increment="-1" data-index="${index}" disabled>
+                  <i class="bi-dash-circle"></i>
+                </button>
+                <input type="number" class="form-control text-center" 
+                  id="input-qty-split-${index}" 
+                  value="${item.qty}" 
+                  min="1" 
+                  max="${item.qty}" 
+                  readonly>
+                <button class="btn btn-dark input-group-text btn-increment-split btn-increment-${index}" data-increment="1" data-index="${index}" disabled>
+                  <i class="bi-plus-circle"></i>
+                </button>
+              </div>
+            </div>
+            <div class="col-2 text-center">
+              <input type="checkbox" class="larger checkbox-split" data-index="${index}">
+            </div>
+            <hr style="margin: 0 0 0.5em 0">`;
+        });
+        $("#list-split-bill").html(html);
+        bsModalSplitBill.show();
+      }
+    }
+  });
 
-  //   if (this.checked) {
-  //     const dataProduk = JSON.parse(localStorage.getItem("cart-active"))[index];
-  //     let qty = parseInt($("#input-qty-pisah-" + index).val());
-  //     dataPisahBill = {
-  //       index: index,
-  //       harga: dataProduk.harga,
-  //       id_produk: dataProduk.id_produk,
-  //       id_varian: dataProduk.id_varian,
-  //       nama_produk: dataProduk.nama_produk,
-  //       nama_varian: dataProduk.nama_varian,
-  //       qty: qty,
-  //       subtotal: parseInt(dataProduk.harga) * qty,
-  //     };
+  let dataSplitBill;
+  // Toggle checkbox pisah bill
+  // Select item untuk pisah bill
+  $(document).on("click", ".checkbox-split", function () {
+    const index = $(this).data("index");
+    $(".btn-increment-" + index).attr("disabled", !this.checked);
 
-  //     // Index qty
-  //     let indexQty = JSON.parse(localStorage.getItem("indexqty"));
-  //     indexQty[index] = dataProduk.qty;
-  //     localStorage.setItem("indexqty", JSON.stringify(indexQty));
+    if (this.checked) {
+      const dataCart = JSON.parse(localStorage.getItem("cart-active"))[index];
+      let qty = parseInt($("#input-qty-split-" + index).val());
+      dataSplitBill = {
+        index: index,
+        price: dataCart.price,
+        productId: dataCart.productId,
+        variantId: dataCart.variantId,
+        productName: dataCart.productName,
+        variantName: dataCart.variantName,
+        qty: qty,
+        subtotal: parseInt(dataCart.price) * qty,
+      };
 
-  //     let data = [];
+      // Index qty
+      let indexQty = JSON.parse(localStorage.getItem("indexqty"));
+      indexQty[index] = dataCart.qty;
+      localStorage.setItem("indexqty", JSON.stringify(indexQty));
 
-  //     if (localStorage.getItem("split-bill")) {
-  //       // if localstorage exist
-  //       data = JSON.parse(localStorage.getItem("split-bill"));
-  //       data.push(dataPisahBill);
-  //       localStorage.setItem("split-bill", JSON.stringify(data));
-  //     } else {
-  //       // if localstorage doesn't exist
-  //       localStorage.setItem("split-bill", JSON.stringify([dataPisahBill]));
-  //     }
-  //   } else {
-  //     const data = JSON.parse(localStorage.getItem("split-bill"));
-  //     let newData = data.filter(function (item) {
-  //       return item.index != index;
-  //     });
-  //     localStorage.setItem("split-bill", JSON.stringify(newData));
-  //     $("#input-qty-pisah-" + index).val(
-  //       JSON.parse(localStorage.getItem("cart-active"))[index].qty
-  //     );
-  //     let indexQty = JSON.parse(localStorage.getItem("indexqty"));
-  //     indexQty[index] = 0;
-  //     localStorage.setItem("indexqty", JSON.stringify(indexQty));
-  //   }
+      let data = [];
 
-  //   if (localStorage.getItem("split-bill") != "[]") {
-  //     $("#btn-split-bill").attr("disabled", false);
-  //   } else {
-  //     $("#btn-split-bill").attr("disabled", true);
-  //   }
+      if (localStorage.getItem("split-bill")) {
+        // if localstorage exist
+        data = JSON.parse(localStorage.getItem("split-bill"));
+        data.push(dataSplitBill);
+        localStorage.setItem("split-bill", JSON.stringify(data));
+      } else {
+        // if localstorage doesn't exist
+        localStorage.setItem("split-bill", JSON.stringify([dataSplitBill]));
+      }
+    } else {
+      const data = JSON.parse(localStorage.getItem("split-bill"));
+      let newData = data.filter(function (item) {
+        return item.index != index;
+      });
+      localStorage.setItem("split-bill", JSON.stringify(newData));
+      $("#input-qty-split-" + index).val(
+        JSON.parse(localStorage.getItem("cart-active"))[index].qty
+      );
+      let indexQty = JSON.parse(localStorage.getItem("indexqty"));
+      indexQty[index] = 0;
+      localStorage.setItem("indexqty", JSON.stringify(indexQty));
+    }
 
-  //   totalPisahBill();
-  // });
+    if (localStorage.getItem("split-bill") != "[]") {
+      $("#btn-split-bill").attr("disabled", false);
+    } else {
+      $("#btn-split-bill").attr("disabled", true);
+    }
 
-  // // Increment qty pisah bill
-  // $(document).on("click", ".btn-increment-pisah", function () {
-  //   const indexInput = $(this).data("index");
-  //   const value = JSON.parse(localStorage.getItem("cart-active"))[indexInput]
-  //     .qty;
-  //   let currentValue = $("#input-qty-pisah-" + indexInput).val();
-  //   let increment =
-  //     parseInt(currentValue) + parseInt($(this).data("increment"));
-  //   let resultQty = 1;
-  //   if (increment < 1) {
-  //     $("#input-qty-pisah-" + indexInput).val(1);
-  //     resultQty = 1;
-  //   } else if (increment > value) {
-  //     $("#input-qty-pisah-" + indexInput).val(parseInt(value));
-  //     resultQty = parseInt(value);
-  //   } else {
-  //     $("#input-qty-pisah-" + indexInput).val(increment);
-  //     resultQty = increment;
-  //   }
+    totalSplitBill();
+  });
 
-  //   let data = JSON.parse(localStorage.getItem("split-bill"));
-  //   const newData = data.map((obj, index) =>
-  //     obj.index == indexInput
-  //       ? {
-  //           ...obj,
-  //           qty: resultQty,
-  //           subtotal: parseInt(obj.harga) * parseInt(resultQty),
-  //         }
-  //       : obj
-  //   );
-  //   let indexQty = JSON.parse(localStorage.getItem("indexqty"));
-  //   indexQty[indexInput] = resultQty;
-  //   localStorage.setItem("indexqty", JSON.stringify(indexQty));
+  // Increment qty pisah bill
+  $(document).on("click", ".btn-increment-split", function () {
+    const indexInput = $(this).data("index");
+    const value = JSON.parse(localStorage.getItem("cart-active"))[indexInput]
+      .qty;
+    let currentValue = $("#input-qty-split-" + indexInput).val();
+    let increment =
+      parseInt(currentValue) + parseInt($(this).data("increment"));
+    let resultQty = 1;
+    if (increment < 1) {
+      $("#input-qty-split-" + indexInput).val(1);
+      resultQty = 1;
+    } else if (increment > value) {
+      $("#input-qty-split-" + indexInput).val(parseInt(value));
+      resultQty = parseInt(value);
+    } else {
+      $("#input-qty-split-" + indexInput).val(increment);
+      resultQty = increment;
+    }
 
-  //   localStorage.setItem("split-bill", JSON.stringify(newData));
-  //   totalPisahBill();
-  // });
+    let data = JSON.parse(localStorage.getItem("split-bill"));
+    const newData = data.map((obj, index) =>
+      obj.index == indexInput
+        ? {
+            ...obj,
+            qty: resultQty,
+            subtotal: parseInt(obj.harga) * parseInt(resultQty),
+          }
+        : obj
+    );
+    let indexQty = JSON.parse(localStorage.getItem("indexqty"));
+    indexQty[indexInput] = resultQty;
+    localStorage.setItem("indexqty", JSON.stringify(indexQty));
 
-  // // btn pisahkan toggel disabled
-  // $("#btn-split-bill").attr("disabled", true);
-  // $("#btn-split-bill").on("click", function () {
-  //   bsModalSplitBill.hide();
-  //   $("#btn-bayar").click();
-  // });
+    localStorage.setItem("split-bill", JSON.stringify(newData));
+    totalSplitBill();
+  });
+
+  // btn pisahkan toggel disabled
+  $("#btn-split-bill").attr("disabled", true);
+  $("#btn-split-bill").on("click", function () {
+    bsModalSplitBill.hide();
+    $("#btn-payment").click();
+  });
 });
 
-// function totalSplitBill() {
-//   let dataPisahBill = JSON.parse(localStorage.getItem("split-bill"));
-//   if (dataPisahBill.length > 0) {
-//     let sum = 0;
-//     dataPisahBill.map((item) => {
-//       sum += item.subtotal;
-//     });
-//     localStorage.setItem("total-split-bill", sum);
-//   } else {
-//     localStorage.setItem("total-split-bill", 0);
-//   }
+function totalSplitBill() {
+  let dataSplitBill = JSON.parse(localStorage.getItem("split-bill"));
+  if (dataSplitBill.length > 0) {
+    let sum = 0;
+    dataSplitBill.map((item) => {
+      sum += item.subtotal;
+    });
+    localStorage.setItem("total-split-bill", sum);
+  } else {
+    localStorage.setItem("total-split-bill", 0);
+  }
 
-//   $("#total-split-bill").html(
-//     formatRupiah(localStorage.getItem("total-split-bill"))
-//   );
-// }
+  $("#total-split-bill").html(
+    formatRupiah(localStorage.getItem("total-split-bill"))
+  );
+}
 
 function deleteBill(index) {
   const data = JSON.parse(localStorage.getItem("list-bill"));

@@ -14,7 +14,7 @@
           type="button"
           class="btn btn-outline-secondary py-2"
           data-bs-dismiss="modal"
-          onclick="batalPisahBill();"
+          onclick="cancelSplitBill();"
         >
           Batal
         </button>
@@ -22,7 +22,7 @@
         <button
           type="button"
           class="btn btn-dark px-4 py-2"
-          id="btn-pisah-bill"
+          id="btn-split-bill"
         >
           Pisahkan
         </button>
@@ -32,12 +32,12 @@
           class="border border-dark rounded-2 px-4 py-2 d-flex justify-content-between"
         >
           <span class="mt-1">Jumlah yang dipisahkan</span>
-          <span class="fw-semibold fs-5" id="total-pisah-bill">Rp. 0</span>
+          <span class="fw-semibold fs-5" id="total-split-bill">Rp. 0</span>
         </div>
         <br />
         <span class="ps-3 fw-semibold">Produk yang dipisahkan </span>
         <hr style="margin: 0 0 0.5em 0" />
-        <div class="row" id="list-pisah-bill"></div>
+        <div class="row" id="list-split-bill"></div>
       </div>
     </div>
   </div>
