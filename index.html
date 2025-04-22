@@ -105,19 +105,13 @@
         <div class="col col-md-7 h-100 px-0">
           <div class="card h-100">
             <div class="row mb-1">
-              <div class="col col-md-2 col-sm-2 pe-0">
-                <button class="btn btn-primary w-100 h-100" id="btn-scan">
-                  <i class="bi-upc-scan fs-5"></i> Scan
-                </button>
-              </div>
-              <div class="col col-md-10 col-sm-10 ps-0">
+              <div class="col col-md-12">
                 <div class="input-group">
                   <input
                     type="text"
                     id="search_box"
                     class="form-control fs-5"
                     placeholder="Cari..."
-                    aria-label="Recipient's username"
                     aria-describedby="basic-addon2"
                   />
                   <span class="input-group-text" id="basic-addon2">
@@ -129,28 +123,31 @@
             <div class="btn-group rounded-0">
               <button
                 type="button"
-                data-id="semua"
+                data-id=""
                 data-nama="Semua Produk"
-                class="btn-kategori btn btn-outline-dark rounded-0 active"
-                id="all-kategori"
+                class="btn-categories btn btn-outline-dark rounded-0 active"
+                id="all-categories"
                 data-bs-toggle="button"
               >
                 Semua
               </button>
               <button
                 type="button"
-                data-id="0"
+                data-id="null"
                 data-nama="Uncategorized"
-                class="btn-kategori btn btn-outline-dark rounded-0"
+                class="btn-categories btn btn-outline-dark rounded-0"
                 data-bs-toggle="button"
               >
                 Uncategorized
               </button>
             </div>
-            <span class="text-center fw-semibold mt-1" id="title-produk"></span>
+            <span
+              class="text-center fw-semibold mt-1"
+              id="title-product"
+            ></span>
             <div class="overflow-y-auto px-2 pb-2">
               <table class="table table-hover">
-                <tbody id="table-produk"></tbody>
+                <tbody id="table-products"></tbody>
               </table>
             </div>
           </div>
@@ -181,32 +178,6 @@
                 >
                   + Tambah Pelanggan
                 </button>
-              </div>
-            </div>
-            <div class="card-header p-0">
-              <div class="btn-group d-flex">
-                <button
-                  type="button"
-                  id="jenis-transaksi"
-                  class="btn btn-default dropdown-toggle w-100 rounded-top-0 py-1"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Umum
-                </button>
-                <ul class="dropdown-menu w-100">
-                  <li>
-                    <a class="dropdown-item" href="#" data-jenis="umum">Umum</a>
-                  </li>
-                  <li>
-                    <hr class="dropdown-divider" />
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#" data-jenis="magrup"
-                      >Ma Grup</a
-                    >
-                  </li>
-                </ul>
               </div>
             </div>
             <div class="card-body overflow-auto px-2">
