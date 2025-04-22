@@ -231,33 +231,33 @@ function transaksiBaru() {
   if (!localStorage.getItem("split-bill")) {
     if (localStorage.getItem("indexbill")) {
       const indexBill = JSON.parse(localStorage.getItem("indexbill")).indexBill;
-      hapusBill(indexBill);
+      deleteBill(indexBill);
       localStorage.removeItem("indexbill");
     }
     localStorage.removeItem("data-customer");
     localStorage.removeItem("total");
     localStorage.removeItem("cart-active");
   } else {
-    // let dataCartActive = JSON.parse(localStorage.getItem("cart-active"));
-    // let indexQty = JSON.parse(localStorage.getItem("indexqty"));
-    // let res = [];
-    // dataCartActive.map((item, index) => {
-    //   let qty = parseInt(item.qty) - parseInt(indexQty[index]);
-    //   let part = {};
-    //   part.harga = item.harga;
-    //   part.id_produk = item.id_produk;
-    //   part.id_varian = item.id_varian;
-    //   part.nama_produk = item.nama_produk;
-    //   part.nama_varian = item.nama_varian;
-    //   part.qty = qty;
-    //   part.subtotal = parseInt(item.harga) * parseInt(qty);
-    //   res.push(part);
-    // });
-    // let result = res.filter(function (item) {
-    //   return item.qty != 0;
-    // });
-    // localStorage.setItem("cart-active", JSON.stringify(result));
-    // batalPisahBill();
+    let dataCartActive = JSON.parse(localStorage.getItem("cart-active"));
+    let indexQty = JSON.parse(localStorage.getItem("indexqty"));
+    let res = [];
+    dataCartActive.map((item, index) => {
+      let qty = parseInt(item.qty) - parseInt(indexQty[index]);
+      let part = {};
+      part.price = item.price;
+      part.productId = item.productId;
+      part.variantId = item.variantId;
+      part.productName = item.productName;
+      part.variantName = item.variantName;
+      part.qty = qty;
+      part.subtotal = parseInt(item.price) * parseInt(qty);
+      res.push(part);
+    });
+    let result = res.filter(function (item) {
+      return item.qty != 0;
+    });
+    localStorage.setItem("cart-active", JSON.stringify(result));
+    cancelSplitBill();
   }
 
   localStorage.removeItem("payment");

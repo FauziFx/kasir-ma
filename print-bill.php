@@ -87,15 +87,15 @@
 </head>
 
 <?php
-$data = $_COOKIE['cetak-bill'];
+$data = $_COOKIE['print-bill'];
 $data = json_decode($data);
 // echo "<pre>";
 // var_dump($data);
-// die();
 // echo "</pre>";
 ?>
 
-<body onload="window.print()">
+<!-- <body onload="window.print()"> -->
+<body>
   <div class="container">
     <header>
       <div class="nama-perusahaan" style="margin: 15px 0 15px 0">
@@ -110,7 +110,7 @@ $data = json_decode($data);
     </header>
     <div class="metadata">
       <?php
-      $date = explode("pukul", $data->tanggal);
+      $date = explode("pukul", $data->date);
 
       $tgl = $date[0];
       $jam = $date[1];
@@ -124,7 +124,7 @@ $data = json_decode($data);
           <td>Nama Pelanggan</td>
           <td class="text-right" id="nama_pelanggan">
             <?php
-            $namaPelanggan = $data->nama_pelanggan == "" ? "-" : $data->nama_pelanggan;
+            $namaPelanggan = $data->customer == "" ? "-" : $data->customer->nameCustomer;
             echo $namaPelanggan;
             ?>
           </td>
@@ -132,7 +132,7 @@ $data = json_decode($data);
         <tr>
           <td>Nama Bill</td>
           <td class="text-right" id="nama_pelanggan">
-            <?= $data->nama ?>
+            <?= $data->name ?>
           </td>
         </tr>
       </table>
@@ -145,14 +145,11 @@ $data = json_decode($data);
         ?>
           <tr>
             <td colspan="3">
-              <span class="nama-item"><?= $x->nama_produk ?></span>
+              <span class="nama-item"><?= $x->productName ?></span>
             </td>
           </tr>
-          <tr>
-            <td colspan="3"></td>
-          </tr>
           <tr class="text-left">
-            <td>@ <?= $x->harga ?></td>
+            <td>@ <?= $x->price ?></td>
             <td>x <?= $x->qty ?></td>
             <td class="text-right"><?= $x->subtotal ?></td>
           </tr>
@@ -180,11 +177,11 @@ $data = json_decode($data);
   </div>
 </body>
 <script type="text/javascript">
-  document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(function() {
-      window.close();
-    }, 7000);
-  });
+  // document.addEventListener("DOMContentLoaded", () => {
+  //   setTimeout(function() {
+  //     window.close();
+  //   }, 7000);
+  // });
 </script>
 
 </html>

@@ -1,22 +1,44 @@
-<div class="modal fade" id="modal-pisah-bill" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header d-flex justify-content-between">
-                <button type="button" class="btn btn-outline-secondary py-2" data-bs-dismiss="modal" onclick="batalPisahBill();">Batal</button>
-                <h5 class="modal-title">Pisah Bill</h5>
-                <button type="button" class="btn btn-dark px-4 py-2" id="btn-pisah-bill">Pisahkan</button>
-            </div>
-            <div class="modal-body px-4 py-4 mb-5">
-                <div class="border border-dark rounded-2 px-4 py-2 d-flex justify-content-between">
-                    <span class="mt-1">Jumlah yang dipisahkan</span>
-                    <span class="fw-semibold fs-5" id="total-pisah-bill">Rp. 0</span>
-                </div><br>
-                <span class="ps-3 fw-semibold">Produk yang dipisahkan </span>
-                <hr style="margin: 0 0 0.5em 0">
-                <div class="row" id="list-pisah-bill">
-
-                </div>
-            </div>
+<div
+  class="modal fade"
+  id="modal-split-bill"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-between">
+        <button
+          type="button"
+          class="btn btn-outline-secondary py-2"
+          data-bs-dismiss="modal"
+          onclick="batalPisahBill();"
+        >
+          Batal
+        </button>
+        <h5 class="modal-title">Pisah Bill</h5>
+        <button
+          type="button"
+          class="btn btn-dark px-4 py-2"
+          id="btn-pisah-bill"
+        >
+          Pisahkan
+        </button>
+      </div>
+      <div class="modal-body px-4 py-4 mb-5">
+        <div
+          class="border border-dark rounded-2 px-4 py-2 d-flex justify-content-between"
+        >
+          <span class="mt-1">Jumlah yang dipisahkan</span>
+          <span class="fw-semibold fs-5" id="total-pisah-bill">Rp. 0</span>
         </div>
+        <br />
+        <span class="ps-3 fw-semibold">Produk yang dipisahkan </span>
+        <hr style="margin: 0 0 0.5em 0" />
+        <div class="row" id="list-pisah-bill"></div>
+      </div>
     </div>
+  </div>
 </div>
