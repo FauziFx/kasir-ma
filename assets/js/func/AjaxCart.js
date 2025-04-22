@@ -199,32 +199,32 @@ $(document).ready(function () {
     createTransaction(dataTransaksi);
   });
 
-  // // Print nota transaksi berhasil
-  // $(document).on("click", "#print-notanya", function () {
-  //   let is_mobile = /android|mobile/gi.test(navigator.userAgent);
-  //   let url = "print-nota-bayar.php";
-  //   if (is_mobile) {
-  //     console.log("ismobile");
-  //     let html_container =
-  //       "print://escpos.org/escpos/bt/print?srcTp=uri&srcObj=html&src='data:text/html,";
-  //     $.ajax({
-  //       url: url,
-  //       success: function (html) {
-  //         html_container += html;
-  //         window.location.href = html_container;
-  //       },
-  //       error: function () {
-  //         alert("Ajax Error, cek console browser");
-  //       },
-  //     });
-  //   } else {
-  //     window.open(
-  //       url,
-  //       "Cetak laporan",
-  //       "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
-  //     );
-  //   }
-  // });
+  // Print nota transaksi berhasil
+  $(document).on("click", "#print-notanya", function () {
+    let is_mobile = /android|mobile/gi.test(navigator.userAgent);
+    let url = "print-nota-bayar.php";
+    if (is_mobile) {
+      console.log("ismobile");
+      let html_container =
+        "print://escpos.org/escpos/bt/print?srcTp=uri&srcObj=html&src='data:text/html,";
+      $.ajax({
+        url: url,
+        success: function (html) {
+          html_container += html;
+          window.location.href = html_container;
+        },
+        error: function () {
+          alert("Ajax Error, cek console browser");
+        },
+      });
+    } else {
+      window.open(
+        url,
+        "Cetak Nota",
+        "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
+      );
+    }
+  });
 });
 
 function transaksiBaru() {
@@ -287,8 +287,10 @@ function createTransaction(dataTransaction) {
       // localStorage.clear();
       let dataTrx = {
         ...dataTransaction,
-        receipt: data.receipt_no,
+        receipt: data.receipt,
       };
+      console.log(dataTrx);
+
       Cookies.set("transaction-successfull", JSON.stringify(dataTrx));
       localStorage.setItem("transaction-successfull", JSON.stringify(dataTrx));
       getCart();

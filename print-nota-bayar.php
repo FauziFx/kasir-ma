@@ -85,10 +85,10 @@
     </style>
 </head>
 <?php
-$data = $_COOKIE['transaksi-berhasil'];
+$data = $_COOKIE['transaction-successfull'];
 $data = json_decode($data);
 // echo "<pre>";
-// var_dump($data);
+// print_r($data);
 // echo "</pre>";
 ?>
 
@@ -118,7 +118,7 @@ $data = json_decode($data);
                 <tr>
                     <td>No Nota</td>
                     <td class="text-right" id="nama_pelanggan">
-                        #<?= $data->noNota ?>
+                        #<?= $data->receipt ?>
                     </td>
                 </tr>
             </table>
@@ -127,18 +127,15 @@ $data = json_decode($data);
         <div class="item-container">
             <table class="table" id="list">
                 <?php
-                foreach ($data->transaksi_detail as $x) {
+                foreach ($data->transactionDetails as $x) {
                 ?>
                     <tr>
                         <td colspan="3">
-                            <span class="nama-item"><?= $x->nama_produk ?></span>
+                            <span class="nama-item"><?= $x->productName ?></span>
                         </td>
                     </tr>
-                    <tr>
-                        <td colspan="3"></td>
-                    </tr>
                     <tr class="text-left">
-                        <td>@ <?= $x->harga ?></td>
+                        <td>@ <?= $x->price ?></td>
                         <td>x <?= $x->qty ?></td>
                         <td class="text-right"><?= $x->subtotal ?></td>
                     </tr>
@@ -156,19 +153,19 @@ $data = json_decode($data);
                 <tr class="text-bold">
                     <td colspan="2">Total</td>
                     <td class="text-right" id="total">
-                        <?= "Rp. " . number_format($data->total, 0, ',', '.'); ?>
+                        <?= "Rp. " . number_format($data->total_amount, 0, ',', '.'); ?>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" id="metode_pembayaran"><?= strtoupper($data->metode_pembayaran) ?></td>
+                    <td colspan="2" id="metode_pembayaran"><?= strtoupper($data->payment_method) ?></td>
                     <td class="text-right" id="bayar">
-                        <?= "Rp. " . number_format($data->bayar, 0, ',', '.'); ?>
+                        <?= "Rp. " . number_format($data->payment_amount, 0, ',', '.'); ?>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">Kembalian</td>
                     <td class="text-right" id="kembalian">
-                        <?= "Rp. " . number_format($data->bayar - $data->total, 0, ',', '.'); ?>
+                        <?= "Rp. " . number_format($data->payment_amount - $data->total_amount, 0, ',', '.'); ?>
                     </td>
                 </tr>
             </table>
