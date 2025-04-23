@@ -106,27 +106,27 @@
         </div>
         <div class="col col-md-7 h-100">
           <div class="card h-100 p-3 overflow-y-scroll">
-            <div id="detail-transaksi">
+            <div id="detail-transaction">
               <div class="text-center mt-2 mb-3">
-                <button class="btn btn-dark" id="btn-print-nota">
+                <button class="btn btn-dark" id="btn-print-receipt">
                   <i class="bi-printer"></i> Print Nota
                 </button>
               </div>
 
               <span class="ps-3 fw-semibold">Detail</span>
               <hr style="margin: 0 0 0.5em 0" />
-              <input type="hidden" name="" id="transaksi-id" />
+              <input type="hidden" name="" id="transaction-id" />
               <table class="table table-sm">
                 <tbody>
                   <tr>
                     <td
                       class="align-middle text-center"
-                      id="detail-icon-metode_pembayaran"
+                      id="detail-icon-paymentmethod"
                     ></td>
                     <td class="align-middle">Metode Pembayaran</td>
                     <td
                       class="text-end align-middle"
-                      id="detail-metode_pembayaran"
+                      id="detail-paymentmethod"
                     ></td>
                   </tr>
                   <tr>
@@ -134,7 +134,7 @@
                       <i class="bi-receipt fs-4 text-secondary"></i>
                     </td>
                     <td class="align-middle">No Nota</td>
-                    <td class="text-end align-middle" id="detail-no_nota"></td>
+                    <td class="text-end align-middle" id="detail-receipt"></td>
                   </tr>
                   <tr>
                     <td class="align-middle text-center">
@@ -143,7 +143,7 @@
                     <td class="align-middle">Nama</td>
                     <td
                       class="text-end align-middle"
-                      id="detail-nama_pelanggan"
+                      id="detail-customername"
                     ></td>
                   </tr>
                   <tr>
@@ -151,22 +151,7 @@
                       <i class="bi-clock fs-4 text-secondary"></i>
                     </td>
                     <td class="align-middle">Tanggal Transaksi</td>
-                    <td class="text-end align-middle" id="detail-tanggal"></td>
-                  </tr>
-                  <tr>
-                    <td class="align-middle text-center">
-                      <i class="bi-cart fs-4 text-secondary"></i>
-                    </td>
-                    <td class="align-middle">Jenis Transaksi</td>
-                    <td
-                      class="text-end align-middle"
-                      id="detail-jenis_transaksi"
-                    >
-                      <select name="" id="select-jenis_transaksi">
-                        <option value="umum">Umum</option>
-                        <option value="magrup">Ma Grup</option>
-                      </select>
-                    </td>
+                    <td class="text-end align-middle" id="detail-date"></td>
                   </tr>
                 </tbody>
               </table>
@@ -183,12 +168,12 @@
                   <tr>
                     <td></td>
                     <td>Bayar</td>
-                    <td class="text-end" id="detail-bayar"></td>
+                    <td class="text-end" id="detail-payment"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td>Kembalian</td>
-                    <td class="text-end" id="detail-kembalian"></td>
+                    <td class="text-end" id="detail-change"></td>
                   </tr>
                 </tbody>
               </table>
@@ -253,7 +238,7 @@
       function getData(pages) {
         let page = pages || 1;
         const API = config.ENV_URL;
-        const URL = API + "api/laporan/transaksi?mobile=y&page=" + page;
+        const URL = API + "/transactions?page=" + page;
         $.ajax({
           url: URL,
           method: "GET",
@@ -262,65 +247,56 @@
           },
           success: function (data) {
             const datas = data.data;
-            let html = "";
+
+            let html = "<tbody>";
             datas.map((item) => {
-              html +=
-                `<thead>
-                    <tr>
-                        <th style="background: #e9e9e9" colspan="3">` +
-                moment(item.tanggal).tz("Asia/Jakarta").format("LL") +
-                `</th>
-                    </tr>
-                </thead>
-                <tbody>`;
-              const transaksi = item.transaksi.sort(
-                (a, b) => parseFloat(b.id) - parseFloat(a.id)
-              );
-              transaksi.map((items) => {
-                let icon = "";
-                let badge = "";
-                if (items.jenis_transaksi == "magrup") {
-                  badge = `<span class="badge bg-secondary">MA Grup</span>`;
-                }
-                if (items.metode_pembayaran == "transfer") {
-                  icon = `<i class="bi-currency-exchange fs-4"></i>`;
-                } else if (items.metode_pembayaran == "qris") {
-                  icon = `<i class="bi-qr-code-scan fs-4"></i>`;
-                } else if (items.metode_pembayaran == "edc") {
-                  icon = `<i class="bi-credit-card-2-back fs-4"></i>`;
-                } else {
-                  icon = `<i class="bi-cash fs-4"></i>`;
-                }
-                html +=
-                  `<tr class="transaksi" data-id="` +
-                  items.id +
-                  `">
-                    <td class="text-center">
-                        ` +
-                  icon +
-                  `
-                    </td>
-                        <td>` +
-                  formatRupiah(items.total) +
-                  `</br><span class="text-secondary">#` +
-                  items.no_nota +
-                  `</span></td>
-                  <td class="text-end">` +
-                  items.waktu +
-                  `</br>` +
-                  badge +
-                  `</td>
-                    </tr>`;
-              });
-              html += `</tbody>`;
+              let icon = "";
+              if (item.payment_method == "transfer") {
+                icon = `<i class="bi-currency-exchange fs-4"></i>`;
+              } else if (item.payment_method == "qris") {
+                icon = `<i class="bi-qr-code-scan fs-4"></i>`;
+              } else if (item.payment_method == "edc") {
+                icon = `<i class="bi-credit-card-2-back fs-4"></i>`;
+              } else {
+                icon = `<i class="bi-cash fs-4"></i>`;
+              }
+              html += `<tr class="transaction" data-id="${
+                item.id
+              }" style="cursor:pointer">
+                          <td class="item item-${
+                            item.id
+                          } text-center align-middle">${icon}</td>
+                          <td class="item item-${item.id}">
+                            ${formatRupiah(item.total_amount)}</br>
+                            <span class="text-secondary fw-normal">
+                              ${item.receipt_no}
+                            </span></br>
+                            <span class="text-secondary fw-normal">
+                              ${moment(item.date)
+                                .tz("Asia/Jakarta")
+                                .format("lll")}
+                            </span>
+                          </td>
+                          <td class="item item-${
+                            item.id
+                          } text-end text-secondary align-middle">
+                            <span class="badge bg-secondary">
+                              ${item.transactionType.name}
+                            </span>
+                          </td>
+                        </tr>`;
             });
+
             html += `<tr>
-                        <td colspan="3">
-                          <button class="btn btn-primary w-100 btn-loadmore-transaksi" data-page="${
-                            parseInt(data.page) + 1
-                          }">Load More</button>
-                        </td>
-                      </tr>`;
+                      <td colspan="3">
+                        <button class="btn btn-primary w-100 btn-loadmore-transaction"
+                          data-page="${parseInt(data.currentPage) + 1}"
+                          disabled="${data.currentPage == data.totalPages}">
+                          Load More
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>`;
 
             $("#list").html(html);
           },
@@ -328,24 +304,26 @@
       }
 
       $(document).ready(function () {
-        $("#detail-transaksi").hide();
+        $("#detail-transaction").hide();
         moment.locale("id");
         getData();
 
-        $(document).on("click", ".btn-loadmore-transaksi", function () {
+        $(document).on("click", ".btn-loadmore-transaction", function () {
           let page = $(this).data("page");
           getData(page);
           const el = document.querySelector("#list");
           el.scrollIntoView({ block: "start", behavior: "smooth" });
         });
 
-        $(document).on("click", ".transaksi", function () {
+        $(document).on("click", ".transaction", function () {
+          $(".item").css("background", "");
           const id = $(this).data("id");
           const API = config.ENV_URL;
-          const URL = API + "api/laporan/transaksi/" + id;
-          $("#detail-transaksi").show();
-          $("#btn-print-nota").data("id", id);
-          $("#transaksi-id").val(id);
+          const URL = API + "/transactions/" + id;
+          $("#detail-transaction").show();
+          $("#btn-print-receipt").data("id", id);
+          $("#transaction-id").val(id);
+          $(".item-" + id).css("background", "#d7d7d7");
           $.ajax({
             url: URL,
             method: "GET",
@@ -354,61 +332,53 @@
             },
             success: function (data) {
               const datas = data.data;
-              if (datas.metode_pembayaran == "transfer") {
+              if (datas.payment_method == "transfer") {
                 icon = `<i class="bi-currency-exchange fs-4 text-secondary"></i>`;
-              } else if (datas.metode_pembayaran == "qris") {
+              } else if (datas.payment_method == "qris") {
                 icon = `<i class="bi-qr-code-scan fs-4 text-secondary"></i>`;
-              } else if (datas.metode_pembayaran == "edc") {
+              } else if (datas.payment_method == "edc") {
                 icon = `<i class="bi-credit-card-2-back fs-4 text-secondary"></i>`;
               } else {
                 icon = `<i class="bi-cash fs-4 text-secondary"></i>`;
               }
 
-              $("#detail-icon-metode_pembayaran").html(icon);
-              $("#detail-metode_pembayaran").html(
-                datas.metode_pembayaran.toUpperCase()
+              $("#detail-icon-paymentmethod").html(icon);
+              $("#detail-paymentmethod").html(
+                datas.payment_method.toUpperCase()
               );
-              $("#detail-no_nota").html(datas.no_nota);
-              $("#detail-nama_pelanggan").html(datas.nama_pelanggan || "-");
-              $("#detail-tanggal").html(
-                moment(datas.tanggal).tz("Asia/Jakarta").format("lll")
+              $("#detail-receipt").html(datas.receipt_no);
+              $("#detail-customername").html(datas.customer.name || "-");
+              $("#detail-date").html(
+                moment(datas.date).tz("Asia/Jakarta").format("lll")
               );
-              let element = document.getElementById("select-jenis_transaksi");
-              element.value = datas.jenis_transaksi;
-              $("#detail-total").html(formatRupiah(datas.total));
-              $("#detail-bayar").html(formatRupiah(datas.bayar));
-              $("#detail-kembalian").html(formatRupiah(datas.kembalian));
+              $("#detail-total").html(formatRupiah(datas.total_amount));
+              $("#detail-payment").html(formatRupiah(datas.payment_amount));
+              $("#detail-change").html(formatRupiah(datas.change_amount));
 
               let html = "";
-              datas.transaksi_detail.map((item) => {
-                html +=
-                  `<tr>
-                          <td class="align-middle text-center">
-                            <i class="bi-box text-secondary fs-5"></i>
-                          </td>
-                          <td>
-                            <span>` +
-                  item.nama_produk +
-                  `</span><br />
-                            <span class="text-secondary"
-                              >` +
-                  item.nama_varian +
-                  ` <b> x` +
-                  item.qty +
-                  `</b></span
-                            >
-                          </td>
-                          <td class="text-end align-middle">` +
-                  formatRupiah(item.subtotal) +
-                  `</td>
-                        </tr>`;
+              datas.details.map((item) => {
+                html += `<tr>
+                    <td class="align-middle text-center">
+                      <i class="bi-box text-secondary fs-5"></i>
+                    </td>
+                    <td>
+                      <span>${item.productName}</span><br />
+                      <span class="text-secondary">
+                        ${item.variantName}
+                        <b> x${item.qty}</b>
+                      </span>
+                    </td>
+                    <td class="text-end align-middle">
+                      ${formatRupiah(item.subtotal)}
+                    </td>
+                  </tr>`;
               });
               $("#detail-item").html(html);
             },
           });
         });
 
-        $(document).on("click", "#btn-print-nota", function () {
+        $(document).on("click", "#btn-print-receipt", function () {
           let is_mobile = /android|mobile/gi.test(navigator.userAgent);
           let url = "print-nota.php?id=" + $(this).data("id");
           if (is_mobile) {
@@ -432,24 +402,6 @@
               "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
             );
           }
-        });
-
-        $("#select-jenis_transaksi").on("change", function () {
-          const API = config.ENV_URL;
-          const id = $("#transaksi-id").val();
-          const jenis_transaksi = $(this).find(":selected").val();
-          const URL = API + "api/transaksi/" + id;
-          $.ajax({
-            url: URL,
-            method: "PUT",
-            data: { jenis_transaksi: jenis_transaksi },
-            headers: {
-              Authorization: Cookies.get("user-token"),
-            },
-            success: function (data) {
-              getData();
-            },
-          });
         });
       });
     </script>

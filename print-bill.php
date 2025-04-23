@@ -94,8 +94,7 @@ $data = json_decode($data);
 // echo "</pre>";
 ?>
 
-<!-- <body onload="window.print()"> -->
-<body>
+<body onload="window.print()">
   <div class="container">
     <header>
       <div class="nama-perusahaan" style="margin: 15px 0 15px 0">

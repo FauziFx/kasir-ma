@@ -50,13 +50,12 @@ function http_request($url)
 }
 
 $id = $_GET['id'];
-$url = $URL_API . "api/laporan/transaksi/" . $id;
+$url = $URL_API . "/transactions/" . $id;
 $data = http_request($url);
-
 // ubah string JSON menjadi array
 $data = json_decode($data, TRUE)['data'];
 // echo "<pre>";
-// print_r($data);
+// var_dump($data);
 // echo "</pre>";
 ?>
 
@@ -159,7 +158,7 @@ $data = json_decode($data, TRUE)['data'];
         </header>
         <div class="metadata">
             <?php
-            $date = new DateTime($data['tanggal']);
+            $date = new DateTime($data['date']);
             $date->setTimezone(new DateTimeZone('Asia/Jakarta')); // +04
 
             $tgl = $date->format('Y-m-d'); // 2012-07-15 05:00:00 
@@ -174,7 +173,7 @@ $data = json_decode($data, TRUE)['data'];
                     <td>Nama Pelanggan</td>
                     <td class="text-right" id="nama_pelanggan">
                         <?php
-                        $namaPelanggan = $data['nama_pelanggan'] == "" ? "-" : $data['nama_pelanggan'];
+                        $namaPelanggan = $data['customer'] == "" ? "-" : $data['customer']['name'];
                         echo $namaPelanggan;
                         ?>
                     </td>
@@ -182,7 +181,7 @@ $data = json_decode($data, TRUE)['data'];
                 <tr>
                     <td>No Nota</td>
                     <td class="text-right" id="no_nota">
-                        #<?= $data['no_nota'] ?>
+                        #<?= $data['receipt_no'] ?>
                     </td>
                 </tr>
             </table>
@@ -191,18 +190,18 @@ $data = json_decode($data, TRUE)['data'];
         <div class="item-container">
             <table class="table" id="list">
                 <?php
-                foreach ($data['transaksi_detail'] as $x) {
+                foreach ($data['details'] as $x) {
                 ?>
                     <tr>
                         <td colspan="3">
-                            <span class="nama-item"><?= $x['nama_produk'] ?></span>
+                            <span class="nama-item"><?= $x['productName'] ?></span>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="3"></td>
                     </tr>
                     <tr class="text-left">
-                        <td>@ <?= $x['harga'] ?></td>
+                    <td>@ <?= $x['price'] ?></td>
                         <td>x <?= $x['qty'] ?></td>
                         <td class="text-right"><?= $x['subtotal'] ?></td>
                     </tr>
@@ -220,19 +219,19 @@ $data = json_decode($data, TRUE)['data'];
                 <tr class="text-bold">
                     <td colspan="2">Total</td>
                     <td class="text-right" id="total">
-                        <?= "Rp. " . number_format($data['total'], 0, ',', '.'); ?>
+                        <?= "Rp. " . number_format($data['total_amount'], 0, ',', '.'); ?>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" id="metode_pembayaran"><?= strtoupper($data['metode_pembayaran']) ?></td>
+                    <td colspan="2" id="metode_pembayaran"><?= strtoupper($data['payment_method']) ?></td>
                     <td class="text-right" id="bayar">
-                        <?= "Rp. " . number_format($data['bayar'], 0, ',', '.'); ?>
+                        <?= "Rp. " . number_format($data['payment_amount'], 0, ',', '.'); ?>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">Kembalian</td>
                     <td class="text-right" id="kembalian">
-                        <?= "Rp. " . number_format($data['kembalian'], 0, ',', '.'); ?>
+                        <?= "Rp. " . number_format($data['change_amount'], 0, ',', '.'); ?>
                     </td>
                 </tr>
             </table>
