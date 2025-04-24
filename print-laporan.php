@@ -87,7 +87,7 @@
 </head>
 
 <?php
-$data = $_COOKIE['laporan-ringkas'];
+$data = $_COOKIE['report-summary'];
 $data = json_decode($data);
 // echo "<pre>";
 // var_dump($data);
@@ -106,50 +106,18 @@ $data = json_decode($data);
     </header>
     <h3 style="text-align: center; margin: 0">Laporan</h3>
     <hr class="dash" />
-    <table class="table">
-      <tr>
-        <td colspan="2">Tanggal</td>
-        <td class="text-right" id="item-terjual">
-          <?= date("d-m-Y") ?>
-        </td>
-      </tr>
-    </table>
-    <h3 style="text-align: center; margin: 0">Tunai</h3>
     <div class="item-container">
       <table class="table">
         <tr>
-          <td colspan="3">
-            <hr class="dash" />
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">Item Terjual</td>
+          <td colspan="2">Tanggal</td>
           <td class="text-right" id="item-terjual">
-            <?= $data->total_item_terjual ?> Item
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">Pembayaran Tunai</td>
-          <td class="text-right" id="pembayaran-tunai" style="font-weight: bold;">
-            <?= "Rp. " . number_format($data->total_tunai, 0, ',', '.') ?>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">Pemasukan</td>
-          <td class="text-right" id="pemasukan">
-            <?= "Rp. " . number_format($data->pemasukan, 0, ',', '.') ?>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">Pengeluaran</td>
-          <td class="text-right" id="pengeluaran">
-            <?= "- Rp. " . number_format($data->pengeluaran, 0, ',', '.') ?>
+            <?= date("d-m-Y") ?>
           </td>
         </tr>
         <tr>
           <td colspan="2">Total uang tunai</td>
           <td class="text-right" id="total-diharapkan" style="font-weight: bold;">
-            <?= "Rp. " . number_format($data->total_diharapkan, 0, ',', '.') ?>
+            <?= "Rp. " . number_format($data->totalCash, 0, ',', '.') ?>
           </td>
         </tr>
         <tr>
@@ -160,21 +128,22 @@ $data = json_decode($data);
         <tr class="text-bold">
           <td colspan="2" style="font-size: 12px">
             Total uang<br />
-            tunai yg didapatkan
+            Tunai yg didapatkan
           </td style="font-size: 12px">
           <td class="text-right" id="total-didapatkan">
-            <?= "Rp. " . number_format($data->total_didapatkan, 0, ',', '.') ?>
+            <?= "Rp. " . number_format($data->totalEarned, 0, ',', '.') ?>
           </td>
         </tr>
         <tr>
           <td style="padding-top:10px" colspan="2">Selisih</td>
           <td style="padding-top:10px" class="text-right" id="selisih">
-            <?= "Rp. " . number_format($data->selisih, 0, ',', '.') ?>
+            <?= "Rp. " . number_format($data->difference, 0, ',', '.') ?>
           </td>
         </tr>
       </table>
     </div>
-    <h3 style="text-align: center; margin-bottom: 0">MA Grup</h3>
+    <?php foreach($data->transaction as $value){ ?>
+    <h3 style="text-align: center; margin-bottom: 0"><?=$value->transactionTypeName?></h3>
     <div class="item-container">
       <table class="table">
         <tr>
@@ -182,64 +151,55 @@ $data = json_decode($data);
             <hr class="dash" />
           </td>
         </tr>
+        <?php foreach($value->payments as $val){ ?>
         <tr>
-          <td colspan="2">Total</td>
+          <td style="text-transform:capitalize" colspan="2"><?=$val->payment_method?></td>
           <td class="text-right" id="total-magrup">
-            <?= "Rp. " . number_format($data->total_magrup, 0, ',', '.') ?>
+            <?=$val->total ?>
           </td>
         </tr>
-      </table>
-    </div>
-
-    <h3 style="text-align: center; margin-bottom: 0">Lainnya</h3>
-    <div class="item-container">
-      <table class="table">
+        <?php } ?>
+        <?php 
+        $total = array_reduce($value->payments, function ($acc, $curr) {
+            return $acc + $curr->total;
+        }, 0);  
+        ?>
         <tr>
-          <td colspan="3">
-            <hr class="dash" />
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">TRANSFER</td>
-          <td class="text-right" id="transfer">
-            <?= "Rp. " . number_format($data->total_transfer, 0, ',', '.') ?>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">QRIS</td>
-          <td class="text-right" id="qris">
-            <?= "Rp. " . number_format($data->total_qris, 0, ',', '.') ?>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">EDC</td>
-          <td class="text-right" id="edc">
-            <?= "Rp. " . number_format($data->total_edc, 0, ',', '.') ?>
-          </td>
-        </tr>
-        <tr class="text-bold">
-          <td colspan="2">Total Lainnya</td>
-          <td class="text-right" id="total-lainnya">
-            <?= "Rp. " . number_format($data->total_lainnya, 0, ',', '.') ?>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            <hr class="dash" />
-          </td>
-        </tr>
-        <tr class="text-bold">
-        <td colspan="2">Total</td>
-          <td class="text-right" id="total-lainnya">
-            <?php 
-            $total_semua = $data->total_diharapkan + $data->total_lainnya;
-            echo "Rp. " . number_format($total_semua, 0, ',', '.');
-            ?>
+          <td style="font-weight: bold;" colspan="2">Total</td>
+          <td style="font-weight: bold;" class="text-right" id="total-magrup">
+            <?=$total ?>
           </td>
         </tr>
       </table>
     </div>
     <hr class="dash" />
+    <?php } ?>
+    <div class="item-container">
+      <table class="table">
+        <tr>
+          <td style="padding-bottom: 10px" colspan="2">Item Terjual</td>
+          <td style="padding-bottom: 10px" class="text-right" id="total-magrup">
+            <?php
+            $totalQty = array_reduce($data->transactionDetails, function ($acc, $curr) {
+                return $acc + $curr->totalQty;
+            }, 0);  
+            echo $totalQty ." item";
+            ?>
+          </td>
+        </tr>
+        
+        <?php foreach($data->transactionDetails as $v){?>
+        <tr>
+          <td style="padding-bottom: 4px" colspan="2">
+            <span><?=$v->productName?></span><br />
+            <span class="text-secondary"><?=$v->variantName?></span>
+          </td>
+          <td style="padding-bottom: 4px" class="text-right"><?=$v->totalQty?></td>
+        </tr>
+        <?php } ?>
+      </table>
+    </div>
+
     <footer>Terima Kasih</footer>
   </div>
 </body>

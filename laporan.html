@@ -140,73 +140,22 @@
                   <td>:</td>
                   <td id="tanggal"></td>
                 </tr>
-              </tbody>
-            </table>
-            <span class="text-center fs-5">Tunai</span>
-            <hr style="margin: 0" />
-            <table class="table table-sm mt-2 table-hover">
-              <tbody>
-                <tr>
-                  <td>Pembayaran Tunai</td>
-                  <td class="text-end" id="pembayaran-tunai">Rp. 0</td>
-                </tr>
                 <tr>
                   <td>Item Terjual</td>
-                  <td class="text-end" id="btn-item-terjual">
-                    <span id="item-terjual">0</span>
-                    Item<i class="bi-chevron-right"></i>
+                  <td>:</td>
+                  <td
+                    class="justify-content-between"
+                    id="btn-item-sold"
+                    style="cursor: pointer"
+                  >
+                    <button class="btn btn-secondary p-1 py-0">
+                      <span id="item-sold">0</span> Item
+                    </button>
                   </td>
-                </tr>
-                <tr>
-                  <td>Pemasukan</td>
-                  <td class="text-end" id="pemasukan">
-                    Rp. 0 <i class="bi-chevron-right"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Pengeluaran</td>
-                  <td class="text-end" id="pengeluaran">
-                    Rp. 0 <i class="bi-chevron-right"></i>
-                  </td>
-                </tr>
-                <tr class="fw-bold">
-                  <td>Total uang tunai</td>
-                  <td class="text-end" id="total-uang-diharapkan">Rp. 0</td>
                 </tr>
               </tbody>
             </table>
-            <span class="text-center fs-5">MA Grup</span>
-            <hr style="margin: 0" />
-            <table class="table table-sm">
-              <tbody>
-                <tr>
-                  <td>Total</td>
-                  <td class="text-end" id="total-magrup">Rp .0</td>
-                </tr>
-              </tbody>
-            </table>
-            <span class="text-center fs-5">Lainnya</span>
-            <hr style="margin: 0" />
-            <table class="table table-sm mt-2">
-              <tbody>
-                <tr>
-                  <td>TRANSFER</td>
-                  <td class="text-end" id="transfer">Rp. 0</td>
-                </tr>
-                <tr>
-                  <td>QRIS</td>
-                  <td class="text-end" id="qris">Rp. 0</td>
-                </tr>
-                <tr>
-                  <td>EDC</td>
-                  <td class="text-end" id="edc">Rp. 0</td>
-                </tr>
-                <tr class="fw-bold">
-                  <td>Total</td>
-                  <td class="text-end" id="total-lainnya">Rp. 0</td>
-                </tr>
-              </tbody>
-            </table>
+            <div id="list-report"></div>
           </div>
         </div>
       </div>
@@ -415,27 +364,9 @@
           <div class="modal-body px-4 py-4 mb-5">
             <table class="table table-sm mt-2 table-hover">
               <tbody>
-                <tr>
-                  <td>Pembayaran Tunai</td>
-                  <td class="text-end" id="ringkas-pembayaran-tunai">
-                    Rp. 100.000
-                  </td>
-                </tr>
-                <tr>
-                  <td>Pemasukan</td>
-                  <td class="text-end" id="ringkas-pemasukan">
-                    Rp. 0 <i class="bi-chevron-right"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Pengeluaran</td>
-                  <td class="text-end" id="ringkas-pengeluaran">
-                    Rp. 0 <i class="bi-chevron-right"></i>
-                  </td>
-                </tr>
                 <tr class="fw-bold">
-                  <td>Total uang tunai</td>
-                  <td class="text-end" id="ringkas-total-diharapkan">Rp. 0</td>
+                  <td>Total Uang diharapkan</td>
+                  <td class="text-end" id="total-expected">Rp. 0</td>
                 </tr>
               </tbody>
             </table>
@@ -443,13 +374,13 @@
               type="number"
               class="form-control fs-5"
               name=""
-              id="input-total-didapatkan"
+              id="input-total-earned"
               placeholder="Total uang yang didapatkan"
             />
             <table class="table">
               <tr>
                 <td class="text-start">Selisih</td>
-                <td class="text-end" id="selisih">Rp. 0</td>
+                <td class="text-end" id="difference">Rp. 0</td>
               </tr>
             </table>
             <div class="row mt-3">
@@ -462,7 +393,7 @@
                 </button>
               </div>
               <div class="col-6 d-flex">
-                <button class="w-100 btn btn-dark" id="btn-cetak-laporan">
+                <button class="w-100 btn btn-dark" id="btn-print-report">
                   <i class="bi-printer"></i> Cetak
                 </button>
               </div>
@@ -476,7 +407,7 @@
     <!-- Modal Item terjual -->
     <div
       class="modal fade"
-      id="modal-item-terjual"
+      id="modal-item-sold"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
       tabindex="-1"
@@ -490,7 +421,7 @@
           </div>
           <div class="modal-body px-4 py-4 mb-2">
             <table class="table table-sm mt-2 table-hover">
-              <tbody id="list-item-terjual"></tbody>
+              <tbody id="list-item-sold"></tbody>
             </table>
           </div>
           <div class="modal-footer">
