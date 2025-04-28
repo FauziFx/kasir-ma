@@ -207,7 +207,7 @@ $data = json_decode($data);
   document.addEventListener("DOMContentLoaded", () => {
     setTimeout(function() {
       window.close();
-    }, 7000);
+    }, 15000);
   });
 </script>
 
