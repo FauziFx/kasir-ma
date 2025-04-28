@@ -131,6 +131,11 @@ function getReport(date) {
       Authorization: Cookies.get("user-token"),
     },
     success: function (data) {
+      localStorage.setItem(
+        "item-sold",
+        JSON.stringify(data.data.transactionDetails)
+      );
+
       moment.locale("id");
       $("#tanggal").html(moment(date).tz("Asia/Jakarta").format("LL"));
       const datas = data.data;
