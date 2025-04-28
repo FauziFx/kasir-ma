@@ -325,7 +325,7 @@ function getCustomers(search) {
       let html = "";
       datas.map((item) => {
         html += `<tr>
-            <td>${item.name}</td>
+            <td>${item.name} | <span class="text-secondary">${item.transactionType.name}</span></td>
             <td class="text-end">
               <button id="select-customer"
                 data-id-customer="${item.id}" 
