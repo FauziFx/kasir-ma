@@ -272,15 +272,24 @@
                               ${item.receipt_no}
                             </span></br>
                             <span class="text-secondary fw-normal">
-                              ${moment(item.date)
-                                .tz("Asia/Jakarta")
-                                .format("lll")}
+                              ${
+                                moment(item.date)
+                                  .tz("Asia/Jakarta")
+                                  .format("lll")
+                                  .split("pukul")[0]
+                              }
                             </span>
                           </td>
                           <td class="item item-${
                             item.id
-                          } text-end text-secondary align-middle">
-                            <span class="badge bg-secondary">
+                          } text-end align-middle">
+                           <p class="mb-0">${
+                             moment(item.date)
+                               .tz("Asia/Jakarta")
+                               .format("lll")
+                               .split("pukul")[1]
+                           }</p>
+                            <span class="badge bg-secondary fw-normal">
                               ${item.transactionType.name}
                             </span>
                           </td>
