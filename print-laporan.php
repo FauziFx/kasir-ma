@@ -174,40 +174,15 @@ $data = json_decode($data);
     </div>
     <hr class="dash" />
     <?php } ?>
-    <div class="item-container">
-      <table class="table">
-        <tr>
-          <td style="padding-bottom: 10px" colspan="2">Item Terjual</td>
-          <td style="padding-bottom: 10px" class="text-right" id="total-magrup">
-            <?php
-            $totalQty = array_reduce($data->transactionDetails, function ($acc, $curr) {
-                return $acc + $curr->totalQty;
-            }, 0);  
-            echo $totalQty ." item";
-            ?>
-          </td>
-        </tr>
-        
-        <?php foreach($data->transactionDetails as $v){?>
-        <tr>
-          <td style="padding-bottom: 4px" colspan="2">
-            <span><?=$v->productName?></span><br />
-            <span class="text-secondary"><?=$v->variantName?></span>
-          </td>
-          <td style="padding-bottom: 4px" class="text-right"><?=$v->totalQty?></td>
-        </tr>
-        <?php } ?>
-      </table>
-    </div>
 
-    <footer>Terima Kasih</footer>
+    <footer style="margin-bottom:10px">Terima Kasih</footer>
   </div>
 </body>
 <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", () => {
     setTimeout(function() {
       window.close();
-    }, 15000);
+    }, 7000);
   });
 </script>
 

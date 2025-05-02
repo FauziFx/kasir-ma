@@ -43,7 +43,9 @@ $(document).ready(function () {
       difference: difference,
     };
 
-    Cookies.set("report-summary", JSON.stringify(newData));
+    const shortData = { ...newData };
+    delete shortData.transactionDetails;
+    Cookies.set("report-summary", JSON.stringify(shortData));
 
     if ($(this).val().length == 0) {
       $("#btn-print-report").attr("disabled", true);
