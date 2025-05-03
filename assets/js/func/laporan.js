@@ -142,7 +142,7 @@ function getReport(date) {
       $("#tanggal").html(moment(date).tz("Asia/Jakarta").format("LL"));
       const datas = data.data;
 
-      $("#total-expected").html(formatRupiah(datas.totalCash));
+      $("#total-expected").html(formatRupiah(datas.totalCash || 0));
 
       localStorage.setItem("report-summary", JSON.stringify(datas));
 
