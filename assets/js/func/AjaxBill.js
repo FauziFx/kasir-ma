@@ -183,29 +183,78 @@ $(document).ready(function () {
         "print-bill",
         JSON.stringify(JSON.parse(localStorage.getItem("list-bill"))[indexBill])
       );
-      let is_mobile = /android|mobile/gi.test(navigator.userAgent);
-      let url = "print-bill.php";
-      if (is_mobile) {
-        console.log("ismobile");
-        let html_container =
-          "print://escpos.org/escpos/bt/print?srcTp=uri&srcObj=html&src='data:text/html,";
-        $.ajax({
-          url: url,
-          success: function (html) {
-            html_container += html;
-            window.location.href = html_container;
-          },
-          error: function () {
-            alert("Ajax Error, cek console browser");
-          },
-        });
-      } else {
-        window.open(
-          url,
-          "Cetak Bill",
-          "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
-        );
-      }
+      let dataListBill = JSON.parse(localStorage.getItem("list-bill"))[
+        indexBill
+      ];
+      console.log(dataListBill);
+      let dataPrintBill = {
+        store: "// UD MURTI AJI ////",
+        address:
+          "Jl. Karang Kencana No.51, Panjunan, Kec. Lemahwungkuk, Kota Cirebon, Jawa Barat 45112",
+        phone: "Telp/WA 0853 1457 9001",
+        date: moment().tz("Asia/Jakarta").format("DD/MM/YYYY HH:mm"),
+        transactions: [],
+      };
+
+      let struk = [];
+
+      struk.push("BUKAN BUKTI PEMBAYARAN");
+      struk.push("");
+      struk.push(dataPrintBill.store);
+      struk.push(dataPrintBill.address);
+      struk.push(dataPrintBill.phone);
+      struk.push("--------------------------------");
+      struk.push("Nama Bill: " + dataListBill.name);
+      let customerName =
+        dataListBill.customer == "" ? "" : dataListBill.customer.nameCustomer;
+      struk.push("Nama: " + customerName);
+      struk.push("Tanggal: " + dataPrintBill.date);
+      struk.push("--------------------------------");
+
+      dataListBill.cart.forEach((item) => {
+        struk.push(item.productName); // nama produk
+
+        // varian (jika berbeda)
+        if (item.variantName && item.variantName !== item.productName) {
+          struk.push(" # " + item.variantName);
+        }
+
+        // harga satuan dan subtotal
+        let line = ` x${item.qty} @${item.price}`;
+        struk.push(line + `${item.subtotal}`.padStart(18));
+      });
+
+      struk.push("--------------------------------");
+      struk.push("Total                " + formatRupiah(dataListBill.total));
+
+      let escPosData = encodeURIComponent(struk.join("\n"));
+      console.log(struk);
+
+      window.location.href = "rawbt://" + escPosData;
+
+      // let is_mobile = /android|mobile/gi.test(navigator.userAgent);
+      // let url = "print-bill.php";
+      // if (is_mobile) {
+      //   console.log("ismobile");
+      //   let html_container =
+      //     "print://escpos.org/escpos/bt/print?srcTp=uri&srcObj=html&src='data:text/html,";
+      //   $.ajax({
+      //     url: url,
+      //     success: function (html) {
+      //       html_container += html;
+      //       window.location.href = html_container;
+      //     },
+      //     error: function () {
+      //       alert("Ajax Error, cek console browser");
+      //     },
+      //   });
+      // } else {
+      //   window.open(
+      //     url,
+      //     "Cetak Bill",
+      //     "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
+      //   );
+      // }
     }
   });
 

@@ -324,6 +324,21 @@
           el.scrollIntoView({ block: "start", behavior: "smooth" });
         });
 
+        let printTransaksi = {
+          store: "// UD MURTI AJI ////",
+          address:
+            "Jl. Karang Kencana No.51, Panjunan, Kec. Lemahwungkuk, Kota Cirebon, Jawa Barat 45112",
+          phone: "Telp/WA 0853 1457 9001",
+          date: "",
+          name: "",
+          no_nota: "",
+          items: [],
+          total: 0,
+          payment_method: "",
+          payment: "",
+          change: 0,
+        };
+
         $(document).on("click", ".transaction", function () {
           $(".item").css("background", "");
           const id = $(this).data("id");
@@ -341,6 +356,41 @@
             },
             success: function (data) {
               const datas = data.data;
+              console.log(datas);
+
+              printTransaksi.date = "";
+              printTransaksi.name = "";
+              printTransaksi.no_nota = "";
+              printTransaksi.items = [];
+              printTransaksi.total = 0;
+              printTransaksi.payment_method = "";
+              printTransaksi.payment = "";
+              printTransaksi.change = 0;
+
+              datas.details.forEach((item, index) => {
+                printTransaksi.items.push({
+                  price: item.price,
+                  productName: item.productName,
+                  qty: item.qty,
+                  subtotal: item.subtotal,
+                  variantName: item.variantName,
+                });
+              });
+
+              printTransaksi.date = moment(datas.date)
+                .tz("Asia/Jakarta")
+                .format("DD/MM/YYYY HH:mm");
+              printTransaksi.name = datas.customer.name;
+              printTransaksi.no_nota = datas.receipt_no;
+              printTransaksi.total = datas.total_amount;
+              printTransaksi.payment_method =
+                datas.payment_method.toString().charAt(0).toUpperCase() +
+                datas.payment_method.slice(1);
+              printTransaksi.payment = datas.payment_amount;
+              printTransaksi.change = datas.change_amount;
+
+              console.log(printTransaksi);
+
               if (datas.payment_method == "transfer") {
                 icon = `<i class="bi-currency-exchange fs-4 text-secondary"></i>`;
               } else if (datas.payment_method == "qris") {
@@ -388,30 +438,67 @@
         });
 
         $(document).on("click", "#btn-print-receipt", function () {
-          let is_mobile = /android|mobile/gi.test(navigator.userAgent);
-          let url = "print-nota.php?id=" + $(this).data("id");
-          if (is_mobile) {
-            console.log("ismobile");
-            let html_container =
-              "print://escpos.org/escpos/bt/print?srcTp=uri&srcObj=html&src='data:text/html,";
-            $.ajax({
-              url: url,
-              success: function (html) {
-                html_container += html;
-                window.location.href = html_container;
-              },
-              error: function () {
-                alert("Ajax Error, cek console browser");
-              },
-            });
-          } else {
-            window.open(
-              url,
-              "notaPenjualan",
-              "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
-            );
-          }
+          let struk = [];
+
+          struk.push(printTransaksi.store);
+          struk.push(printTransaksi.address);
+          struk.push(printTransaksi.phone);
+          struk.push("--------------------------------");
+          struk.push("Nama: " + printTransaksi.name);
+          struk.push("Order ID: " + printTransaksi.no_nota);
+          struk.push("Tanggal: " + printTransaksi.date);
+          struk.push("--------------------------------");
+
+          printTransaksi.items.forEach((item) => {
+            struk.push(item.productName); // nama produk
+
+            // varian (jika berbeda)
+            if (item.variantName && item.variantName !== item.productName) {
+              struk.push(" # " + item.variantName);
+            }
+
+            // harga satuan dan subtotal
+            let line = ` x${item.qty} @${item.price}`;
+            struk.push(line + `${item.subtotal}`.padStart(18));
+          });
+
+          struk.push("--------------------------------");
+          struk.push("Total                  " + printTransaksi.total);
+          struk.push("Bayar                  " + printTransaksi.payment);
+          struk.push(printTransaksi.payment_method);
+          struk.push("Kembalian              " + printTransaksi.change);
+          struk.push("--------------------------------");
+          struk.push("Terima kasih");
+
+          let escPosData = encodeURIComponent(struk.join("\n"));
+          window.location.href = "rawbt://" + escPosData;
         });
+
+        // $(document).on("click", "#btn-print-receipt", function () {
+        //   let is_mobile = /android|mobile/gi.test(navigator.userAgent);
+        //   let url = "print-nota.php?id=" + $(this).data("id");
+        //   if (is_mobile) {
+        //     console.log("ismobile");
+        //     let html_container =
+        //       "print://escpos.org/escpos/bt/print?srcTp=uri&srcObj=html&src='data:text/html,";
+        //     $.ajax({
+        //       url: url,
+        //       success: function (html) {
+        //         html_container += html;
+        //         window.location.href = html_container;
+        //       },
+        //       error: function () {
+        //         alert("Ajax Error, cek console browser");
+        //       },
+        //     });
+        //   } else {
+        //     window.open(
+        //       url,
+        //       "notaPenjualan",
+        //       "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
+        //     );
+        //   }
+        // });
       });
     </script>
   </body>

@@ -444,5 +444,76 @@
     <script src="assets/js/moment-timezone-with-data.js"></script>
     <script src="assets/js/func/index.js"></script>
     <script src="assets/js/func/laporan.js"></script>
+    <script>
+      let printReport = {
+        store: "// UD MURTI AJI ////",
+        address:
+          "Jl. Karang Kencana No.51, Panjunan, Kec. Lemahwungkuk, Kota Cirebon, Jawa Barat 45112",
+        phone: "Telp/WA 0853 1457 9001",
+        date: moment().tz("Asia/Jakarta").format("DD/MM/YYYY HH:mm"),
+        totalCash: 0,
+        totalEarned: 0,
+        difference: 0,
+        transactions: [],
+      };
+
+      $(document).on("click", "#btn-print-report", function () {
+        printReport.totalCash = 0;
+        printReport.totalEarned = 0;
+        printReport.difference = 0;
+        printReport.transactions = [];
+        const data = JSON.parse(Cookies.get("report-summary"));
+        printReport.totalCash = data.totalCash;
+        printReport.totalEarned = data.totalEarned;
+        printReport.difference = data.difference;
+        printReport.transactions = data.transaction;
+
+        console.log(data);
+        console.log(printReport);
+
+        let struk = [];
+
+        struk.push(printReport.store);
+        struk.push(printReport.address);
+        struk.push(printReport.phone);
+        struk.push("");
+        struk.push("LAPORAN");
+        struk.push("Tanggal: " + printReport.date);
+        struk.push("--------------------------------");
+        struk.push(
+          "Total Tunai         " +
+            formatRupiah(printReport.totalCash ? printReport.totalCash : 0)
+        );
+        struk.push(
+          "Total didapatkan    " +
+            formatRupiah(printReport.totalEarned ? printReport.totalEarned : 0)
+        );
+        struk.push(
+          "Selisih             " +
+            formatRupiah(printReport.difference ? printReport.difference : 0)
+        );
+        struk.push("--------------------------------");
+
+        printReport.transactions.forEach((item) => {
+          struk.push("//" + item.transactionTypeName.toUpperCase());
+
+          item.payments.forEach((i) => {
+            struk.push(
+              i.payment_method.charAt(0).toUpperCase() +
+                i.payment_method.slice(1) +
+                `: ${formatRupiah(i.total)}`
+            );
+          });
+
+          struk.push(""); // baris kosong antar item
+        });
+        struk.push("--------------------------------");
+        struk.push("");
+        struk.push("Terima kasih");
+
+        let escPosData = encodeURIComponent(struk.join("\n"));
+        window.location.href = "rawbt://" + escPosData;
+      });
+    </script>
   </body>
 </html>

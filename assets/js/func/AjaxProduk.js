@@ -5,11 +5,11 @@ const API = config.ENV_URL;
 $(document).ready(function () {
   // GET
   getCategory();
-  getProduk();
+  // getProduk();
 
   // Title Produk table
   let titleProduk = $("#title-product");
-  titleProduk.html("Semua Produk");
+  titleProduk.html("Favorit");
 
   // on hidden modal pilih varian
   const elModalVarian = document.getElementById("modal-varian");
@@ -33,6 +33,11 @@ $(document).ready(function () {
     getProduk(categoryId, "");
     titleProduk.html($(this).data("nama"));
     $("#search_box").val("");
+    if ($(this).data("nama") == "Favorite") {
+      $("#favorite").show();
+    } else {
+      $("#favorite").hide();
+    }
   });
 
   // Click row produk
@@ -206,9 +211,7 @@ function getProduk(categoryId = "", name) {
         $("#table-products").html(html);
       } else {
         $("#table-products").addClass("text-center");
-        $("#table-products").html(
-          `<i class="text-secondary text-center">Tidak ada Produk</>`
-        );
+        $("#table-products").html(`<i class="text-secondary text-center"></>`);
       }
     },
   });

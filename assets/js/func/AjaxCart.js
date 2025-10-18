@@ -290,6 +290,8 @@ function createTransaction(dataTransaction) {
         receipt: data.receipt,
       };
 
+      localStorage.setItem("idTransaksi", data.id);
+
       Cookies.set("transaction-successfull", JSON.stringify(dataTrx));
       localStorage.setItem("transaction-successfull", JSON.stringify(dataTrx));
       getCart();

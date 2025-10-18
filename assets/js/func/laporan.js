@@ -18,7 +18,7 @@ modalTutup.addEventListener("shown.bs.modal", () => {
 });
 
 modalTutup.addEventListener("hidden.bs.modal", () => {
-  $("#input-total-didapatkan").val("");
+  $("#input-total-earned").val("");
   $("#selisih").html("Rp. 0");
   $("#btn-cetak-laporan").attr("disabled", true);
 });
@@ -54,35 +54,35 @@ $(document).ready(function () {
     }
   });
 
-  $(document).on("click", "#btn-print-report", function () {
-    $("#input-total-earned").val("");
-    $("#difference").html("");
-    $("#btn-print-report").attr("disabled", true);
-    bsModalTutuplaporan.hide();
-    let is_mobile = /android|mobile/gi.test(navigator.userAgent);
-    let url = "print-laporan.php";
-    if (is_mobile) {
-      console.log("ismobile");
-      let html_container =
-        "print://escpos.org/escpos/bt/print?srcTp=uri&srcObj=html&src='data:text/html,";
-      $.ajax({
-        url: url,
-        success: function (html) {
-          html_container += html;
-          window.location.href = html_container;
-        },
-        error: function () {
-          alert("Ajax Error, cek console browser");
-        },
-      });
-    } else {
-      window.open(
-        url,
-        "Cetak laporan",
-        "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
-      );
-    }
-  });
+  // $(document).on("click", "#btn-print-report", function () {
+  //   $("#input-total-earned").val("");
+  //   $("#difference").html("");
+  //   $("#btn-print-report").attr("disabled", true);
+  //   bsModalTutuplaporan.hide();
+  //   let is_mobile = /android|mobile/gi.test(navigator.userAgent);
+  //   let url = "print-laporan.php";
+  //   if (is_mobile) {
+  //     console.log("ismobile");
+  //     let html_container =
+  //       "print://escpos.org/escpos/bt/print?srcTp=uri&srcObj=html&src='data:text/html,";
+  //     $.ajax({
+  //       url: url,
+  //       success: function (html) {
+  //         html_container += html;
+  //         window.location.href = html_container;
+  //       },
+  //       error: function () {
+  //         alert("Ajax Error, cek console browser");
+  //       },
+  //     });
+  //   } else {
+  //     window.open(
+  //       url,
+  //       "Cetak laporan",
+  //       "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
+  //     );
+  //   }
+  // });
 
   $(document).on("click", "#btn-hari-ini", function () {
     $(this).addClass("active");

@@ -123,9 +123,18 @@
             <div class="btn-group rounded-0">
               <button
                 type="button"
+                data-id="favorite"
+                data-nama="Favorite"
+                class="btn-categories btn btn-outline-dark rounded-0 active"
+                data-bs-toggle="button"
+              >
+                <i class="bi bi-star-fill"></i>
+              </button>
+              <button
+                type="button"
                 data-id=""
                 data-nama="Semua Produk"
-                class="btn-categories btn btn-outline-dark rounded-0 active"
+                class="btn-categories btn btn-outline-dark rounded-0"
                 id="all-categories"
                 data-bs-toggle="button"
               >
@@ -149,6 +158,28 @@
               <table class="table table-hover">
                 <tbody id="table-products"></tbody>
               </table>
+              <div id="favorite">
+                <div class="overflow-y-auto px-2 pb-2" style="height: 80vh">
+                  <div
+                    class="row row-cols-3 row-cols-lg-4 g-2 g-lg-2 gy-lg-2"
+                    id="table-products"
+                  >
+                    <div class="col">
+                      <div
+                        class="hover-button p-2 py-3 border rounded text-center"
+                        style="cursor: pointer; min-height: 100px"
+                      >
+                        <div class="fs-3 fw-semibold text-secondary py-2">
+                          <i class="bi bi-plus-circle"></i>
+                        </div>
+                        <p style="font-size: 11px; line-height: 100%">
+                          Add Item
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -343,5 +374,109 @@
     <script src="assets/js/func/AjaxCart.js"></script>
     <script src="assets/js/func/AjaxBill.js"></script>
     <script src="assets/js/func/ScanBarcode.js"></script>
+    <script>
+      // Print Transaksi Berhasil
+      $(document).ready(function () {
+        $(document).on("click", "#print-nota-transaksi", function () {
+          let printTransaksi = {
+            store: "// UD MURTI AJI ////",
+            address:
+              "Jl. Karang Kencana No.51, Panjunan, Kec. Lemahwungkuk, Kota Cirebon, Jawa Barat 45112",
+            phone: "Telp/WA 0853 1457 9001",
+            date: "",
+            name: "",
+            no_nota: "",
+            items: [],
+            total: 0,
+            payment_method: "",
+            payment: "",
+            change: 0,
+          };
+
+          const id = localStorage.getItem("idTransaksi")
+            ? localStorage.getItem("idTransaksi")
+            : "";
+          const URL = config.ENV_URL + "/transactions/" + id;
+
+          $.ajax({
+            url: URL,
+            method: "GET",
+            headers: {
+              Authorization: Cookies.get("user-token"),
+            },
+            success: function (data) {
+              const datas = data.data;
+              console.log(datas);
+
+              printTransaksi.date = "";
+              printTransaksi.name = "";
+              printTransaksi.no_nota = "";
+              printTransaksi.items = [];
+              printTransaksi.total = 0;
+              printTransaksi.payment_method = "";
+              printTransaksi.payment = "";
+              printTransaksi.change = 0;
+
+              datas.details.forEach((item, index) => {
+                printTransaksi.items.push({
+                  price: item.price,
+                  productName: item.productName,
+                  qty: item.qty,
+                  subtotal: item.subtotal,
+                  variantName: item.variantName,
+                });
+              });
+
+              printTransaksi.date = moment(datas.date)
+                .tz("Asia/Jakarta")
+                .format("DD/MM/YYYY HH:mm");
+              printTransaksi.name = datas.customer.name;
+              printTransaksi.no_nota = datas.receipt_no;
+              printTransaksi.total = datas.total_amount;
+              printTransaksi.payment_method =
+                datas.payment_method.toString().charAt(0).toUpperCase() +
+                datas.payment_method.slice(1);
+              printTransaksi.payment = datas.payment_amount;
+              printTransaksi.change = datas.change_amount;
+
+              let struk = [];
+
+              struk.push(printTransaksi.store);
+              struk.push(printTransaksi.address);
+              struk.push(printTransaksi.phone);
+              struk.push("--------------------------------");
+              struk.push("Nama: " + printTransaksi.name);
+              struk.push("Order ID: " + printTransaksi.no_nota);
+              struk.push("Tanggal: " + printTransaksi.date);
+              struk.push("--------------------------------");
+
+              printTransaksi.items.forEach((item) => {
+                struk.push(item.productName); // nama produk
+
+                // varian (jika berbeda)
+                if (item.variantName && item.variantName !== item.productName) {
+                  struk.push(" # " + item.variantName);
+                }
+
+                // harga satuan dan subtotal
+                let line = ` x${item.qty} @${item.price}`;
+                struk.push(line + `${item.subtotal}`.padStart(18));
+              });
+
+              struk.push("--------------------------------");
+              struk.push("Total                  " + printTransaksi.total);
+              struk.push("Bayar                  " + printTransaksi.payment);
+              struk.push(printTransaksi.payment_method);
+              struk.push("Kembalian              " + printTransaksi.change);
+              struk.push("--------------------------------");
+              struk.push("Terima kasih");
+
+              let escPosData = encodeURIComponent(struk.join("\n"));
+              window.location.href = "rawbt://" + escPosData;
+            },
+          });
+        });
+      });
+    </script>
   </body>
 </html>
