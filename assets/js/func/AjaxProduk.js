@@ -2,10 +2,11 @@ let modalVarian = new bootstrap.Modal($("#modal-varian"));
 // SELECTED Tambah ke keranjang
 let selectedVarian = {};
 const API = config.ENV_URL;
+let dataProduct = [];
 $(document).ready(function () {
   // GET
   getCategory();
-  // getProduk();
+  getProduk();
 
   // Title Produk table
   let titleProduk = $("#title-product");
@@ -30,7 +31,9 @@ $(document).ready(function () {
     $(".btn-categories").removeClass("active").addClass("inactive");
     $(this).removeClass("inactive").addClass("active");
     const categoryId = $(this).data("id");
-    getProduk(categoryId, "");
+
+    showProduct(categoryId, "");
+
     titleProduk.html($(this).data("nama"));
     $("#search_box").val("");
     if ($(this).data("nama") == "Favorite") {
@@ -52,10 +55,10 @@ $(document).ready(function () {
     var query = $("#search_box").val();
     if (query.length != 0) {
       titleProduk.html(`Cari "` + query + `"`);
-      getProduk("", query);
+      showProduct("", query);
     } else {
       titleProduk.html("Semua Produk");
-      getProduk();
+      showProduct("", "");
     }
   });
 
@@ -199,20 +202,7 @@ function getProduk(categoryId = "", name) {
     success: function (data) {
       const datas = data.data;
 
-      let html = "";
-      if (datas.length > 0) {
-        var i;
-        for (i = 0; i < datas.length; i++) {
-          html += `<tr id="row-products" data-id="${datas[i].id}">
-                    <td class="py-3">${datas[i].name}</td>
-                  </tr>`;
-        }
-        $("#table-products").removeClass("text-center");
-        $("#table-products").html(html);
-      } else {
-        $("#table-products").addClass("text-center");
-        $("#table-products").html(`<i class="text-secondary text-center"></>`);
-      }
+      dataProduct = datas;
     },
   });
 }
@@ -265,4 +255,37 @@ function getProdukById(productId, objVarian, indexCart = "") {
       $("#list-variants").html(html);
     },
   });
+}
+
+function showProduct(id, name) {
+  const data = dataProduct.filter((item) => {
+    // Cek kecocokan kategori
+    const matchesCategory =
+      id === ""
+        ? true // Jika id kosong, semua category cocok
+        : id === null
+        ? item.categoryId === null // Jika null, cari categoryId null
+        : item.categoryId === id; // Jika angka, cocokkan langsung
+
+    // Cek pencarian nama
+    const matchesSearch =
+      !name || item.name.toLowerCase().includes(name.toLowerCase());
+
+    return matchesCategory && matchesSearch;
+  });
+
+  let html = "";
+  if (data.length > 0) {
+    var i;
+    for (i = 0; i < data.length; i++) {
+      html += `<tr id="row-products" data-id="${data[i].id}">
+                    <td class="py-3">${data[i].name}</td>
+                  </tr>`;
+    }
+    $("#table-products").removeClass("text-center");
+    $("#table-products").html(html);
+  } else {
+    $("#table-products").addClass("text-center");
+    $("#table-products").html(`<i class="text-secondary text-center"></>`);
+  }
 }
