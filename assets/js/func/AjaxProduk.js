@@ -1,4 +1,5 @@
 let modalVarian = new bootstrap.Modal($("#modal-varian"));
+let modalFavorit = new bootstrap.Modal($("#modal-favorit"));
 // SELECTED Tambah ke keranjang
 let selectedVarian = {};
 const API = config.ENV_URL;
@@ -7,6 +8,11 @@ $(document).ready(function () {
   // GET
   getCategory();
   getProduk();
+
+  const favoritList = JSON.parse(localStorage.getItem("list-favorit")) || [];
+  setTimeout(function () {
+    showFavorit(favoritList);
+  }, 500); // 3000 milliseconds = 3 seconds delay
 
   // Title Produk table
   let titleProduk = $("#title-product");
@@ -45,10 +51,14 @@ $(document).ready(function () {
 
   // Click row produk
   // Select Produk
-  $(document).on("click", "#table-products tr", function () {
-    getProdukById($(this).data("id"));
-    modalVarian.show();
-  });
+  $(document).on(
+    "click",
+    "#table-products tr, #list-favorite #favorite-item",
+    function () {
+      getProdukById($(this).data("id"));
+      modalVarian.show();
+    }
+  );
 
   //   Load data Search
   $("#search_box").keyup(function () {
@@ -152,6 +162,73 @@ $(document).ready(function () {
     let varianTotal =
       parseInt($("#input-qty").val()) * parseInt($("#input-price").val());
     $("#varian-total").html(formatRupiah(varianTotal));
+  });
+
+  //Add Favorit
+  $("#add-favorit").on("click", function () {
+    const favoritList = JSON.parse(localStorage.getItem("list-favorit")) || [];
+
+    let html = "";
+    if (dataProduct.length > 0) {
+      var i;
+      for (i = 0; i < dataProduct.length; i++) {
+        const isFavorit = favoritList.some(
+          (item) => item.id === dataProduct[i].id
+        );
+        html += `<tr id="row-products" data-id="${dataProduct[i].id}">
+                    <td style="font-size: 12px;" class="py-2">${
+                      dataProduct[i].name
+                    }</td>
+                    <td class="py-2">
+                      <div class="form-check">
+                        <input class="form-check-input favorit-checkbox" type="checkbox"  data-id="${
+                          dataProduct[i].id
+                        }" ${isFavorit ? "checked" : ""}>
+                      </div>
+                    </td>
+                  </tr>`;
+      }
+      $("#list-products").html(html);
+    } else {
+      $("#list-products").html(``);
+    }
+    modalFavorit.show();
+  });
+
+  // Save Favorit
+  $("#btn-add-favorit").on("click", function () {
+    // 1. Ambil checkbox yang dicentang
+    const checkedBoxes = $(".favorit-checkbox:checked");
+
+    // 2. Ambil ID produk yang dicentang
+    const checkedIds = checkedBoxes
+      .map(function () {
+        return Number($(this).data("id"));
+      })
+      .get(); // .get() untuk ubah dari jQuery object ke array JS biasa
+
+    // 3. Ambil favorit lama dari localStorage
+    const oldFavorit = JSON.parse(localStorage.getItem("list-favorit")) || [];
+
+    // 4. Simpan hanya item favorit lama yang masih dicentang
+    const stillFavorit = oldFavorit.filter((item) =>
+      checkedIds.includes(item.id)
+    );
+
+    // 5. Cari ID baru yang dicentang, tapi belum ada di favorit lama
+    const existingIds = stillFavorit.map((item) => item.id);
+    const newFavoritItems = checkedIds
+      .filter((id) => !existingIds.includes(id))
+      .map((id) => dataProduct.find((product) => product.id === id))
+      .filter(Boolean); // pastikan tidak null
+
+    // 6. Gabungkan favorit lama (yang masih dicentang) + yang baru
+    const updatedFavorit = [...stillFavorit, ...newFavoritItems];
+
+    // 7. Simpan ke localStorage
+    localStorage.setItem("list-favorit", JSON.stringify(updatedFavorit));
+    showFavorit(updatedFavorit);
+    modalFavorit.hide();
   });
 });
 
@@ -287,5 +364,35 @@ function showProduct(id, name) {
   } else {
     $("#table-products").addClass("text-center");
     $("#table-products").html(`<i class="text-secondary text-center"></>`);
+  }
+}
+
+function showFavorit(data) {
+  $("#add-favorit").nextAll(".col").remove();
+  let html = "";
+  if (data.length > 0) {
+    var i;
+    for (i = 0; i < data.length; i++) {
+      const name = data[i].name.split(" ");
+      const name2 = name.length > 1 ? name[1][0] : name[0][1];
+      html += `<div class="col" id="favorite-item" data-id="${data[i].id}">
+                  <div
+                    id="row-products"
+                    class="hover-button p-1 py-1 border border-secondary rounded text-center"
+                    style="cursor: pointer; min-height: 90px"
+                  >
+                    <div class="fs-4 fw-semibold text-secondary py-2">
+                      ${name[0][0] + name2}
+                    </div>
+                    <p
+                      style="font-size: 12px; line-height: 100%"
+                      class="mb-0"
+                    >
+                      ${data[i].name}
+                    </p>
+                  </div>
+                </div>`;
+    }
+    $("#add-favorit").after(html);
   }
 }

@@ -29,6 +29,23 @@
     <link rel="stylesheet" href="assets/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="stylesheet" href="assets/css/sweetalert2.min.css" />
+    <style>
+      .form-check-input {
+        width: 1.2em;
+        height: 1.2em;
+        border: 2px solid #999;
+        background-color: white;
+      }
+
+      .form-check-input:checked {
+        background-color: #0d6efd; /* Bootstrap primary */
+        border-color: #0d6efd;
+      }
+
+      .form-check-input:focus {
+        box-shadow: none;
+      }
+    </style>
   </head>
 
   <body>
@@ -161,13 +178,13 @@
               <div id="favorite">
                 <div class="overflow-y-auto px-2 pb-2" style="height: 80vh">
                   <div
+                    id="list-favorite"
                     class="row row-cols-3 row-cols-lg-4 g-2 g-lg-2 gy-lg-2"
-                    id="table-products"
                   >
-                    <div class="col">
+                    <div class="col" id="add-favorit">
                       <div
                         class="hover-button p-1 py-1 border rounded text-center"
-                        style="cursor: pointer; min-height: 100px"
+                        style="cursor: pointer; min-height: 90px"
                       >
                         <div class="fs-4 fw-semibold text-secondary py-2">
                           <i class="bi bi-plus-circle"></i>
@@ -177,22 +194,6 @@
                           class="mb-0"
                         >
                           Add Item
-                        </p>
-                      </div>
-                    </div>
-                    <div class="col">
-                      <div
-                        class="hover-button p-1 py-1 border border-secondary rounded text-center"
-                        style="cursor: pointer; min-height: 100px"
-                      >
-                        <div class="fs-4 fw-semibold text-secondary py-2">
-                          SE
-                        </div>
-                        <p
-                          style="font-size: 12px; line-height: 100%"
-                          class="mb-0"
-                        >
-                          SV ENERGEYES BLUE CONTROL
                         </p>
                       </div>
                     </div>
@@ -338,6 +339,9 @@
     </div>
     <!-- ./Sidebar off canvas -->
 
+    <!-- Modal Add Favorit -->
+    <div id="ModalFavorit"></div>
+
     <!-- Modal Click Produk Varian -->
     <div id="ModalVarian"></div>
 
@@ -369,6 +373,7 @@
     <script src="assets/js/jquery.min.js"></script>
     <!-- Load modal -->
     <script>
+      $("#ModalFavorit").load("component/ModalFavorit.html");
       $("#ModalVarian").load("component/ModalVarian.html");
       $("#ModalPelanggan").load("component/ModalPelanggan.html");
       $("#ModalBayar").load("component/ModalBayar.html");
