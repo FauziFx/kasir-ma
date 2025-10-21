@@ -235,6 +235,23 @@
     <script src="assets/js/moment-timezone-with-data.js"></script>
     <script src="assets/js/func/index.js"></script>
     <script>
+      let dataCustomers = [];
+
+      function getCustomers() {
+        const API = config.ENV_URL;
+        const URL = API + "/customers";
+        $.ajax({
+          url: URL,
+          method: "GET",
+          headers: {
+            Authorization: Cookies.get("user-token"),
+          },
+          success: function (data) {
+            dataCustomers = data.data;
+          },
+        });
+      }
+
       function getData(pages) {
         let page = pages || 1;
         const API = config.ENV_URL;
@@ -263,49 +280,51 @@
               html += `<tr class="transaction" data-id="${
                 item.id
               }" style="cursor:pointer">
-                          <td class="item item-${
-                            item.id
-                          } text-center align-middle">${icon}</td>
-                          <td class="item item-${item.id}">
-                            ${formatRupiah(item.total_amount)}</br>
-                            <span class="text-secondary fw-normal">
-                              ${item.receipt_no}
-                            </span></br>
-                            <span class="text-secondary fw-normal">
-                              ${
-                                moment(item.date)
-                                  .tz("Asia/Jakarta")
-                                  .format("lll")
-                                  .split("pukul")[0]
-                              }
-                            </span>
-                          </td>
-                          <td class="item item-${
-                            item.id
-                          } text-end align-middle">
-                           <p class="mb-0">${
-                             moment(item.date)
-                               .tz("Asia/Jakarta")
-                               .format("lll")
-                               .split("pukul")[1]
-                           }</p>
-                            <span class="badge bg-secondary fw-normal">
-                              ${item.transactionType.name}
-                            </span>
-                          </td>
-                        </tr>`;
+                                <td class="item item-${
+                                  item.id
+                                } text-center align-middle">${icon}</td>
+                                <td class="item item-${item.id}">
+                                  ${formatRupiah(item.total_amount)}</br>
+                                  <span class="text-secondary fw-normal">
+                                    ${item.receipt_no}
+                                  </span></br>
+                                  <span class="text-secondary fw-normal">
+                                    ${
+                                      moment(item.date)
+                                        .tz("Asia/Jakarta")
+                                        .format("lll")
+                                        .split("pukul")[0]
+                                    }
+                                  </span>
+                                </td>
+                                <td class="item item-${
+                                  item.id
+                                } text-end align-middle">
+                                 <p class="mb-0">${
+                                   moment(item.date)
+                                     .tz("Asia/Jakarta")
+                                     .format("lll")
+                                     .split("pukul")[1]
+                                 }</p>
+                                  <span class="badge bg-secondary fw-normal">
+                                    ${item.transactionType.name}
+                                  </span>
+                                </td>
+                              </tr>`;
             });
 
             html += `<tr>
-                      <td colspan="3">
-                        <button class="btn btn-primary w-100 btn-loadmore-transaction"
-                          data-page="${parseInt(data.currentPage) + 1}"
-                          disabled="${data.currentPage == data.totalPages}">
-                          Load More
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>`;
+                            <td colspan="3">
+                              <button class="btn btn-primary w-100 btn-loadmore-transaction"
+                                data-page="${parseInt(data.currentPage) + 1}"
+                                disabled="${
+                                  data.currentPage == data.totalPages
+                                }">
+                                Load More
+                              </button>
+                            </td>
+                          </tr>
+                        </tbody>`;
 
             $("#list").html(html);
           },
@@ -316,6 +335,7 @@
         $("#detail-transaction").hide();
         moment.locale("id");
         getData();
+        getCustomers();
 
         $(document).on("click", ".btn-loadmore-transaction", function () {
           let page = $(this).data("page");
@@ -401,12 +421,43 @@
                 icon = `<i class="bi-cash fs-4 text-secondary"></i>`;
               }
 
+              let paymentMethod = `<select id="paymentSelect" data-id="${id}" style="padding: 0 10px;border-radius: 5px; background: white;border: 1px solid #ccc;">
+                                    <option value="cash" ${
+                                      datas.payment_method == "cash"
+                                        ? "selected"
+                                        : ""
+                                    }>CASH</option>
+                                    <option value="qris" ${
+                                      datas.payment_method == "qris"
+                                        ? "selected"
+                                        : ""
+                                    }>QRIS</option>
+                                    <option value="transfer" ${
+                                      datas.payment_method == "transfer"
+                                        ? "selected"
+                                        : ""
+                                    }>TRANSFER</option>
+                                    <option value="edc" ${
+                                      datas.payment_method == "edc"
+                                        ? "selected"
+                                        : ""
+                                    }>EDC</option>
+                                  </select>`;
+
+              let customerName = `<select id="customerSelect" data-id="${id}" style="padding: 0 10px;border-radius: 5px; background: white;border: 1px solid #ccc;">`;
+              dataCustomers.map((item) => {
+                customerName += `<option value="${item.id}-${
+                  item.include_revenue
+                }-${item.transactionTypeId}" ${
+                  datas.customer.name == item.name ? "selected" : ""
+                }>${item.name}</option>`;
+              });
+              customerName += `</select>`;
+
               $("#detail-icon-paymentmethod").html(icon);
-              $("#detail-paymentmethod").html(
-                datas.payment_method.toUpperCase()
-              );
+              $("#detail-paymentmethod").html(paymentMethod);
               $("#detail-receipt").html(datas.receipt_no);
-              $("#detail-customername").html(datas.customer.name || "-");
+              $("#detail-customername").html(customerName);
               $("#detail-date").html(
                 moment(datas.date).tz("Asia/Jakarta").format("lll")
               );
@@ -417,20 +468,20 @@
               let html = "";
               datas.details.map((item) => {
                 html += `<tr>
-                    <td class="align-middle text-center">
-                      <i class="bi-box text-secondary fs-5"></i>
-                    </td>
-                    <td>
-                      <span>${item.productName}</span><br />
-                      <span class="text-secondary">
-                        ${item.variantName}
-                        <b> x${item.qty}</b>
-                      </span>
-                    </td>
-                    <td class="text-end align-middle">
-                      ${formatRupiah(item.subtotal)}
-                    </td>
-                  </tr>`;
+                          <td class="align-middle text-center">
+                            <i class="bi-box text-secondary fs-5"></i>
+                          </td>
+                          <td>
+                            <span>${item.productName}</span><br />
+                            <span class="text-secondary">
+                              ${item.variantName}
+                              <b> x${item.qty}</b>
+                            </span>
+                          </td>
+                          <td class="text-end align-middle">
+                            ${formatRupiah(item.subtotal)}
+                          </td>
+                        </tr>`;
               });
               $("#detail-item").html(html);
             },
@@ -474,31 +525,86 @@
           window.location.href = "rawbt://" + escPosData;
         });
 
-        // $(document).on("click", "#btn-print-receipt", function () {
-        //   let is_mobile = /android|mobile/gi.test(navigator.userAgent);
-        //   let url = "print-nota.php?id=" + $(this).data("id");
-        //   if (is_mobile) {
-        //     console.log("ismobile");
-        //     let html_container =
-        //       "print://escpos.org/escpos/bt/print?srcTp=uri&srcObj=html&src='data:text/html,";
-        //     $.ajax({
-        //       url: url,
-        //       success: function (html) {
-        //         html_container += html;
-        //         window.location.href = html_container;
-        //       },
-        //       error: function () {
-        //         alert("Ajax Error, cek console browser");
-        //       },
-        //     });
-        //   } else {
-        //     window.open(
-        //       url,
-        //       "notaPenjualan",
-        //       "top=100,left=100,width=700,height=600,menubar=no,status=no,titlebar=no"
-        //     );
-        //   }
-        // });
+        // Change payment
+        let previousValuePayment = $("#paymentSelect").val();
+
+        $(document).on("focus", "#paymentSelect", function () {
+          // simpan nilai sebelumnya sebelum berubah
+          previousValuePayment = $(this).val();
+        });
+
+        $(document).on("change", "#paymentSelect", function () {
+          const newValue = $(this).val();
+          const id = $(this).data("id");
+          const confirmed = confirm("Yakin ingin mengganti Metode Pembayaran?");
+          const API = config.ENV_URL;
+          const URL = API + "/transactions/" + id;
+
+          if (confirmed) {
+            // lanjutkan proses AJAX
+            $.ajax({
+              url: URL,
+              method: "PATCH",
+              headers: {
+                Authorization: Cookies.get("user-token"),
+              },
+              data: { payment_method: newValue },
+              success: function (response) {
+                getData();
+              },
+              error: function () {
+                alert("Gagal memperbarui data customer!");
+                // balikin ke nilai lama kalau gagal update
+                $("#paymentSelect").val(previousValuePayment);
+              },
+            });
+          } else {
+            // kalau batal, balikin ke pilihan lama
+            $(this).val(previousValuePayment);
+          }
+        });
+
+        // Change customer
+        let previousValueCustomer = $("#customerSelect").val();
+
+        $(document).on("focus", "#customerSelect", function () {
+          // simpan nilai sebelumnya sebelum berubah
+          previousValueCustomer = $(this).val();
+        });
+
+        $(document).on("change", "#customerSelect", function () {
+          const id = $(this).data("id");
+          const value = $(this).val().split("-");
+          const customerId = value[0];
+          const include_revenue = value[1];
+          const transactionTypeId = value[2];
+          const confirmed = confirm("Yakin ingin mengganti customer?");
+          const API = config.ENV_URL;
+          const URL = API + "/transactions/" + id;
+
+          if (confirmed) {
+            // lanjutkan proses AJAX
+            $.ajax({
+              url: URL,
+              method: "PATCH",
+              headers: {
+                Authorization: Cookies.get("user-token"),
+              },
+              data: { customerId, include_revenue, transactionTypeId },
+              success: function (response) {
+                getData();
+              },
+              error: function () {
+                alert("Gagal memperbarui data customer!");
+                // balikin ke nilai lama kalau gagal update
+                $("#customerSelect").val(previousValuePayment);
+              },
+            });
+          } else {
+            // kalau batal, balikin ke pilihan lama
+            $(this).val(previousValueCustomer);
+          }
+        });
       });
     </script>
   </body>
