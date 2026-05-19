@@ -1,0 +1,118 @@
+<!-- Fixed sidebar -->
+<div
+  class="d-flex flex-column flex-shrink-0 bg-body-tertiary sidenav"
+  style="width: 4.5rem"
+>
+  <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
+    <li class="nav-item">
+      <a
+        id="btn-index"
+        href="index.html"
+        class="btn btn-outline-dark border-0 py-3 border-bottom ps-1 rounded-0 fs-4"
+        aria-current="page"
+        title="index"
+        data-bs-toggle="tooltip"
+        data-bs-placement="right"
+      >
+        <i class="bi-grid"></i>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        id="btn-nota"
+        href="nota.html"
+        class="btn btn-outline-dark border-0 py-3 border-bottom ps-1 rounded-0 fs-4"
+        aria-current="page"
+        title="nota"
+        data-bs-toggle="tooltip"
+        data-bs-placement="right"
+      >
+        <i class="bi-receipt"></i>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        id="btn-laporan"
+        href="laporan.html"
+        class="btn btn-outline-dark border-0 py-3 border-bottom ps-1 rounded-0 fs-4"
+        aria-current="page"
+        title="laporan"
+        data-bs-toggle="tooltip"
+        data-bs-placement="right"
+      >
+        <i class="bi-printer"></i>
+      </a>
+    </li>
+  </ul>
+  <div>
+    <a
+      id="btn-menu-mobile"
+      class="nav-link px-4 py-2 fs-3"
+      data-bs-toggle="offcanvas"
+      href="#offcanvasExample"
+      role="button"
+      aria-controls="offcanvasExample"
+    >
+      <i class="bi-justify"></i>
+    </a>
+  </div>
+</div>
+<!-- ./Fixed sidebar -->
+
+<!-- Sidebar off canvas -->
+<div
+  class="sidebar-mobile offcanvas offcanvas-start"
+  tabindex="-1"
+  id="offcanvasExample"
+  style="width: 280px"
+  id="btn-h5"
+  aria-labelledby="offcanvasExampleLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">KASIR MA</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body sidebar-body">
+    <div class="img-profile">
+      <div class="avatar-profile">
+        <img
+          class="rounded-circle"
+          src="https://picsum.photos/128"
+          width="64px"
+        />
+      </div>
+      <p class="mb-0 mt-3">Kasir</p>
+    </div>
+    <nav class="mt-3">
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <button
+            type="button"
+            class="link-dark p-3 w-100 text-start btn btn-outline-secondary"
+            id="btn-logout"
+          >
+            <i class="bi-box-arrow-right me-2"></i>Logout
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<!-- ./Sidebar off canvas -->
+
+<script>
+  $(document).ready(function () {
+    if (window.location.href.includes("index.html")) {
+      $("#btn-index").addClass("active");
+    } else if (window.location.href.includes("nota.html")) {
+      $("#btn-nota").addClass("active");
+    } else if (window.location.href.includes("laporan.html")) {
+      $("#btn-laporan").addClass("active");
+    }
+  });
+</script>

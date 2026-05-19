@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <script>
@@ -29,23 +29,6 @@
     <link rel="stylesheet" href="assets/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="stylesheet" href="assets/css/sweetalert2.min.css" />
-    <style>
-      .form-check-input {
-        width: 1.2em;
-        height: 1.2em;
-        border: 2px solid #999;
-        background-color: white;
-      }
-
-      .form-check-input:checked {
-        background-color: #0d6efd; /* Bootstrap primary */
-        border-color: #0d6efd;
-      }
-
-      .form-check-input:focus {
-        box-shadow: none;
-      }
-    </style>
   </head>
 
   <body>
@@ -53,70 +36,10 @@
       <div class="progress-bar progress-bar-success" style="width: 0%"></div>
     </div>
     <!-- Fixed sidebar -->
-    <div
-      class="d-flex flex-column flex-shrink-0 bg-body-tertiary sidenav"
-      style="width: 4.5rem"
-    >
-      <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
-        <li class="nav-item">
-          <a
-            href="index.html"
-            class="btn btn-outline-dark active py-3 border-bottom ps-1 rounded-0 fs-4"
-            aria-current="page"
-            title="Home"
-            data-bs-toggle="tooltip"
-            data-bs-placement="right"
-          >
-            <i class="bi-grid"></i>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a
-            href="nota.html"
-            class="btn btn-outline-dark border-0 py-3 border-bottom ps-1 rounded-0 fs-4"
-            aria-current="page"
-            title="Home"
-            data-bs-toggle="tooltip"
-            data-bs-placement="right"
-          >
-            <i class="bi-receipt"></i>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a
-            href="laporan.html"
-            class="btn btn-outline-dark border-0 py-3 border-bottom ps-1 rounded-0 fs-4"
-            aria-current="page"
-            title="Home"
-            data-bs-toggle="tooltip"
-            data-bs-placement="right"
-          >
-            <i class="bi-printer"></i>
-          </a>
-        </li>
-      </ul>
-      <div>
-        <a
-          id="btn-menu-mobile"
-          class="nav-link px-4 py-2 fs-3"
-          data-bs-toggle="offcanvas"
-          href="#offcanvasExample"
-          role="button"
-          aria-controls="offcanvasExample"
-        >
-          <i class="bi-justify"></i>
-        </a>
-      </div>
-    </div>
-
-    <!-- Input Scan -->
-    <input
-      type="text"
-      id="input-scan"
-      style="position: absolute; z-index: 100; opacity: 0"
-    />
-
+    <div id="FixedSidebar"></div>
     <!-- ./Fixed sidebar -->
+
+    <!-- Main Content -->
     <div class="container-fluid vh-100">
       <div class="main row h-100">
         <div class="col col-md-7 h-100 px-0">
@@ -293,51 +216,7 @@
         <!-- ./Right panel / cart / keranjang -->
       </div>
     </div>
-
-    <!-- Sidebar off canvas -->
-    <div
-      class="sidebar-mobile offcanvas offcanvas-start"
-      tabindex="-1"
-      id="offcanvasExample"
-      style="width: 280px"
-      aria-labelledby="offcanvasExampleLabel"
-    >
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasExampleLabel">KASIR MA</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="offcanvas"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="offcanvas-body sidebar-body">
-        <div class="img-profile">
-          <div class="avatar-profile">
-            <img
-              class="rounded-circle"
-              src="https://picsum.photos/128"
-              width="64px"
-            />
-          </div>
-          <p class="mb-0 mt-3">Username</p>
-        </div>
-        <nav class="mt-3">
-          <ul class="nav nav-pills flex-column">
-            <li class="nav-item">
-              <button
-                type="button"
-                class="link-dark p-3 w-100 text-start btn btn-outline-secondary"
-                id="btn-logout"
-              >
-                <i class="bi-box-arrow-right me-2"></i>Logout
-              </button>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </div>
-    <!-- ./Sidebar off canvas -->
+    <!-- ./Main Content -->
 
     <!-- Modal Add Favorit -->
     <div id="ModalFavorit"></div>
@@ -373,12 +252,13 @@
     <script src="assets/js/jquery.min.js"></script>
     <!-- Load modal -->
     <script>
+      $("#FixedSidebar").load("component/FixedSidebar.html");
       $("#ModalFavorit").load("component/ModalFavorit.html");
       $("#ModalVarian").load("component/ModalVarian.html");
       $("#ModalPelanggan").load("component/ModalPelanggan.html");
       $("#ModalBayar").load("component/ModalBayar.html");
       $("#ModalTransaksiBerhasil").load(
-        "component/ModalTransaksiBerhasil.html"
+        "component/ModalTransaksiBerhasil.html",
       );
       $("#ModalSimpanBill").load("component/ModalSimpanBill.html");
       $("#ModalListBill").load("component/ModalListBill.html");
@@ -397,7 +277,6 @@
     <script src="assets/js/func/AjaxProduk.js"></script>
     <script src="assets/js/func/AjaxCart.js"></script>
     <script src="assets/js/func/AjaxBill.js"></script>
-    <script src="assets/js/func/ScanBarcode.js"></script>
     <script>
       // Print Transaksi Berhasil
       $(document).ready(function () {

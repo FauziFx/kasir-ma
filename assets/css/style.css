@@ -64,3 +64,19 @@ input.larger {
   height: 25px;
   margin-top: 6px;
 }
+
+.form-check-input {
+  width: 1.2em;
+  height: 1.2em;
+  border: 2px solid #999;
+  background-color: white;
+}
+
+.form-check-input:checked {
+  background-color: #0d6efd; /* Bootstrap primary */
+  border-color: #0d6efd;
+}
+
+.form-check-input:focus {
+  box-shadow: none;
+}
