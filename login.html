@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <script>
@@ -54,7 +54,6 @@
                       id="username"
                       type="text"
                       class="form-control"
-                      id="username"
                       name="username"
                       required=""
                       placeholder="Username/Email"
@@ -67,18 +66,15 @@
                       id="password"
                       type="password"
                       class="form-control"
-                      id="password"
                       name="password"
                       required=""
                       placeholder="******"
                     />
                     <div class="invalid-feedback">Password is required</div>
                   </div>
-                  <div class="d-flex align-items-center">
-                    <button type="submit" class="btn btn-primary ms-auto">
-                      Masuk
-                    </button>
-                  </div>
+                  <button type="submit" class="btn btn-primary w-100">
+                    Masuk
+                  </button>
                 </form>
               </div>
             </div>
@@ -90,7 +86,7 @@
                 rel="noopener noreferrer"
                 >Ahmad Fauzi</a
               ><br />
-              © No Copyright. Hak Cipta hanya Milik Allah
+              <!-- © No Copyright. Hak Cipta hanya Milik Allah -->
             </div>
           </div>
         </div>
@@ -102,6 +98,7 @@
     <script src="assets/js/js.cookie.min.js"></script>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/sweetalert2.all.min.js"></script>
+    <script src="assets/js/func/index.js"></script>
     <script>
       $(document).ready(function () {
         $("button[type=submit]").on("click", function () {
@@ -115,9 +112,10 @@
             Swal.fire("Password Wajib diisi!");
           } else {
             $(this).attr("disabled", true);
-            $(this)
-              .html(`<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                                <span role="status">Loading...</span>`);
+            $(this).html(`
+                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                    <span role="status">Loading...</span>
+                  `);
             $.ajax({
               url: URL,
               method: "POST",
@@ -143,25 +141,6 @@
             });
           }
         });
-
-        progressBar();
-
-        function progressBar(url) {
-          $(".progress").show();
-          $(".progress-bar").animate(
-            {
-              width: "100%",
-            },
-            1000
-          );
-          setTimeout(function () {
-            $(".progress").hide();
-            $(".progress-bar").css("width", "0%");
-            if (url != undefined) {
-              window.location.href = url;
-            }
-          }, 1100);
-        }
       });
     </script>
   </body>

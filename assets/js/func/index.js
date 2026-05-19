@@ -1,19 +1,6 @@
 $(document).ready(function () {
   // Progress bar
   progressBar();
-  function progressBar() {
-    $(".progress").show();
-    $(".progress-bar").animate(
-      {
-        width: "100%",
-      },
-      1000
-    );
-    setTimeout(function () {
-      $(".progress").hide();
-      $(".progress-bar").css("width", "0%");
-    }, 1100);
-  }
 
   // Btn Logout
   $("#btn-logout").on("click", function () {
@@ -42,4 +29,22 @@ function formatRupiah(input) {
 
   rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
   return rupiah ? "Rp" + rupiah : "";
+}
+
+// Progress Bar Animation
+function progressBar(url) {
+  $(".progress").show();
+  $(".progress-bar").animate(
+    {
+      width: "100%",
+    },
+    1000,
+  );
+  setTimeout(function () {
+    $(".progress").hide();
+    $(".progress-bar").css("width", "0%");
+    if (url != undefined) {
+      window.location.href = url;
+    }
+  }, 1100);
 }
