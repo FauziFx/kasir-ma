@@ -1,3 +1,6 @@
+// Global Variable
+const API = config.ENV_URL;
+
 $(document).ready(function () {
   // Progress bar
   progressBar();

@@ -42,6 +42,7 @@
     <!-- Main Content -->
     <div class="container-fluid vh-100">
       <div class="main row h-100">
+        <!-- Left Panel List Product -->
         <div class="col col-md-7 h-100 px-0">
           <div class="card h-100">
             <div class="row mb-1">
@@ -60,11 +61,11 @@
                 </div>
               </div>
             </div>
-            <div class="btn-group rounded-0">
+            <div class="btn-group rounded-0" id="list-categories">
               <button
                 type="button"
                 data-id="favorite"
-                data-nama="Favorite"
+                data-name="Favorite"
                 class="btn-categories btn btn-outline-dark rounded-0 active"
                 data-bs-toggle="button"
               >
@@ -73,30 +74,20 @@
               <button
                 type="button"
                 data-id=""
-                data-nama="Semua Produk"
+                data-name="Semua Produk"
                 class="btn-categories btn btn-outline-dark rounded-0"
-                id="all-categories"
                 data-bs-toggle="button"
               >
                 Semua
               </button>
-              <button
-                type="button"
-                data-id="null"
-                data-nama="Uncategorized"
-                class="btn-categories btn btn-outline-dark rounded-0"
-                data-bs-toggle="button"
-              >
-                Uncategorized
-              </button>
             </div>
             <span
               class="text-center fw-semibold mt-1"
-              id="title-product"
+              id="list-product-title"
             ></span>
             <div class="overflow-y-auto px-2 pb-2">
               <table class="table table-hover">
-                <tbody id="table-products"></tbody>
+                <tbody id="list-products"></tbody>
               </table>
               <div id="favorite">
                 <div class="overflow-y-auto px-2 pb-2" style="height: 80vh">
@@ -126,6 +117,7 @@
             </div>
           </div>
         </div>
+        <!-- ./Left Panel List Product -->
 
         <!-- Right panel / cart / keranjang -->
         <div class="col col-md-5 h-100">
@@ -221,9 +213,6 @@
     <!-- Modal Add Favorit -->
     <div id="ModalFavorit"></div>
 
-    <!-- Modal Click Produk Varian -->
-    <div id="ModalVarian"></div>
-
     <!-- Modal tambah pelanggan -->
     <div id="ModalPelanggan"></div>
 
@@ -245,6 +234,10 @@
     <!-- Modal Pisah Bill -->
     <div id="ModalPisahBill"></div>
 
+    <!-- ==================== -->
+    <div id="ModalProduct"></div>
+    <!-- ==================== -->
+
     <!-- Register PWA -->
     <script src="register.js"></script>
     <!-- Config -->
@@ -254,7 +247,6 @@
     <script>
       $("#FixedSidebar").load("component/FixedSidebar.html");
       $("#ModalFavorit").load("component/ModalFavorit.html");
-      $("#ModalVarian").load("component/ModalVarian.html");
       $("#ModalPelanggan").load("component/ModalPelanggan.html");
       $("#ModalBayar").load("component/ModalBayar.html");
       $("#ModalTransaksiBerhasil").load(
@@ -264,6 +256,10 @@
       $("#ModalListBill").load("component/ModalListBill.html");
       $("#ModalAlert").load("component/ModalAlert.html");
       $("#ModalPisahBill").load("component/ModalPisahBill.html");
+
+      //
+      $("#ModalProduct").load("component/ModalProduct.html");
+      //
     </script>
     <!-- Load JS -->
     <script src="assets/js/loadingoverlay.min.js"></script>
@@ -274,7 +270,8 @@
     <script src="assets/js/moment-with-locales.min.js"></script>
     <script src="assets/js/moment-timezone-with-data.js"></script>
     <script src="assets/js/func/index.js"></script>
-    <script src="assets/js/func/AjaxProduk.js"></script>
+    <script src="assets/js/func/Data.js"></script>
+    <script src="assets/js/func/Produk.js"></script>
     <script src="assets/js/func/AjaxCart.js"></script>
     <script src="assets/js/func/AjaxBill.js"></script>
     <script>
