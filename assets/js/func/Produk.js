@@ -1,20 +1,33 @@
-// Global Variabel
+// ==========================================
+// 1. STATE & GLOBAL VARIABLES
+// ==========================================
 let currentCategoryId = null;
-let modalProduct = new bootstrap.Modal($("#modal-product"));
-let selectedVariant = {};
-let currentQty = 1;
-let currentPrice = 0;
+const modalProduct = new bootstrap.Modal($("#modal-product"));
 
-// Show Categories
+// Satukan variabel modal yang saling berhubungan ke dalam satu Objek State
+let activeTransaction = {
+  productid: null,
+  productname: "",
+  variantid: null,
+  variantname: "",
+  price: 0,
+  qty: 1,
+  subtotal: 0,
+};
+
+// ==========================================
+// 2. DATA LOADERS (IndexedDB)
+// ==========================================
+
 function showCategories() {
   const transaction = db.transaction(["categories"], "readonly");
   const storeCat = transaction.objectStore("categories");
+  const el = $("#list-categories");
 
   storeCat.openCursor().onsuccess = function (e) {
     const cursor = e.target.result;
     if (cursor) {
       const category = cursor.value;
-      const el = $("#list-categories");
       el.append(
         `<button 
           type="button" 
@@ -31,35 +44,22 @@ function showCategories() {
   };
 }
 
-// Show Products
 function showProducts(categoryId = null, searchQuery = "") {
   const transaction = db.transaction(["products"], "readonly");
   const storeProd = transaction.objectStore("products");
-
-  let source;
-
-  if (categoryId) {
-    const myIndex = storeProd.index("categoryId");
-    source = myIndex.openCursor(IDBKeyRange.only(categoryId));
-  } else {
-    source = storeProd.openCursor();
-  }
+  let source = categoryId
+    ? storeProd.index("categoryId").openCursor(IDBKeyRange.only(categoryId))
+    : storeProd.openCursor();
 
   let html = "";
   const query = searchQuery.toLowerCase();
 
   source.onsuccess = function (e) {
     const cursor = e.target.result;
-
     if (cursor) {
       const product = cursor.value;
-      const productName = product.name.toLowerCase();
-
-      if (query === "" || productName.includes(query)) {
-        html += `<tr
-                  class="row-products"
-                  data-id="${product.id}"
-                >
+      if (query === "" || product.name.toLowerCase().includes(query)) {
+        html += `<tr class="row-products" data-id="${product.id}">
                   <td class="py-3">${product.name}</td>
                 </tr>`;
       }
@@ -70,16 +70,13 @@ function showProducts(categoryId = null, searchQuery = "") {
   };
 }
 
-// Show Product Detail
 function showProductDetail(productId) {
   const transaction = db.transaction(["products"], "readonly");
   const storeProd = transaction.objectStore("products");
-
   const request = storeProd.get(productId);
 
   request.onsuccess = function (e) {
     const product = e.target.result;
-
     if (!product) {
       console.error("Produk tidak ditemukan di database lokal");
       return;
@@ -87,21 +84,19 @@ function showProductDetail(productId) {
 
     $("#modal-product-title").text(product.name);
 
-    // 2. Loop Variant (Asumsi dari API struktur datanya berupa array: product.variants)
     let variantHtml = "";
-    const variants = product.variants || []; // Pengaman jika produk tidak punya varian
-
-    // Sort by variant.id
+    const variants = product.variants || [];
     variants.sort((a, b) => Number(a.id) - Number(b.id));
+
     if (variants.length > 0) {
       variants.forEach((variant) => {
+        // Menggunakan standard format data-attribute agar dibaca otomatis oleh jQuery .data()
         variantHtml += `<li class="nav-item col-6 px-1 mb-1" role="presentation">
                           <button
-                            class="btn btn-outline-dark w-100 border border-dark py-2"
+                            class="btn btn-outline-dark w-100 border border-dark py-2 btn-variant-choice"
                             type="button"
                             role="tab"
                             data-bs-toggle="tab"
-                            aria-selected="false"
                             data-productid="${product.id}"
                             data-variantid="${variant.id}"
                             data-productname="${product.name}"
@@ -112,13 +107,10 @@ function showProductDetail(productId) {
                         </li>`;
       });
     } else {
-      variantHtml = `<p class="text-muted small">Produk ini tidak memiliki varian.</p>`;
+      variantHtml = `<p class="text-muted small p-3">Produk ini tidak memiliki varian.</p>`;
     }
 
-    // Masukkan list varian ke dalam container di modal
     $("#list-variants").html(variantHtml);
-
-    // 3. Tampilkan Modal Bootstrap
     modalProduct.show();
   };
 
@@ -127,100 +119,141 @@ function showProductDetail(productId) {
   };
 }
 
-// Debounce
-function debounce(func, timeout = 200) {
-  let timer;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      func.apply(this, args);
-    }, timeout);
-  };
+// ==========================================
+// 3. CORE CART LOGIC & DOM SYNC
+// ==========================================
+
+// Fungsi Tunggal khusus sinkronisasi State ke Tampilan (DOM)
+function syncModalUI() {
+  const hasVariant = activeTransaction.variantid !== null;
+  const isValidAmount =
+    activeTransaction.qty > 0 && activeTransaction.price >= 0;
+
+  // Render komponen teks & input
+  $("#input-qty").val(activeTransaction.qty);
+  $("#input-price").val(activeTransaction.price);
+  $("#modal-variant-title").text(activeTransaction.variantname || "-");
+  $("#modal-subtotal-title").html(formatRupiah(activeTransaction.subtotal));
+
+  // Amankan tombol Add to Cart
+  $("#btn-add-to-cart").prop("disabled", !(hasVariant && isValidAmount));
 }
 
-// Set Selected Variant
-function setSelectedVariant(variant) {
-  currentPrice = variant.price;
-  const subTotal = currentQty * currentPrice;
+function updateActiveTransaction(changes) {
+  // Gabungkan perubahan data baru ke state transaksi aktif
+  activeTransaction = { ...activeTransaction, ...changes };
 
-  // Set Input value
-  $("#input-qty").val(currentQty);
-  $("#input-price").val(currentPrice);
+  // Hitung ulang subtotal murni berdasarkan state terbaru
+  activeTransaction.subtotal = activeTransaction.qty * activeTransaction.price;
 
-  selectedVariant = variant;
-  selectedVariant.qty = currentQty;
-  selectedVariant.subtotal = subTotal;
-
-  $("#modal-variant-title").html(variant.variantname);
-  $("#modal-subtotal-title").html(formatRupiah(subTotal));
+  // Perbarui tampilan layar
+  syncModalUI();
 }
 
-function calculateSubtotal(qty, price) {
-  if (!qty || !price) {
-    $("#btn-add-to-cart").attr("disabled", true);
-    return;
-  }
-
-  if (qty <= 0 || price <= 0) {
-    $("#input-qty").val(currentQty);
-    $("#input-price").val(currentPrice);
-    return;
-  }
-
-  // Set input value
-  $("#input-qty").val(qty);
-  $("#input-price").val(price);
-
-  // Set variabel
-  currentQty = qty;
-  currentPrice = price;
-
-  const subTotal = qty * price;
-
-  selectedVariant.qty = qty;
-  selectedVariant.price = price;
-  selectedVariant.subtotal = subTotal;
-
-  $("#modal-subtotal-title").html(formatRupiah(subTotal)); // Set modal title
-  $("#btn-add-to-cart").attr("disabled", false); // Set button tambah active
-}
-
-// Add to cart
 function addToCart(cart, newItem) {
-  // 1. Cari tahu apakah ada item yang variantid & price-nya sama
+  // Amankan konversi tipe data angka demi konsistensi data storage
+  const itemPrice = Number(newItem.price);
+  const itemQty = Number(newItem.qty);
+
   const existingItem = cart.find(
     (item) =>
-      item.variantid == newItem.variantid && item.price == newItem.price,
+      item.variantid === newItem.variantid && Number(item.price) === itemPrice,
   );
 
   if (existingItem) {
-    // Jika ketemu, tambahkan qty-nya sesuai dengan qty item baru
-    existingItem.qty += newItem.qty;
-    // Hitung ulang subtotalnya
-    existingItem.subtotal = existingItem.price * existingItem.qty;
+    existingItem.qty += itemQty;
+    existingItem.subtotal = Number(existingItem.price) * existingItem.qty;
   } else {
-    // Jika tidak ketemu (beda variantid atau beda price), tinggal push ke dalam array
-    cart.push(newItem);
+    // Kloning objek agar tidak merusak state aktif UI
+    cart.push({
+      ...newItem,
+      price: itemPrice,
+      qty: itemQty,
+      subtotal: itemPrice * itemQty,
+    });
   }
-
   return cart;
 }
 
-// Event on Modal Product Hidden
-const myModalProduct = document.getElementById("modal-product");
-myModalProduct.addEventListener("hidden.bs.modal", function (event) {
-  selectedVariant = {};
-  // Reset semua title di Modal Product
-  $(`#modal-product-title, 
-    #modal-variant-title, 
-    #modal-subtotal-title`).html("");
+// ==========================================
+// 4. EVENT LISTENERS
+// ==========================================
 
-  // Reset input di Modal product
-  $("#input-qty").val(1);
-  $("#input-price").val(0);
+// Reset total & kembalikan state transaksi ke default mutlak saat modal ditutup
+const myModalProduct = document.getElementById("modal-product");
+myModalProduct.addEventListener("hidden.bs.modal", function () {
+  activeTransaction = {
+    productid: null,
+    productname: "",
+    variantid: null,
+    variantname: "",
+    price: 0,
+    qty: 1,
+    subtotal: 0,
+  };
+  $(`#modal-product-title, #modal-variant-title, #modal-subtotal-title`).html(
+    "",
+  );
+  syncModalUI();
 });
 
-// Event: tombol kategori diklik
+// Pilih Varian produk
+$(document).on("click", ".btn-variant-choice", function () {
+  const data = $(this).data(); // Membaca: productid, variantid, productname, variantname, price
+
+  updateActiveTransaction({
+    productid: data.productid,
+    productname: data.productname,
+    variantid: data.variantid,
+    variantname: data.variantname,
+    price: Number(data.price),
+    qty: 1, // Reset qty menjadi 1 tiap ganti varian baru demi keamanan kasir
+  });
+
+  $("#container-variant").animate(
+    {
+      scrollTop: $("#container-variant")[0].scrollHeight,
+    },
+    "smooth",
+  );
+});
+
+// Increment / Decrement Qty Buttons
+$(document).on("click", ".btn-increment", function () {
+  const diff = Number($(this).data("increment"));
+  const targetQty = activeTransaction.qty + diff;
+
+  if (targetQty > 0) {
+    updateActiveTransaction({ qty: targetQty });
+  }
+});
+
+// Mengubah kuantitas via input langsung
+$(document).on("input keyup", "#input-qty", function () {
+  const val = Number($(this).val());
+  if (val > 0) {
+    updateActiveTransaction({ qty: val });
+  }
+});
+
+// Mengubah harga via input langsung (Khusus Open Price)
+$(document).on("input keyup", "#input-price", function () {
+  const val = Number($(this).val());
+  if (val >= 0) {
+    updateActiveTransaction({ price: val });
+  }
+});
+
+// Simpan ke Keranjang Belanja
+$(document).on("click", "#btn-add-to-cart", function () {
+  let currentCart = JSON.parse(localStorage.getItem("cart")) || [];
+  let updateCart = addToCart(currentCart, activeTransaction);
+
+  localStorage.setItem("cart", JSON.stringify(updateCart));
+  modalProduct.hide(); // Tutup modal otomatis setelah berhasil simpan
+});
+
+// Kategori & Pencarian
 $(document).on("click", ".btn-categories", function () {
   $(".btn-categories").removeClass("active").addClass("inactive");
   $(this).removeClass("inactive").addClass("active");
@@ -228,64 +261,31 @@ $(document).on("click", ".btn-categories", function () {
   $("#list-product-title").html($(this).data("name"));
 
   currentCategoryId = $(this).data("id") || null;
-
   showProducts(currentCategoryId, "");
 
-  if ($(this).data("id") == "favorite") {
-    $("#favorite").show();
-  } else {
-    $("#favorite").hide();
-  }
+  $("#favorite").toggle($(this).data("id") === "favorite");
 });
 
-// Event: kolom pencarian diklik
+// Pencarian Produk Debounce
+const processSearch = debounce((query) =>
+  showProducts(currentCategoryId, query),
+);
 $(document).on("keyup", "#search_box", function () {
-  const currentSearch = $(this).val();
   $("#list-favorite").hide();
-  debounce(() => showProducts(currentCategoryId, currentSearch))();
+  processSearch($(this).val());
 });
 
-// Event: tombol produk diklik
 $(document).on("click", ".row-products", function () {
-  const productId = $(this).data("id");
-  $("#btn-add-to-cart").attr("disabled", true);
-
-  // Panggil fungsi baru untuk mengambil detail dan menampilkan modal
-  showProductDetail(productId);
+  showProductDetail($(this).data("id"));
 });
 
-// Event: klik varian yang dipilih
-$(document).on("click", "#list-variants li button", function () {
-  $("#btn-add-to-cart").attr("disabled", false);
-  setSelectedVariant($(this).data());
-});
-
-// Event: klik increment atau decrement qty
-$(document).on("click", ".btn-increment", function () {
-  const increment = Number($(this).data("increment"));
-  const newQty = Number(currentQty) + increment;
-
-  calculateSubtotal(newQty, currentPrice);
-});
-
-// Event: onChange input qty
-$(document).on("keyup", "#input-qty", function () {
-  const newQty = Number($(this).val());
-
-  calculateSubtotal(newQty, currentPrice);
-});
-
-// Event: onChange input price
-$(document).on("keyup", "#input-price", function () {
-  const newPrice = Number($(this).val());
-
-  calculateSubtotal(currentQty, newPrice);
-});
-
-// Event: klik Button add to cart
-$(document).on("click", "#btn-add-to-cart", function () {
-  let currentCart = JSON.parse(localStorage.getItem("cart")) || [];
-
-  let updateCart = addToCart(currentCart, selectedVariant);
-  localStorage.setItem("cart", JSON.stringify(updateCart));
-});
+// Helper Debounce (Perbaikan scope arguments)
+function debounce(func, timeout = 200) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func(...args);
+    }, timeout);
+  };
+}
