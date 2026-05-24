@@ -20,6 +20,9 @@ request.onupgradeneeded = function (e) {
   if (!db.objectStoreNames.contains("categories")) {
     db.createObjectStore("categories", { keyPath: "id" });
   }
+  if (!db.objectStoreNames.contains("customers")) {
+    db.createObjectStore("customers", { keyPath: "id" });
+  }
 };
 
 // ==========================================
@@ -43,6 +46,7 @@ async function initApp() {
 function fetchAndRefreshData(categoryId = "", name) {
   const URL_Prod = API + "/products?all=true";
   const URL_Cat = API + "/categories?type=main";
+  const URL_Cust = API + "/customers";
   const token = Cookies.get("user-token");
 
   // Show Loading
@@ -56,21 +60,28 @@ function fetchAndRefreshData(categoryId = "", name) {
     },
   };
 
-  Promise.all([fetch(URL_Cat, options), fetch(URL_Prod, options)])
-    .then(async ([resCat, resProd]) => {
-      if (!resCat.ok || !resProd.ok) {
+  Promise.all([
+    fetch(URL_Cat, options),
+    fetch(URL_Prod, options),
+    fetch(URL_Cust, options),
+  ])
+    .then(async ([resCat, resProd, resCust]) => {
+      if (!resCat.ok || !resProd.ok || !resCust.ok) {
         throw new Error("Gagal mengambil data dari server");
       }
 
       const jsonCat = await resCat.json();
       const jsonProd = await resProd.json();
+      const jsonCust = await resCust.json();
 
       const dataCat = jsonCat.data || [];
       const dataProd = jsonProd.data || [];
+      const dataCust = jsonCust.data || [];
 
       return Promise.all([
         saveDatabase(dataCat, "categories"),
         saveDatabase(dataProd, "products"),
+        saveDatabase(dataCust, "customers"),
       ]);
     })
     .then(() => {
@@ -118,15 +129,21 @@ function saveDatabase(data, storeName) {
 
 function checkDatabase() {
   return new Promise((resolve) => {
-    const transaction = db.transaction(["categories", "products"], "readonly");
+    const transaction = db.transaction(
+      ["categories", "products", "customers"],
+      "readonly",
+    );
     const storeCat = transaction.objectStore("categories");
     const storeProd = transaction.objectStore("products");
+    const storeCust = transaction.objectStore("customers");
 
     const countProdReq = storeProd.count();
     const countCatReq = storeCat.count();
+    const countCustReq = storeCust.count();
 
     let prodCount = 0;
     let catCount = 0;
+    let custCount = 0;
 
     countProdReq.onsuccess = () => {
       prodCount = countProdReq.result;
@@ -136,8 +153,12 @@ function checkDatabase() {
       catCount = countProdReq.result;
     };
 
+    countCustReq.onsuccess = () => {
+      custCount = countCustReq.result;
+    };
+
     transaction.oncomplete = function () {
-      resolve(prodCount === 0 || catCount === 0);
+      resolve(prodCount === 0 || catCount === 0 || custCount === 0);
     };
 
     transaction.onerror = function () {
