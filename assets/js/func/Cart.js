@@ -1,5 +1,11 @@
 // ==========================================
-// 1. RENDERER (Fungsi khusus Gambar UI)
+// 1. STATE & GLOBAL VARIABLES
+// ==========================================
+let modalListCustomers = new bootstrap.Modal($("#modal-list-customers"));
+let modalActiveCustomers = new bootstrap.Modal($("#modal-active-customer"));
+
+// ==========================================
+// 2. RENDERER (Fungsi khusus Gambar UI)
 // ==========================================
 
 function getCart() {
@@ -55,13 +61,50 @@ function getCart() {
   $("#cart-total").text(formatRupiah(grandTotal));
 }
 
+function getCustomers() {
+  const transaction = db.transaction(["customers"], "readonly");
+  const storeCust = transaction.objectStore("customers");
+  let html = "";
+
+  storeCust.openCursor().onsuccess = function (e) {
+    const cursor = e.target.result;
+    if (cursor) {
+      const customer = cursor.value;
+      html += `<tr>
+                <td>${customer.name} | <span class="text-secondary">${customer.transactionType.name}</span></td>
+                <td class="text-end">
+                  <button
+                    data-id='${customer.id}'
+                    class="btn btn-dark btn-sm btn-customer-choice">Pilih</button></td>
+              </tr>`;
+      cursor.continue();
+    } else {
+      $("#list-customers").html(html);
+      modalListCustomers.show();
+    }
+  };
+}
+
+function getActiveCustomer() {
+  const rawCustomer = localStorage.getItem("customer");
+  if (!rawCustomer) return;
+
+  const dataCustomer = JSON.parse(rawCustomer);
+
+  $("#active-customer").html(dataCustomer.name);
+  modalActiveCustomers.show();
+}
+
 // ==========================================
-// 2. EVENT LISTENERS
+// 3. EVENT LISTENERS
 // ==========================================
 
 // Render halaman saat pertama dimuat
 $(document).ready(function () {
   getCart();
+
+  const savedCustomer = JSON.parse(localStorage.getItem("customer"));
+  $("#customer-name").html(savedCustomer ? savedCustomer.name : "+ Pelanggan");
 });
 
 // Event: Klik item keranjang untuk EDIT
@@ -122,4 +165,47 @@ $(document).on("click", ".btn-delete-cart-item", function () {
 
   // Render Cart
   getCart();
+});
+
+// Event: Klik tambah pelanggan (Toggle Modal)
+$(document).on("click", "#customer-name", function () {
+  if (localStorage.getItem("customer")) {
+    getActiveCustomer();
+  } else {
+    getCustomers();
+  }
+});
+
+// Event: Pilih customer
+$(document).on("click", ".btn-customer-choice", function () {
+  const customerId = $(this).data("id");
+
+  const transaction = db.transaction(["customers"], "readonly");
+  const storeCust = transaction.objectStore("customers");
+  const request = storeCust.get(customerId);
+
+  request.onsuccess = function (e) {
+    const customerObj = e.target.result;
+    if (!customerObj) return;
+
+    const obj = {
+      id: customerObj.id,
+      name: customerObj.name,
+      include_revenue: customerObj.include_revenue,
+      transactionTypeId: customerObj.transactionTypeId,
+    };
+
+    localStorage.setItem("customer", JSON.stringify(obj));
+    $("#customer-name").html(obj.name);
+
+    modalListCustomers.hide();
+  };
+});
+
+// Event: Hapus customer dari transaksi
+$(document).on("click", "#btn-remove-customer", function () {
+  modalActiveCustomers.hide();
+  localStorage.removeItem("customer");
+  $("#customer-name").html("+ Pelanggan");
+  getCustomers();
 });

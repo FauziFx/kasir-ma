@@ -1,0 +1,63 @@
+<!-- Modal List Pelanggan -->
+<div
+  class="modal fade"
+  id="modal-list-customers"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-between">
+        <button
+          type="button"
+          class="btn btn-outline-secondary py-2"
+          data-bs-dismiss="modal"
+        >
+          Batal
+        </button>
+        <h5 class="modal-title">Pelanggan</h5>
+        <div></div>
+      </div>
+      <div class="modal-body pb-5 p2-5">
+        <table class="table mt-2 mb-5">
+          <tbody id="list-customers"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Pelanggan -->
+<div
+  class="modal fade"
+  id="modal-active-customer"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header text-start">
+        <button
+          type="button"
+          class="btn btn-outline-secondary py-2"
+          data-bs-dismiss="modal"
+        >
+          Batal
+        </button>
+      </div>
+      <div class="modal-body pb-5 px-5 text-center">
+        <h3 id="active-customer">Nama Pelanggan</h3>
+        <hr />
+        <button class="btn btn-block btn-dark" id="btn-remove-customer">
+          Hapus Dari Transaksi
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
