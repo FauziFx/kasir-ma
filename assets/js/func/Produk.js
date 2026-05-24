@@ -6,6 +6,7 @@ const modalProduct = new bootstrap.Modal($("#modal-product"));
 
 // Satukan variabel modal yang saling berhubungan ke dalam satu Objek State
 let activeTransaction = {
+  cartIndex: null,
   productid: null,
   productname: "",
   variantid: null,
@@ -150,11 +151,25 @@ function updateActiveTransaction(changes) {
   syncModalUI();
 }
 
-function addToCart(cart, newItem) {
+function addToCart(cart, newItem, targetIndex = null) {
   // Amankan konversi tipe data angka demi konsistensi data storage
   const itemPrice = Number(newItem.price);
   const itemQty = Number(newItem.qty);
 
+  // Mode Edit
+  if (targetIndex !== null && targetIndex !== undefined) {
+    cart[targetIndex] = {
+      ...newItem,
+      price: itemPrice,
+      qty: itemQty,
+      subtotal: itemPrice * itemQty,
+    };
+
+    delete cart[targetIndex].cartIndex;
+    return cart;
+  }
+
+  // Model Tambah
   const existingItem = cart.find(
     (item) =>
       item.variantid === newItem.variantid && Number(item.price) === itemPrice,
@@ -171,7 +186,9 @@ function addToCart(cart, newItem) {
       qty: itemQty,
       subtotal: itemPrice * itemQty,
     });
+    delete cart[cart.length - 1].cartIndex;
   }
+
   return cart;
 }
 
@@ -183,6 +200,7 @@ function addToCart(cart, newItem) {
 const myModalProduct = document.getElementById("modal-product");
 myModalProduct.addEventListener("hidden.bs.modal", function () {
   activeTransaction = {
+    cartIndex: null,
     productid: null,
     productname: "",
     variantid: null,
@@ -195,6 +213,8 @@ myModalProduct.addEventListener("hidden.bs.modal", function () {
     "",
   );
   syncModalUI();
+
+  $("#btn-add-to-cart").text("Tambah");
 });
 
 // Pilih Varian produk
@@ -207,7 +227,7 @@ $(document).on("click", ".btn-variant-choice", function () {
     variantid: data.variantid,
     variantname: data.variantname,
     price: Number(data.price),
-    qty: 1, // Reset qty menjadi 1 tiap ganti varian baru demi keamanan kasir
+    qty: activeTransaction.qty, // Reset qty menjadi 1 tiap ganti varian baru demi keamanan kasir
   });
 
   $("#container-variant").animate(
@@ -247,10 +267,16 @@ $(document).on("input keyup", "#input-price", function () {
 // Simpan ke Keranjang Belanja
 $(document).on("click", "#btn-add-to-cart", function () {
   let currentCart = JSON.parse(localStorage.getItem("cart")) || [];
-  let updateCart = addToCart(currentCart, activeTransaction);
+  let updateCart = addToCart(
+    currentCart,
+    activeTransaction,
+    activeTransaction.cartIndex,
+  );
 
   localStorage.setItem("cart", JSON.stringify(updateCart));
   modalProduct.hide(); // Tutup modal otomatis setelah berhasil simpan
+
+  getCart(); // Render cart
 });
 
 // Kategori & Pencarian

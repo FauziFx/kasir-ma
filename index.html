@@ -147,9 +147,7 @@
               </div>
             </div>
             <div class="card-body overflow-auto px-2">
-              <table class="table table-sm table-hover" style="font-size: 14px">
-                <tbody id="cart-active"></tbody>
-              </table>
+              <div id="cart-list"></div>
             </div>
             <div class="card-footer p-0 bg-dark-subtle">
               <div
@@ -199,7 +197,7 @@
                   class="btn w-100 btn-dark fs-4 rounded-top-0"
                   id="btn-payment"
                 >
-                  Bayar : <b id="payment"></b>
+                  Bayar : <b id="cart-total"></b>
                 </button>
               </div>
             </div>
@@ -272,7 +270,7 @@
     <script src="assets/js/func/index.js"></script>
     <script src="assets/js/func/Data.js"></script>
     <script src="assets/js/func/Produk.js"></script>
-    <script src="assets/js/func/AjaxCart.js"></script>
+    <script src="assets/js/func/Cart.js"></script>
     <script src="assets/js/func/AjaxBill.js"></script>
     <script>
       // Print Transaksi Berhasil
