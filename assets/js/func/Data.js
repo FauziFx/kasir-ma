@@ -6,39 +6,41 @@ request.onerror = function (event) {
 };
 
 request.onsuccess = function (event) {
-  db = event.target.result; // Simpan koneksi ke variabel global db
+  db = event.target.result;
   console.log("Database siap.");
-  // 2. JALANKAN APP HANYA JIKA DB SUDAH SIAP
   initApp();
 };
 
 request.onupgradeneeded = function (e) {
   db = e.target.result;
   if (!db.objectStoreNames.contains("products")) {
-    // Menggunakan "id" dari API sebagai keyPath utama
     const productStore = db.createObjectStore("products", { keyPath: "id" });
     productStore.createIndex("categoryId", "categoryId", { unique: false });
   }
   if (!db.objectStoreNames.contains("categories")) {
-    // Menggunakan "id" dari API sebagai keyPath utama
     db.createObjectStore("categories", { keyPath: "id" });
   }
 };
 
+// ==========================================
+// CORE APP INITIALIZATION
+// ==========================================
+
 async function initApp() {
   const dbIsEmpty = await checkDatabase();
 
+  // Jika DB sudah ada isinya, langsung render UI
   if (!dbIsEmpty) {
-    // Show Categories
     showCategories();
     return;
   }
 
-  getData();
+  // Jika kosong, ambil data dari API
+  fetchAndRefreshData();
 }
 
-// Get Produk dan Kategori from API
-function getData(categoryId = "", name) {
+// Sinkronisasi: Ambil data terbaru darai API dan menimpa isi IndexDB
+function fetchAndRefreshData(categoryId = "", name) {
   const URL_Prod = API + "/products?all=true";
   const URL_Cat = API + "/categories?type=main";
   const token = Cookies.get("user-token");
@@ -73,22 +75,26 @@ function getData(categoryId = "", name) {
     })
     .then(() => {
       showCategories();
-      showProducts();
+
+      console.log("Sinkronisasi data berhasil!");
     })
     .catch((error) => {
       console.error("Terjadi kesalahan:", error);
     })
     .finally(() => {
-      $.LoadingOverlay("hide");
+      if ($.LoadingOverlay) $.LoadingOverlay("hide");
     });
 }
 
-// Save data From API to IndexDB
-function saveDatabase(data, store) {
+// ==========================================
+// DATABASE UTILITIES (Refactored)
+// ==========================================
+
+function saveDatabase(data, storeName) {
   return new Promise((resolve, reject) => {
     // Mulai transaksi readwrite untuk object store
-    const transaction = db.transaction(["categories", "products"], "readwrite");
-    const objectStore = transaction.objectStore(store);
+    const transaction = db.transaction([storeName], "readwrite");
+    const objectStore = transaction.objectStore(storeName);
 
     // Loop data dari API dan langsung simpan bulat-bulat
     data.forEach((item) => {
@@ -110,26 +116,28 @@ function saveDatabase(data, store) {
   });
 }
 
-// Cek Ketersediaan Database
 function checkDatabase() {
   return new Promise((resolve) => {
     const transaction = db.transaction(["categories", "products"], "readonly");
     const storeCat = transaction.objectStore("categories");
     const storeProd = transaction.objectStore("products");
 
-    const countProd = storeProd.count();
-    const countCat = storeCat.count();
+    const countProdReq = storeProd.count();
+    const countCatReq = storeCat.count();
 
-    countProd.onsuccess = function () {
-      countCat.onsuccess = function () {
-        // Mengembalikan TRUE jika salah satu atau kedua store kosong (perlu isi data)
-        // Mengembalikan FALSE jika kedua store sudah ada isinya
-        if (countProd.result === 0 || countCat.result === 0) {
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      };
+    let prodCount = 0;
+    let catCount = 0;
+
+    countProdReq.onsuccess = () => {
+      prodCount = countProdReq.result;
+    };
+
+    countCatReq.onsuccess = () => {
+      catCount = countProdReq.result;
+    };
+
+    transaction.oncomplete = function () {
+      resolve(prodCount === 0 || catCount === 0);
     };
 
     transaction.onerror = function () {

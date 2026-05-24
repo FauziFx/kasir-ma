@@ -24,6 +24,26 @@ function showCategories() {
   const transaction = db.transaction(["categories"], "readonly");
   const storeCat = transaction.objectStore("categories");
   const el = $("#list-categories");
+  el.html(`
+          <button
+            type="button"
+            data-id="favorite"
+            data-name="Favorite"
+            class="btn-categories btn btn-outline-dark rounded-0 active"
+            data-bs-toggle="button"
+          >
+            <i class="bi bi-star-fill"></i>
+          </button>
+          <button
+            type="button"
+            data-id=""
+            data-name="Semua Produk"
+            class="btn-categories btn btn-outline-dark rounded-0"
+            data-bs-toggle="button"
+          >
+            Semua
+          </button>
+        `);
 
   storeCat.openCursor().onsuccess = function (e) {
     const cursor = e.target.result;

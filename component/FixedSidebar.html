@@ -43,6 +43,19 @@
         <i class="bi-printer"></i>
       </a>
     </li>
+    <li class="nav-item mt-5" id="btn-sync-data">
+      <a
+        href="javascript:void(0);"
+        class="btn btn-outline-dark border-0 py-3 ps-1 rounded-0 fs-4"
+        aria-current="page"
+        title="laporan"
+        data-bs-toggle="tooltip"
+        data-bs-placement="right"
+        onclick="fetchAndRefreshData()"
+      >
+        <i class="bi-arrow-repeat"></i>
+      </a>
+    </li>
   </ul>
   <div>
     <a
@@ -107,8 +120,10 @@
 
 <script>
   $(document).ready(function () {
+    $("#btn-sync-data").hide();
     if (window.location.href.includes("index.html")) {
       $("#btn-index").addClass("active");
+      $("#btn-sync-data").show();
     } else if (window.location.href.includes("nota.html")) {
       $("#btn-nota").addClass("active");
     } else if (window.location.href.includes("laporan.html")) {
