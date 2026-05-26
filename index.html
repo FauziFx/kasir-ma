@@ -192,12 +192,6 @@
     <!-- Modal Add Favorit -->
     <div id="ModalFavorit"></div>
 
-    <!-- Modal Bayar -->
-    <div id="ModalBayar"></div>
-
-    <!-- Modal transaksi berhasil -->
-    <div id="ModalTransaksiBerhasil"></div>
-
     <!-- Modal Simpan Bill -->
     <div id="ModalSimpanBill"></div>
 
@@ -213,6 +207,7 @@
     <!-- ==================== -->
     <div id="ModalProduct"></div>
     <div id="ModalCustomers"></div>
+    <div id="ModalPayment"></div>
     <!-- ==================== -->
 
     <!-- Register PWA -->
@@ -222,20 +217,17 @@
     <script src="assets/js/jquery.min.js"></script>
     <!-- Load modal -->
     <script>
-      $("#FixedSidebar").load("component/FixedSidebar.html");
       $("#ModalFavorit").load("component/ModalFavorit.html");
-      $("#ModalBayar").load("component/ModalBayar.html");
-      $("#ModalTransaksiBerhasil").load(
-        "component/ModalTransaksiBerhasil.html",
-      );
       $("#ModalSimpanBill").load("component/ModalSimpanBill.html");
       $("#ModalListBill").load("component/ModalListBill.html");
       $("#ModalAlert").load("component/ModalAlert.html");
       $("#ModalPisahBill").load("component/ModalPisahBill.html");
 
       //
+      $("#FixedSidebar").load("component/FixedSidebar.html");
       $("#ModalProduct").load("component/ModalProduct.html");
       $("#ModalCustomers").load("component/ModalCustomers.html");
+      $("#ModalPayment").load("component/ModalPayment.html");
       //
     </script>
     <!-- Load JS -->
@@ -251,109 +243,5 @@
     <script src="assets/js/func/Produk.js"></script>
     <script src="assets/js/func/Cart.js"></script>
     <script src="assets/js/func/AjaxBill.js"></script>
-    <script>
-      // Print Transaksi Berhasil
-      $(document).ready(function () {
-        $(document).on("click", "#print-nota-transaksi", function () {
-          let printTransaksi = {
-            store: "// UD MURTI AJI ////",
-            address:
-              "Jl. Karang Kencana No.51, Panjunan, Kec. Lemahwungkuk, Kota Cirebon, Jawa Barat 45112",
-            phone: "Telp/WA 0853 1457 9001",
-            date: "",
-            name: "",
-            no_nota: "",
-            items: [],
-            total: 0,
-            payment_method: "",
-            payment: "",
-            change: 0,
-          };
-
-          const id = localStorage.getItem("idTransaksi")
-            ? localStorage.getItem("idTransaksi")
-            : "";
-          const URL = config.ENV_URL + "/transactions/" + id;
-
-          $.ajax({
-            url: URL,
-            method: "GET",
-            headers: {
-              Authorization: Cookies.get("user-token"),
-            },
-            success: function (data) {
-              const datas = data.data;
-              console.log(datas);
-
-              printTransaksi.date = "";
-              printTransaksi.name = "";
-              printTransaksi.no_nota = "";
-              printTransaksi.items = [];
-              printTransaksi.total = 0;
-              printTransaksi.payment_method = "";
-              printTransaksi.payment = "";
-              printTransaksi.change = 0;
-
-              datas.details.forEach((item, index) => {
-                printTransaksi.items.push({
-                  price: item.price,
-                  productName: item.productName,
-                  qty: item.qty,
-                  subtotal: item.subtotal,
-                  variantName: item.variantName,
-                });
-              });
-
-              printTransaksi.date = moment(datas.date)
-                .tz("Asia/Jakarta")
-                .format("DD/MM/YYYY HH:mm");
-              printTransaksi.name = datas.customer.name;
-              printTransaksi.no_nota = datas.receipt_no;
-              printTransaksi.total = datas.total_amount;
-              printTransaksi.payment_method =
-                datas.payment_method.toString().charAt(0).toUpperCase() +
-                datas.payment_method.slice(1);
-              printTransaksi.payment = datas.payment_amount;
-              printTransaksi.change = datas.change_amount;
-
-              let struk = [];
-
-              struk.push(printTransaksi.store);
-              struk.push(printTransaksi.address);
-              struk.push(printTransaksi.phone);
-              struk.push("--------------------------------");
-              struk.push("Nama: " + printTransaksi.name);
-              struk.push("Order ID: " + printTransaksi.no_nota);
-              struk.push("Tanggal: " + printTransaksi.date);
-              struk.push("--------------------------------");
-
-              printTransaksi.items.forEach((item) => {
-                struk.push(item.productName); // nama produk
-
-                // varian (jika berbeda)
-                if (item.variantName && item.variantName !== item.productName) {
-                  struk.push(" # " + item.variantName);
-                }
-
-                // harga satuan dan subtotal
-                let line = ` x${item.qty} @${item.price}`;
-                struk.push(line + `${item.subtotal}`.padStart(18));
-              });
-
-              struk.push("--------------------------------");
-              struk.push("Total                  " + printTransaksi.total);
-              struk.push("Bayar                  " + printTransaksi.payment);
-              struk.push(printTransaksi.payment_method);
-              struk.push("Kembalian              " + printTransaksi.change);
-              struk.push("--------------------------------");
-              struk.push("Terima kasih");
-
-              let escPosData = encodeURIComponent(struk.join("\n"));
-              window.location.href = "rawbt://" + escPosData;
-            },
-          });
-        });
-      });
-    </script>
   </body>
 </html>

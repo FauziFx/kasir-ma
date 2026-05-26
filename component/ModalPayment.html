@@ -1,0 +1,157 @@
+<div
+  class="modal fade"
+  id="modal-payment"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-between">
+        <button
+          type="button"
+          class="btn btn-outline-secondary py-2"
+          data-bs-dismiss="modal"
+        >
+          Batal
+        </button>
+        <div class="modal-title text-center">
+          <span class="" id="modal-payment-method-title"></span>
+          <span class="fs-5 fw-semibold" id="modal-payment-title"></span>
+        </div>
+        <button
+          type="button"
+          class="btn btn-dark px-4 py-2"
+          id="btn-submit-transaction"
+        >
+          Bayar
+        </button>
+      </div>
+      <div class="modal-body px-4 py-4 mb-5">
+        <div class="row mb-2">
+          <div class="col-md-3 d-flex justify-content-end">
+            <h6 class="fw-semibold">Pelanggan :</h6>
+          </div>
+          <div class="col-md-9" id="payment-customer-name"></div>
+        </div>
+
+        <div class="row mb-4">
+          <div class="col-md-3 d-flex justify-content-end">
+            <h6 class="fw-semibold">Tunai :</h6>
+          </div>
+          <div class="col-md-9">
+            <div class="d-flex gap-2 mb-2" id="list-payment-cash"></div>
+            <div class="d-flex">
+              <div class="input-group w-50">
+                <span class="input-group-text" id="label-input-payment"
+                  >Rp</span
+                >
+                <input
+                  type="number"
+                  id="input-payment"
+                  class="form-control payment-method py-3"
+                  min="0"
+                  placeholder="0"
+                />
+              </div>
+              <div class="input-group input-group-sm w-50 ps-2">
+                <small class="input-group-text">Kembalian</small>
+                <input
+                  type="text"
+                  id="payment-change"
+                  class="form-control py-3 ps-3"
+                  placeholder="0"
+                  disabled
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <h6 class="ps-3 fw-semibold">Metode Pembayaran Lain</h6>
+        <hr style="margin: 0 0 0.5em 0" />
+        <div class="d-flex gap-2 mb-2">
+          <input
+            type="radio"
+            class="btn-check payment-method"
+            name="payment-method"
+            id="transfer"
+            autocomplete="off"
+            data-method="transfer"
+          />
+          <label class="btn btn-outline-dark py-3 flex-fill" for="transfer">
+            <i class="bi-currency-exchange"></i> Transfer
+          </label>
+
+          <input
+            type="radio"
+            class="btn-check payment-method"
+            name="payment-method"
+            id="qris"
+            autocomplete="off"
+            data-method="qris"
+          />
+          <label class="btn btn-outline-dark py-3 flex-fill" for="qris">
+            <i class="bi-qr-code-scan"></i> QRIS
+          </label>
+
+          <input
+            type="radio"
+            class="btn-check payment-method"
+            name="payment-method"
+            id="edc"
+            autocomplete="off"
+            data-method="edc"
+          />
+          <label class="btn btn-outline-dark py-3 flex-fill" for="edc">
+            <i class="bi-credit-card-2-back"></i> EDC
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="modal-transaction-success"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-center">
+        <h5 class="modal-title text">Transaksi berhasil</h5>
+      </div>
+      <div class="modal-body px-0 py-4 mb-4 text-center">
+        <span class="fw-semibold fs-5" id="success-payment-method">Tunai</span>
+        -
+        <span class="fs-5" id="success-payment">Rp 10.000</span>
+        <br />
+        <span class="fs-3 fw-bold">Kembali </span>
+        <span class="fs-3 fw-bold" id="success-change">Rp. 0</span>
+        <br />
+        <i class="bi-check-circle" style="font-size: 72px"></i>
+        <br />
+        <div class="px-5">
+          <button
+            class="btn btn-dark text-center w-100 py-2 mb-3"
+            id="btn-print-receipt"
+          >
+            <i class="bi-printer"></i> Print receipt
+          </button>
+          <button
+            class="btn btn-outline-dark text-center w-100 py-2"
+            data-bs-dismiss="modal"
+          >
+            Transaksi Baru
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
