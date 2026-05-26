@@ -7,10 +7,10 @@ const modalProduct = new bootstrap.Modal($("#modal-product"));
 // Satukan variabel modal yang saling berhubungan ke dalam satu Objek State
 let activeTransaction = {
   cartIndex: null,
-  productid: null,
-  productname: "",
-  variantid: null,
-  variantname: "",
+  productId: null,
+  productName: "",
+  variantId: null,
+  variantName: "",
   price: 0,
   qty: 1,
   subtotal: 0,
@@ -146,14 +146,14 @@ function showProductDetail(productId) {
 
 // Fungsi Tunggal khusus sinkronisasi State ke Tampilan (DOM)
 function syncModalUI() {
-  const hasVariant = activeTransaction.variantid !== null;
+  const hasVariant = activeTransaction.variantId !== null;
   const isValidAmount =
     activeTransaction.qty > 0 && activeTransaction.price >= 0;
 
   // Render komponen teks & input
   $("#input-qty").val(activeTransaction.qty);
   $("#input-price").val(activeTransaction.price);
-  $("#modal-variant-title").text(activeTransaction.variantname || "-");
+  $("#modal-variant-title").text(activeTransaction.variantName || "-");
   $("#modal-subtotal-title").html(formatRupiah(activeTransaction.subtotal));
 
   // Amankan tombol Add to Cart
@@ -221,10 +221,10 @@ const myModalProduct = document.getElementById("modal-product");
 myModalProduct.addEventListener("hidden.bs.modal", function () {
   activeTransaction = {
     cartIndex: null,
-    productid: null,
-    productname: "",
-    variantid: null,
-    variantname: "",
+    productId: null,
+    productName: "",
+    variantId: null,
+    variantName: "",
     price: 0,
     qty: 1,
     subtotal: 0,
@@ -242,10 +242,10 @@ $(document).on("click", ".btn-variant-choice", function () {
   const data = $(this).data(); // Membaca: productid, variantid, productname, variantname, price
 
   updateActiveTransaction({
-    productid: data.productid,
-    productname: data.productname,
-    variantid: data.variantid,
-    variantname: data.variantname,
+    productId: data.productid,
+    productName: data.productname,
+    variantId: data.variantid,
+    variantName: data.variantname,
     price: Number(data.price),
     qty: activeTransaction.qty, // Reset qty menjadi 1 tiap ganti varian baru demi keamanan kasir
   });
