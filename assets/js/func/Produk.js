@@ -27,18 +27,9 @@ function showCategories() {
   el.html(`
           <button
             type="button"
-            data-id="favorite"
-            data-name="Favorite"
-            class="btn-categories btn btn-outline-dark rounded-0 active"
-            data-bs-toggle="button"
-          >
-            <i class="bi bi-star-fill"></i>
-          </button>
-          <button
-            type="button"
             data-id=""
             data-name="Semua Produk"
-            class="btn-categories btn btn-outline-dark rounded-0"
+            class="btn-categories btn btn-outline-dark rounded-0 active"
             data-bs-toggle="button"
           >
             Semua
@@ -308,8 +299,6 @@ $(document).on("click", ".btn-categories", function () {
 
   currentCategoryId = $(this).data("id") || null;
   showProducts(currentCategoryId, "");
-
-  $("#favorite").toggle($(this).data("id") === "favorite");
 });
 
 // Pencarian Produk Debounce
@@ -317,7 +306,6 @@ const processSearch = debounce((query) =>
   showProducts(currentCategoryId, query),
 );
 $(document).on("keyup", "#search_box", function () {
-  $("#list-favorite").hide();
   processSearch($(this).val());
 });
 

@@ -35,6 +35,7 @@ async function initApp() {
   // Jika DB sudah ada isinya, langsung render UI
   if (!dbIsEmpty) {
     showCategories();
+    showProducts();
     return;
   }
 
