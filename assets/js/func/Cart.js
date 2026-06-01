@@ -156,7 +156,7 @@ function renderCashSuggestions(grandTotal) {
                   autocomplete="off"
                   data-amount="${cash}"
                 />
-                <label class="btn btn-outline-dark py-3 flex-fill" for="tunai${i}">
+                <label class="btn btn-outline-dark py-3 flex-fill ${i === 0 ? "fw-semibold" : ""}" for="tunai${i}">
                   ${formatRupiah(cash)}
                 </label>`;
   });
