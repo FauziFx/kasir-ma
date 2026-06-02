@@ -43,19 +43,6 @@
         <i class="bi-printer"></i>
       </a>
     </li>
-    <li class="nav-item mt-5" id="btn-sync-data">
-      <a
-        href="javascript:void(0);"
-        class="btn btn-outline-dark border-0 py-3 ps-1 rounded-0 fs-4"
-        aria-current="page"
-        title="laporan"
-        data-bs-toggle="tooltip"
-        data-bs-placement="right"
-        onclick="fetchAndRefreshData()"
-      >
-        <i class="bi-arrow-repeat"></i>
-      </a>
-    </li>
   </ul>
   <div>
     <a
@@ -101,7 +88,30 @@
       </div>
       <p class="mb-0 mt-3">Kasir</p>
     </div>
-    <nav class="mt-3">
+    <nav class="my-4">
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item mb-2">
+          <button
+            type="button"
+            class="link-dark p-3 w-100 text-start btn btn-outline-secondary"
+            onclick="fetchAndRefreshData()"
+            data-bs-dismiss="offcanvas"
+          >
+            <i class="bi-arrow-repeat me-2"></i>Sync Data
+          </button>
+        </li>
+        <li class="nav-item">
+          <a
+            href="#"
+            class="link-dark p-3 w-100 text-start btn btn-outline-secondary"
+          >
+            <i class="bi-database-down me-2"></i>Import/Exoprt Data
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <hr />
+    <nav class="mt-4">
       <ul class="nav nav-pills flex-column">
         <li class="nav-item">
           <button
