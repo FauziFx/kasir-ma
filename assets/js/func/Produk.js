@@ -183,7 +183,7 @@ function addToCart(cart, newItem, targetIndex = null) {
   // Model Tambah
   const existingItem = cart.find(
     (item) =>
-      item.variantid === newItem.variantid && Number(item.price) === itemPrice,
+      item.variantId === newItem.variantId && Number(item.price) === itemPrice,
   );
 
   if (existingItem) {

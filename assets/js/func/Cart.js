@@ -311,13 +311,13 @@ $(document).on("click", ".cart-item", function (e) {
   $("#btn-add-to-cart").text("Simpan");
 
   // 2. Tampilkan Detail Produk
-  showProductDetail(selectedCartItem.productid);
+  showProductDetail(selectedCartItem.productId);
 
   // 3. Set nilai varian aktif dan update transaksi modal (menunggu render DB selesai)
-  debounce(() => {
+  setTimeout(() => {
     // Cari tombol varian di dalam modal yang variantid-nya cocok
     const variantButton = $(
-      `.btn-variant-choice[data-variantid="${selectedCartItem.variantid}"]`,
+      `.btn-variant-choice[data-variantid="${selectedCartItem.variantId}"]`,
     );
 
     if (variantButton.length > 0) {
@@ -327,10 +327,10 @@ $(document).on("click", ".cart-item", function (e) {
     // Sinkronisasi state transaksi modal
     updateActiveTransaction({
       cartIndex: index,
-      productid: selectedCartItem.productid,
-      productname: selectedCartItem.productname,
-      variantid: selectedCartItem.variantid,
-      variantname: selectedCartItem.variantname,
+      productId: selectedCartItem.productId,
+      productName: selectedCartItem.productName,
+      variantId: selectedCartItem.variantId,
+      variantName: selectedCartItem.variantName,
       price: Number(selectedCartItem.price),
       qty: Number(selectedCartItem.qty),
     });
