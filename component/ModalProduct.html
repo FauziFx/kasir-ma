@@ -9,25 +9,26 @@
 >
   <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content">
-      <div class="modal-header d-flex justify-content-between py-3">
+      <div
+        class="modal-header position-relative d-flex align-items-center justify-content-center py-3"
+      >
         <button
           type="button"
-          class="btn btn-outline-secondary py-2"
+          class="btn btn-outline-secondary py-2 position-absolute start-0 ms-3"
           data-bs-dismiss="modal"
         >
           Batal
         </button>
-        <div class="text-center">
-          <div class="modal-title d-flex justify-content-between gap-2">
+        <div class="text-center modal-title">
+          <div class="d-flex justify-content-between gap-2">
             <div class="mb-0 fw-semibold" id="modal-product-title"></div>
             <div class="fw-light mb-0" id="modal-variant-title"></div>
-            <input type="hidden" id="isEdit" value="" />
           </div>
           <div class="mb-0" id="modal-subtotal-title"></div>
         </div>
         <button
           type="button"
-          class="btn btn-dark px-4 py-2"
+          class="btn btn-dark px-4 py-2 position-absolute end-0 me-3"
           id="btn-add-to-cart"
           data-bs-dismiss="modal"
         >

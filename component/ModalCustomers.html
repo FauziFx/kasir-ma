@@ -10,16 +10,17 @@
 >
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
-      <div class="modal-header d-flex justify-content-between">
+      <div
+        class="modal-header position-relative d-flex align-items-center justify-content-center"
+      >
         <button
           type="button"
-          class="btn btn-outline-secondary py-2"
+          class="btn btn-outline-secondary py-2 position-absolute start-0 ms-3"
           data-bs-dismiss="modal"
         >
           Batal
         </button>
         <h5 class="modal-title">Pelanggan</h5>
-        <div></div>
       </div>
       <div class="modal-body pb-5 p2-5">
         <table class="table mt-2 mb-5">
@@ -42,17 +43,20 @@
 >
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
-      <div class="modal-header text-start">
+      <div
+        class="modal-header position-relative d-flex align-items-center justify-content-center"
+      >
         <button
           type="button"
-          class="btn btn-outline-secondary py-2"
+          class="btn btn-outline-secondary py-2 position-absolute start-0 ms-3"
           data-bs-dismiss="modal"
         >
           Batal
         </button>
+        <h5 class="modal-title">Pelanggan Aktif</h5>
       </div>
       <div class="modal-body pb-5 px-5 text-center">
-        <h3 id="active-customer">Nama Pelanggan</h3>
+        <h3 id="active-customer"></h3>
         <hr />
         <button class="btn btn-block btn-dark" id="btn-remove-customer">
           Hapus Dari Transaksi
