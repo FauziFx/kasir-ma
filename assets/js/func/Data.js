@@ -87,6 +87,7 @@ function fetchAndRefreshData(categoryId = "", name) {
     })
     .then(() => {
       showCategories();
+      showProducts();
 
       console.log("Sinkronisasi data berhasil!");
     })
