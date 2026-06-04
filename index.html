@@ -115,7 +115,7 @@
                 <button
                   type="button"
                   class="btn w-25 btn-outline-dark rounded-0 border-bottom-0"
-                  id="btn-save"
+                  id="btn-save-bill"
                 >
                   <i class="bi-floppy"></i>
                   Simpan
@@ -164,12 +164,6 @@
     </div>
     <!-- ./Main Content -->
 
-    <!-- Modal Simpan Bill -->
-    <div id="ModalSimpanBill"></div>
-
-    <!-- Modal List Bill -->
-    <div id="ModalListBill"></div>
-
     <!-- Modal alert -->
     <div id="ModalAlert"></div>
 
@@ -180,6 +174,7 @@
     <div id="ModalProduct"></div>
     <div id="ModalCustomers"></div>
     <div id="ModalPayment"></div>
+    <div id="ModalBill"></div>
     <!-- ==================== -->
 
     <!-- Register PWA -->
@@ -189,8 +184,6 @@
     <script src="assets/js/jquery.min.js"></script>
     <!-- Load modal -->
     <script>
-      $("#ModalSimpanBill").load("component/ModalSimpanBill.html");
-      $("#ModalListBill").load("component/ModalListBill.html");
       $("#ModalAlert").load("component/ModalAlert.html");
       $("#ModalPisahBill").load("component/ModalPisahBill.html");
 
@@ -199,6 +192,7 @@
       $("#ModalProduct").load("component/ModalProduct.html");
       $("#ModalCustomers").load("component/ModalCustomers.html");
       $("#ModalPayment").load("component/ModalPayment.html");
+      $("#ModalBill").load("component/ModalBill.html");
       //
     </script>
     <!-- Load JS -->
@@ -213,6 +207,6 @@
     <script src="assets/js/func/Data.js"></script>
     <script src="assets/js/func/Produk.js"></script>
     <script src="assets/js/func/Cart.js"></script>
-    <script src="assets/js/func/AjaxBill.js"></script>
+    <script src="assets/js/func/Bill.js"></script>
   </body>
 </html>

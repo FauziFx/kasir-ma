@@ -350,6 +350,7 @@ $(document).on("click", ".btn-delete-cart-item", function () {
     localStorage.setItem("cart", JSON.stringify(currentCart));
   } else {
     localStorage.removeItem("cart"); // Jika keranjang kosong melompong, hapus key-nya sekalian
+    localStorage.removeItem("activeBillIndex");
   }
 
   // Render Cart
@@ -483,7 +484,7 @@ $(document).on("click", "#btn-print-receipt", function () {
       const struk = [];
 
       // 1. Header Toko (Di-center agar rapi)
-      struk.push(formatCenter("// UD MURTI AJI ////"));
+      struk.push(formatCenter("UD MURTI AJI"));
       struk.push(
         formatCenter(
           "Jl. Karang Kencana No.51, Panjunan, Kec. Lemahwungkuk, Kota Cirebon, Jawa Barat 45112",
