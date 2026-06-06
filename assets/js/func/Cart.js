@@ -66,7 +66,7 @@ function getCart() {
                     </button>
                 </div>
                 <div class="d-flex justify-content-between text-muted small mt-1">
-                    <span>${item.qty} x ${item.price}</span>
+                    <span>${item.qty} x ${formatCurrency(item.price)}</span>
                     <strong>${formatRupiah(item.subtotal)}</strong>
                 </div>
             </div>
@@ -166,9 +166,14 @@ function renderCashSuggestions(grandTotal) {
 
 function showPaymentModal() {
   const rawCart = localStorage.getItem("cart");
+  const rawCartSplit = localStorage.getItem("cartSplitSession");
   if (!rawCart) return;
 
-  const items = JSON.parse(rawCart);
+  let items = JSON.parse(rawCart);
+
+  if (rawCartSplit) {
+    items = JSON.parse(rawCartSplit);
+  }
 
   // Hitung total keseluruhan
   const totalAmount = items.reduce(
@@ -247,6 +252,8 @@ function createTransaction(dataTransaction) {
       );
       $("#success-change").html(formatRupiah(dataTransaction.change_amount));
 
+      onCreateTransactionSuccess();
+
       modalPayment.hide();
       modalTransactionSuccess.show();
     },
@@ -259,6 +266,78 @@ function createTransaction(dataTransaction) {
   });
 }
 
+function updateCustomerName() {
+  const savedCustomer = JSON.parse(localStorage.getItem("customer"));
+  $("#customer-name").html(savedCustomer ? savedCustomer.name : "+ Pelanggan");
+}
+
+function onCreateTransactionSuccess() {
+  // 1. Ambil data mentah dari storage
+  let currentCart = JSON.parse(localStorage.getItem("cart")) || [];
+  const activeIndex = localStorage.getItem("activeBillIndex");
+  const rawSplit = localStorage.getItem("cartSplitSession");
+
+  // ==========================================
+  // SELESAIKAN URUSAN POTONG STOK CART
+  // ==========================================
+  if (rawSplit) {
+    const splitItems = JSON.parse(rawSplit);
+
+    // Kurangi qty di cart utama berdasarkan item yang lunas di split
+    splitItems.forEach((splitItem) => {
+      let mainItem = currentCart.find(
+        (item) =>
+          item.variantId === splitItem.variantId &&
+          item.price === splitItem.price,
+      );
+      if (mainItem) {
+        mainItem.qty -= splitItem.qty;
+        mainItem.subtotal = mainItem.qty * mainItem.price;
+      }
+    });
+
+    // Filter sisa item yang qty-nya masih di atas 0
+    currentCart = currentCart.filter((item) => item.qty > 0);
+    localStorage.removeItem("cartSplitSession"); // Hapus session split
+  } else {
+    // Jika tidak di-split, berarti seluruh isi keranjang saat ini lunas. Paksa jadi kosong.
+    currentCart = [];
+  }
+
+  // ==========================================
+  // SAVE HASIL AKHIR KE STORAGE & REFRESH UI
+  // ==========================================
+  if (currentCart.length > 0) {
+    // Jika dari mode split dan MASIH ADA SISA BARANG, simpan sisanya di cart aktif utama
+    localStorage.setItem("cart", JSON.stringify(currentCart));
+    showListSplitItem();
+  } else {
+    // Jika lunas semua bersih, kosongkan meja kasir
+    localStorage.removeItem("cart");
+    localStorage.removeItem("customer");
+    if (activeIndex !== null) {
+      let listBill = JSON.parse(localStorage.getItem("listBill")) || [];
+
+      // Hapus bill lama dari list antrean karena datanya sudah diproses keluar
+      listBill.splice(Number(activeIndex), 1);
+
+      if (listBill.length > 0) {
+        localStorage.setItem("listBill", JSON.stringify(listBill));
+      } else {
+        localStorage.removeItem("listBill");
+      }
+
+      // Lepas gembok karena bill asal sudah tidak menggantung lagi
+      localStorage.removeItem("activeBillIndex");
+    }
+    modalSplitBill.hide();
+  }
+
+  updateCustomerName();
+  getCart(); // Gambar ulang keranjang
+  modalPayment.hide();
+}
+
 // ==========================================
 // 3. EVENT LISTENERS
 // ==========================================
@@ -266,9 +345,7 @@ function createTransaction(dataTransaction) {
 // Render halaman saat pertama dimuat
 $(document).ready(function () {
   getCart();
-
-  const savedCustomer = JSON.parse(localStorage.getItem("customer"));
-  $("#customer-name").html(savedCustomer ? savedCustomer.name : "+ Pelanggan");
+  updateCustomerName();
 });
 
 // Reset total & kembalikan state transaksi ke default mutlak saat modal ditutup
@@ -290,8 +367,6 @@ myModalPayment.addEventListener("hidden.bs.modal", function () {
 
 // Reset cart saat modal ditutup
 myModalTransactionSuccess.addEventListener("hidden.bs.modal", function () {
-  localStorage.removeItem("customer");
-  localStorage.removeItem("cart");
   updatePaymentState({});
   getCart();
 });
@@ -397,7 +472,7 @@ $(document).on("click", ".btn-customer-choice", function () {
 $(document).on("click", "#btn-remove-customer", function () {
   modalActiveCustomers.hide();
   localStorage.removeItem("customer");
-  $("#customer-name").html("+ Pelanggan");
+  updateCustomerName();
   getCustomers();
 });
 
@@ -452,8 +527,17 @@ $(document).on("keyup", "#input-payment", function () {
 
 // Event: klik BAYAR (Submit Transaction)
 $(document).on("click", "#btn-submit-transaction", function () {
-  const dataCustomer = JSON.parse(localStorage.getItem("customer")) || {};
-  const datacart = JSON.parse(localStorage.getItem("cart"));
+  const rawCart = localStorage.getItem("cart");
+  const rawCartSplit = localStorage.getItem("cartSplitSession");
+  const rawCustomer = localStorage.getItem("customer");
+
+  let dataCustomer = JSON.parse(rawCustomer) || {};
+  let dataCart = JSON.parse(rawCart);
+
+  if (rawCartSplit) {
+    dataCustomer = {};
+    dataCart = JSON.parse(rawCartSplit);
+  }
 
   const dataTransaction = {
     total_amount: transactionPayment.totalAmount,
@@ -463,7 +547,7 @@ $(document).on("click", "#btn-submit-transaction", function () {
     include_revenue: dataCustomer.include_revenue,
     customerId: dataCustomer.id,
     transactionTypeId: dataCustomer.transactionTypeId,
-    transactionDetails: datacart,
+    transactionDetails: dataCart,
   };
 
   createTransaction(dataTransaction);

@@ -1,0 +1,43 @@
+<div
+  class="modal fade"
+  id="modal-split-bill"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div
+        class="modal-header position-relative d-flex align-items-center justify-content-center"
+      >
+        <button
+          type="button"
+          class="btn btn-outline-secondary py-2 position-absolute start-0 ms-3"
+          data-bs-dismiss="modal"
+        >
+          Batal
+        </button>
+        <div
+          class="modal-title d-flex align-items-center justify-content-between gap-2"
+        >
+          <div class="fs-5 fw-semibold">Pisah Bill</div>
+          <div class="fs-5" id="modal-split-bill-title">Rp0</div>
+        </div>
+        <button
+          type="button"
+          class="btn btn-dark py-2 position-absolute end-0 me-3"
+          id="btn-submit-split-bill"
+        >
+          Pisah Bill
+        </button>
+      </div>
+      <div class="modal-body px-4 py-4 mb-5">
+        <span class="ps-1 fw-semibold">Daftar item</span>
+        <div class="border border-bottom w-100 mb-2"></div>
+        <div class="row" id="list-item-split-bill"></div>
+      </div>
+    </div>
+  </div>
+</div>

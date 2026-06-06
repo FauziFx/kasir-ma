@@ -140,13 +140,13 @@
                 <button
                   type="button"
                   class="btn w-25 btn-outline-dark rounded-top-0"
-                  id="btn-modal-split-bill"
+                  id="btn-split-bill"
                 >
                   <i
                     class="bi-receipt-cutoff d-block fs-5"
                     style="height: 16px"
                   ></i>
-                  <small clas>Pisah Bill</small>
+                  <small>Pisah Bill</small>
                 </button>
                 <button
                   type="button"
@@ -164,17 +164,12 @@
     </div>
     <!-- ./Main Content -->
 
-    <!-- Modal alert -->
-    <div id="ModalAlert"></div>
-
-    <!-- Modal Pisah Bill -->
-    <div id="ModalPisahBill"></div>
-
     <!-- ==================== -->
     <div id="ModalProduct"></div>
     <div id="ModalCustomers"></div>
-    <div id="ModalPayment"></div>
     <div id="ModalBill"></div>
+    <div id="ModalSplitBill"></div>
+    <div id="ModalPayment"></div>
     <!-- ==================== -->
 
     <!-- Register PWA -->
@@ -184,15 +179,13 @@
     <script src="assets/js/jquery.min.js"></script>
     <!-- Load modal -->
     <script>
-      $("#ModalAlert").load("component/ModalAlert.html");
-      $("#ModalPisahBill").load("component/ModalPisahBill.html");
-
       //
       $("#FixedSidebar").load("component/FixedSidebar.html");
       $("#ModalProduct").load("component/ModalProduct.html");
       $("#ModalCustomers").load("component/ModalCustomers.html");
       $("#ModalPayment").load("component/ModalPayment.html");
       $("#ModalBill").load("component/ModalBill.html");
+      $("#ModalSplitBill").load("component/ModalSplitBill.html");
       //
     </script>
     <!-- Load JS -->
@@ -208,5 +201,6 @@
     <script src="assets/js/func/Produk.js"></script>
     <script src="assets/js/func/Cart.js"></script>
     <script src="assets/js/func/Bill.js"></script>
+    <script src="assets/js/func/SplitBill.js"></script>
   </body>
 </html>
