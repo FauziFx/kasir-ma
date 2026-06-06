@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <script>
+      function getCookie(name) {
+        var v = document.cookie.match("(^|;) ?" + name + "=([^;]*)(;|$)");
+        return v ? v[2] : null;
+      }
+      if (!getCookie("user-token")) {
+        window.location.href = "login.html";
+      }
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Extract & Import Data Kasir</title>
+    <link rel="manifest" href="web.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+      body {
+        padding: 20px;
+        background: #f4f4f9;
+        color: #333;
+        font-family: "Poppins", sans-serif;
+      }
+      textarea {
+        width: 100%;
+        height: 65vh;
+        margin-top: 15px;
+        font-family: monospace;
+        padding: 10px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      /* Mengubah warna latar belakang tombol Export saat aktif menjadi hijau */
+      .nav-pills .nav-link.pill-export.active {
+        background-color: #198754; /* Warna hijau sukses Bootstrap */
+        color: #ffffff;
+      }
+
+      /* Opsional: Mengubah warna teks Export saat tidak aktif agar berwarna hijau */
+      .nav-pills .nav-link.pill-export:not(.active) {
+        color: #198754;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 class="fw-bold m-0">📦 Kasir BIll Manager</h3>
+      <a
+        href="index.html"
+        class="btn btn-outline-secondary d-flex align-items-center gap-2 fw-semibold"
+      >
+        <i class="bi bi-arrow-left-circle-fill"></i> Kembali
+      </a>
+    </div>
+
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+      <li class="nav-item px-1" role="presentation">
+        <!-- Cukup tambah kelas kustom 'pill-export' di sini -->
+        <button
+          class="nav-link active fw-semibold pill-export"
+          id="tab-export"
+          data-bs-toggle="pill"
+          data-bs-target="#konten-export"
+          type="button"
+          role="tab"
+        >
+          📋 Export Data
+        </button>
+      </li>
+      <li class="nav-item px-1" role="presentation">
+        <!-- Tombol Import dibiarkan standar bawaan Bootstrap -->
+        <button
+          class="nav-link fw-semibold"
+          id="tab-import"
+          data-bs-toggle="pill"
+          data-bs-target="#konten-import"
+          type="button"
+          role="tab"
+        >
+          📥 Import Data
+        </button>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="pills-tabContent">
+      <div class="tab-pane fade show active" id="konten-export" role="tabpanel">
+        <div class="text-secondary mb-2">
+          Estimasi Ukuran Data:
+          <span class="text-danger fw-semibold" id="ukuran-data">0 KB</span>
+          / 5000 KB (Batas Maksimal 5MB)
+        </div>
+        <button id="btn-select" class="btn btn-success w-100 py-2 fw-bold">
+          Copy Semua Data Transaksi
+        </button>
+        <textarea
+          id="output-json"
+          readonly
+          placeholder="Memuat data bill..."
+        ></textarea>
+      </div>
+
+      <div class="tab-pane fade" id="konten-import" role="tabpanel">
+        <div class="text-secondary mb-2">
+          Tempelkan (*paste*) JSON backup yang valid ke dalam kolom di bawah
+          ini.
+        </div>
+        <button id="btn-import" class="btn btn-primary w-100 py-2 fw-bold">
+          Proses & Simpan Ke Device
+        </button>
+        <textarea
+          id="input-json"
+          placeholder="Penting: Paste / Tempel data JSON di sini untuk mengembalikan data kasir..."
+        ></textarea>
+      </div>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        // --- LOGIKA EXPORT ---
+        let semuaData = JSON.parse(localStorage.getItem("listBill")) || [];
+
+        // Hitung ukuran data asli
+        let ukuranByte = new Blob([JSON.stringify(semuaData)]).size;
+        $("#ukuran-data").text((ukuranByte / 1024).toFixed(2) + " KB");
+
+        // Masukkan ke textarea export
+        $("#output-json").val(JSON.stringify(semuaData, null, 2));
+
+        // Tombol Copy otomatis
+        $("#btn-select").on("click", function () {
+          let textarea = $("#output-json")[0];
+          textarea.focus();
+          textarea.select();
+          document.execCommand("copy");
+          alert("Data berhasil disalin ke Clipboard tablet.");
+        });
+
+        // --- LOGIKA IMPORT ---
+        $("#btn-import").on("click", function () {
+          let rawData = $("#input-json").val().trim();
+
+          if (!rawData) {
+            alert("Gagal: Kolom input JSON masih kosong!");
+            return;
+          }
+
+          try {
+            let parsedData = JSON.parse(rawData);
+
+            // --- PROSES VALIDASI STRUKTUR ---
+
+            // 1. Validasi Root (Harus berupa Array)
+            if (!Array.isArray(parsedData)) {
+              throw new Error(
+                "Format root harus berupa Array (diawali dengan '[' dan diakhiri ']')",
+              );
+            }
+
+            // Jika array kosong, kita izinkan (kosongkan data)
+            if (parsedData.length > 0) {
+              // Looping untuk cek setiap struktur nota/bill
+              for (let i = 0; i < parsedData.length; i++) {
+                let bill = parsedData[i];
+
+                // 2. Validasi properti utama di level Bill
+                if (
+                  !bill.hasOwnProperty("billName") ||
+                  !bill.hasOwnProperty("cart") ||
+                  !bill.hasOwnProperty("date")
+                ) {
+                  throw new Error(
+                    `Data bill ke-${i + 1} tidak valid. Pastikan memiliki field 'billName', 'cart', dan 'date'.`,
+                  );
+                }
+
+                // 3. Validasi Keranjang (Cart) harus berbentuk Array
+                if (!Array.isArray(bill.cart)) {
+                  throw new Error(
+                    `Field 'cart' pada bill ke-${i + 1} harus berbentuk Array.`,
+                  );
+                }
+
+                // 4. Validasi isi item di dalam Cart
+                for (let j = 0; j < bill.cart.length; j++) {
+                  let item = bill.cart[j];
+
+                  // Definisikan key wajib yang harus ada di setiap item produk
+                  let requiredKeys = [
+                    "productId",
+                    "productName",
+                    "variantId",
+                    "variantName",
+                    "price",
+                    "qty",
+                    "subtotal",
+                  ];
+
+                  for (let key of requiredKeys) {
+                    if (!item.hasOwnProperty(key)) {
+                      throw new Error(
+                        `Item ke-${j + 1} pada bill ke-${i + 1} (Bill: "${bill.billName}") kehilangan properti wajib: "${key}".`,
+                      );
+                    }
+                  }
+
+                  // Validasi tipe data dasar (opsional tapi bagus untuk keamanan ekstra)
+                  if (
+                    typeof item.price !== "number" ||
+                    typeof item.qty !== "number" ||
+                    typeof item.subtotal !== "number"
+                  ) {
+                    throw new Error(
+                      `Tipe data angka salah pada item ke-${j + 1} di bill "${bill.billName}". Price, Qty, dan Subtotal harus berupa angka.`,
+                    );
+                  }
+                }
+              }
+            }
+
+            // --- JIKA LOLOS VALIDASI ---
+            let konfirmasi = confirm(
+              `Struktur data VALID (${parsedData.length} Bill terdeteksi).\n\nApakah Anda yakin ingin menimpa data transaksi aktif di tablet ini?`,
+            );
+
+            if (konfirmasi) {
+              // 1. Ambil data transaksi lama yang saat ini ada di tablet
+              let dataLokalLama =
+                JSON.parse(localStorage.getItem("listBill")) || [];
+
+              // 2. Gabungkan langsung data lama dan data baru yang di-import (Murni Push)
+              // Menggunakan spread operator [...] untuk menggabungkan dua array
+              let dataGabungan = [...dataLokalLama, ...parsedData];
+
+              // 3. Simpan hasil gabungan kembali ke localStorage
+              localStorage.setItem("listBill", JSON.stringify(dataGabungan));
+
+              // Berikan info jumlah nota yang baru saja ditambahkan
+              alert(
+                `Sukses! ${parsedData.length} Bill dari file backup berhasil ditambahkan ke tablet ini.\n(Total data di tablet sekarang: ${dataGabungan.length} Bill).`,
+              );
+
+              window.location.reload(); // Reload halaman untuk memperbarui isi teks & ukuran data
+            }
+          } catch (error) {
+            // Menangkap pesan error dari throw Error di atas atau error bawaan JSON.parse
+            alert(`🚨 IMPORT GAGAL!\n\nPenyebab: ${error.message}`);
+            console.error(error);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
