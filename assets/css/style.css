@@ -140,5 +140,5 @@ input[type="number"] {
 
 /* 1. Modern Standard (Firefox) */
 * {
-  scrollbar-color: #c7c7c7 #f5f5f5; /* thumb cerah | track sangat cerah */
+  scrollbar-color: #c7c7c7 #ffffff; /* thumb cerah | track sangat cerah */
 }

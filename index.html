@@ -17,178 +17,347 @@
       type="image/x-icon"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kasir MA</title>
+    <title>Kasir MA - Terminal Transaksi</title>
     <link rel="manifest" href="web.webmanifest" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/font/bootstrap-icons.min.css" />
-    <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="stylesheet" href="assets/css/sweetalert2.min.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f4f6f8;
+        color: #212529;
+      }
+      .progress {
+        height: 4px;
+        margin-bottom: 0;
+      }
+
+      /* Base Container Layout */
+      .pos-card {
+        background: #ffffff;
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      /* ==========================================================================
+         LEFT PANEL: PRODUCT COMPONENT STYLES
+         ========================================================================== */
+      .search-wrapper {
+        padding: 12px;
+        background-color: #ffffff;
+        border-bottom: 1px solid #f1f3f5;
+      }
+      .search-input-custom {
+        border-radius: 8px !important;
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        padding: 10px 14px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+      .search-input-custom:focus {
+        background-color: #ffffff;
+        border-color: #212529;
+        box-shadow: 0 0 0 0.2rem rgba(33, 37, 41, 0.08);
+      }
+      .search-icon-box {
+        border-radius: 0 8px 8px 0 !important;
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-left: none;
+      }
+
+      /* Kategori Tab Style */
+      /* Cari selector ini di dalam bagian <style> HTML Anda */
+      #list-categories {
+        padding: 8px 14px 8px 14px;
+        gap: 6px;
+        overflow-x: auto;
+        white-space: nowrap;
+        display: flex;
+        border-bottom: 1px solid #f1f3f5;
+
+        /* TAMBAHKAN BARIS INI */
+        flex-shrink: 0;
+      }
+      #list-categories .btn {
+        border-radius: 6px !important;
+        font-size: 0.85rem;
+        font-weight: 500;
+        padding: 6px 16px;
+        border: 1px solid #e9ecef;
+        background-color: #f8f9fa;
+        color: #495057;
+        transition: all 0.2s ease;
+      }
+      #list-categories .btn.active,
+      #list-categories .btn:hover {
+        background-color: #212529 !important;
+        border-color: #212529 !important;
+        color: #ffffff !important;
+      }
+
+      /* Product List Table Adjustments */
+      #list-products tr {
+        transition: background-color 0.15s ease;
+      }
+      #list-products tr:hover {
+        background-color: #f8f9fa;
+        cursor: pointer;
+      }
+      #list-products td {
+        padding: 14px 12px;
+        border-bottom: 1px solid #f1f3f5;
+        font-size: 0.95rem;
+        font-weight: 500;
+      }
+
+      /* ==========================================================================
+         RIGHT PANEL: CART COMPONENT STYLES
+         ========================================================================== */
+      .cart-header-panel {
+        padding: 12px;
+        background-color: #ffffff;
+        border-bottom: 1px solid #f1f3f5;
+      }
+      .btn-bill-action {
+        border-radius: 8px !important;
+        border: 1px solid #e9ecef;
+        background-color: #f8f9fa;
+        color: #495057;
+        font-weight: 500;
+        font-size: 0.85rem;
+        transition: all 0.2s ease;
+      }
+      .btn-customer-action {
+        border-radius: 8px !important;
+        border: 1px solid #e9ecef;
+        background-color: #f8f9fa;
+        color: #212529;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+      }
+      .btn-bill-action:hover,
+      .btn-customer-action:hover {
+        background-color: #e9ecef;
+        color: #000000;
+      }
+
+      /* Dynamic Cart Item Layout */
+      #cart-list {
+        padding: 8px 4px;
+      }
+      /* Hubungkan style class ini dengan output generator JS Cart Anda */
+      .cart-item-row {
+        padding: 12px 8px;
+        border-bottom: 1px solid #f1f3f5;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      /* Bottom Control Panel Layout */
+      .action-control-box {
+        background-color: #ffffff;
+        border-top: 1px solid #e9ecef;
+        padding: 12px;
+      }
+      .btn-secondary-action {
+        border: 1px solid #e9ecef;
+        background-color: #f8f9fa;
+        color: #495057;
+        border-radius: 8px !important;
+        font-size: 0.85rem;
+        font-weight: 500;
+        padding: 8px;
+        transition: all 0.2s ease;
+      }
+      .btn-secondary-action:hover {
+        background-color: #e9ecef;
+        color: #212529;
+      }
+
+      /* Jantung Utama Tombol Bayar POS */
+      .btn-payment-main {
+        background-color: #212529 !important;
+        border: none !important;
+        color: #ffffff !important;
+        border-radius: 8px !important;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        padding: 14px;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(33, 37, 41, 0.15);
+      }
+      .btn-payment-main:hover {
+        background-color: #000000 !important;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(33, 37, 41, 0.2);
+      }
+      .btn-payment-main:active {
+        transform: translateY(0);
+      }
+    </style>
   </head>
 
   <body>
-    <div class="progress progress-striped rounded-0 active">
-      <div class="progress-bar progress-bar-success" style="width: 0%"></div>
+    <div class="progress rounded-0 active">
+      <div class="progress-bar bg-success" style="width: 0%"></div>
     </div>
-    <!-- Fixed sidebar -->
-    <div id="FixedSidebar"></div>
-    <!-- ./Fixed sidebar -->
 
-    <!-- Main Content -->
-    <div class="container-fluid vh-100">
-      <div class="main row h-100">
-        <!-- Left Panel List Product -->
-        <div class="col col-md-7 h-100 px-0">
-          <div class="card h-100">
-            <div class="row mb-1">
-              <div class="col col-md-12">
-                <div class="input-group">
-                  <input
-                    type="text"
-                    id="search_box"
-                    class="form-control fs-5"
-                    placeholder="Cari..."
-                    aria-describedby="basic-addon2"
-                  />
-                  <span class="input-group-text" id="basic-addon2">
-                    <i class="bi-search"></i>
-                  </span>
-                </div>
+    <div id="FixedSidebar"></div>
+
+    <div class="container-fluid py-1" style="height: calc(100vh - 4px)">
+      <div class="main row g-2 h-100">
+        <div class="col-12 col-md-7 h-100">
+          <div class="pos-card h-100">
+            <div class="search-wrapper">
+              <div class="input-group input-group-sm">
+                <input
+                  type="text"
+                  id="search_box"
+                  class="form-control search-input-custom py-2"
+                  placeholder="Ketik nama produk di sini..."
+                />
               </div>
             </div>
-            <div class="btn-group rounded-0" id="list-categories"></div>
-            <span
-              class="text-center fw-semibold mt-1"
-              id="list-product-title"
-            ></span>
-            <div class="overflow-y-auto px-2 pb-2">
-              <table class="table table-hover">
+
+            <div id="list-categories" role="group"></div>
+
+            <div class="px-3 pt-2">
+              <span
+                class="text-uppercase tracking-wider text-muted small fw-bold"
+                id="list-product-title"
+                >Semua</span
+              >
+            </div>
+
+            <div
+              class="flex-grow-1 overflow-y-auto px-3 pb-3 mt-1"
+              style="max-height: 100%"
+            >
+              <table class="table align-middle">
                 <tbody id="list-products"></tbody>
               </table>
             </div>
           </div>
         </div>
-        <!-- ./Left Panel List Product -->
 
-        <!-- Right panel / cart / keranjang -->
-        <div class="col col-md-5 h-100">
-          <div class="card h-100">
-            <div class="card-header p-0">
-              <div
-                class="btn-group d-flex"
-                role="group"
-                aria-label="Basic example"
-                style="height: 60px"
-              >
-                <button
-                  type="button"
-                  class="btn w-25 btn-outline-secondary rounded-bottom-0"
-                  id="btn-list-bill"
-                >
-                  <i class="bi-receipt d-block fs-5" style="height: 16px"></i>
-                  <small clas>Daftar Bill</small>
-                </button>
-                <button
-                  type="button"
-                  id="customer-name"
-                  class="btn w-100 btn-outline-secondary fs-5 rounded-bottom-0"
-                >
-                  + Pelanggan
-                </button>
+        <div class="col-12 col-md-5 h-100">
+          <div class="pos-card h-100">
+            <div class="cart-header-panel">
+              <div class="row g-2">
+                <div class="col-4">
+                  <button
+                    type="button"
+                    class="btn btn-bill-action w-100 py-2"
+                    id="btn-list-bill"
+                  >
+                    <i class="bi-receipt me-1"></i> Daftar Bill
+                  </button>
+                </div>
+                <div class="col-8">
+                  <button
+                    type="button"
+                    id="customer-name"
+                    class="btn btn-customer-action w-100 py-2 text-truncate"
+                  >
+                    <i class="bi-person-plus-fill me-1"></i> Pelanggan
+                  </button>
+                </div>
               </div>
             </div>
-            <div class="card-body overflow-auto px-2">
+
+            <div
+              class="flex-grow-1 overflow-y-auto px-3 bg-light-subtle"
+              style="max-height: 100%"
+            >
               <div id="cart-list"></div>
             </div>
-            <div class="card-footer p-0 bg-dark-subtle">
-              <div
-                class="btn-group d-flex"
-                role="group"
-                aria-label="Basic example"
-                style="height: 50px"
-              >
-                <button
-                  type="button"
-                  class="btn w-25 btn-outline-dark rounded-0 border-bottom-0"
-                  id="btn-save-bill"
-                >
-                  <i class="bi-floppy"></i>
-                  Simpan
-                </button>
-                <button
-                  type="button"
-                  class="btn w-25 btn-outline-dark rounded-0 border-bottom-0"
-                  id="btn-print-bill"
-                >
-                  <i class="bi-printer"></i>
-                  Cetak
-                </button>
+
+            <div class="action-control-box">
+              <div class="row g-2 mb-3">
+                <div class="col-4">
+                  <button
+                    type="button"
+                    class="btn btn-secondary-action w-100 py-2"
+                    id="btn-save-bill"
+                  >
+                    <i class="bi-floppy me-1"></i> Simpan
+                  </button>
+                </div>
+                <div class="col-4">
+                  <button
+                    type="button"
+                    class="btn btn-secondary-action w-100 py-2"
+                    id="btn-print-bill"
+                  >
+                    <i class="bi-printer me-1"></i> Cetak Bill
+                  </button>
+                </div>
+                <div class="col-4">
+                  <button
+                    type="button"
+                    class="btn btn-secondary-action w-100 py-2"
+                    id="btn-split-bill"
+                  >
+                    <i class="bi-receipt-cutoff me-1"></i> Pisah Bill
+                  </button>
+                </div>
               </div>
-            </div>
-            <div class="card-footer p-0">
-              <div
-                class="btn-group d-flex"
-                role="group"
-                aria-label="Basic example"
-                style="height: 70px"
-              >
+
+              <div class="d-grid">
                 <button
                   type="button"
-                  class="btn w-25 btn-outline-dark rounded-top-0"
-                  id="btn-split-bill"
-                >
-                  <i
-                    class="bi-receipt-cutoff d-block fs-5"
-                    style="height: 16px"
-                  ></i>
-                  <small>Pisah Bill</small>
-                </button>
-                <button
-                  type="button"
-                  class="btn w-100 btn-dark fs-4 rounded-top-0"
+                  class="btn btn-payment-main fs-5 py-3 d-flex justify-content-between align-items-center px-4"
                   id="btn-payment"
                 >
-                  Bayar : <b id="cart-total"></b>
+                  <span>TOTAL BAYAR</span>
+                  <span id="cart-total" class="fw-bold fs-4">Rp 0</span>
                 </button>
               </div>
             </div>
           </div>
         </div>
-        <!-- ./Right panel / cart / keranjang -->
       </div>
     </div>
-    <!-- ./Main Content -->
 
-    <!-- ==================== -->
     <div id="ModalProduct"></div>
     <div id="ModalCustomers"></div>
     <div id="ModalBill"></div>
     <div id="ModalSplitBill"></div>
     <div id="ModalPayment"></div>
-    <!-- ==================== -->
 
-    <!-- Register PWA -->
     <script src="register.js"></script>
-    <!-- Config -->
     <script src="assets/js/config.js"></script>
     <script src="assets/js/jquery.min.js"></script>
-    <!-- Load modal -->
+
     <script>
-      //
       $("#FixedSidebar").load("component/FixedSidebar.html");
       $("#ModalProduct").load("component/ModalProduct.html");
       $("#ModalCustomers").load("component/ModalCustomers.html");
       $("#ModalPayment").load("component/ModalPayment.html");
       $("#ModalBill").load("component/ModalBill.html");
       $("#ModalSplitBill").load("component/ModalSplitBill.html");
-      //
     </script>
-    <!-- Load JS -->
+
     <script src="assets/js/loadingoverlay.min.js"></script>
     <script src="assets/js/sweetalert2.all.min.js"></script>
     <script src="assets/js/js.cookie.min.js"></script>
