@@ -254,3 +254,8 @@ $(document).on("change", "#customerSelect", function () {
     $el.val(previousValues.customer);
   }
 });
+
+// Print Nota
+$(document).on("click", "#btn-print-receipt", function () {
+  printTransaction($(this).data("id"));
+});

@@ -62,3 +62,91 @@ function progressBar(url) {
     }
   }, 1100);
 }
+
+// Print transaction
+function printTransaction(id) {
+  const URL = `${config.ENV_URL}/transactions/${id}`;
+  $.ajax({
+    url: URL,
+    method: "GET",
+    headers: {
+      Authorization: Cookies.get("user-token"),
+    },
+    success: function (response) {
+      const transaction = response.data;
+      const struk = [];
+
+      // 1. Header Toko (Di-center agar rapi)
+      struk.push(formatCenter("UD MURTI AJI"));
+      struk.push(
+        formatCenter(
+          "Jl. Karang Kencana No.51, Panjunan, Kec. Lemahwungkuk, Kota Cirebon, Jawa Barat 45112",
+        ),
+      );
+      struk.push(formatCenter("Telp/WA 0853 1457 9001"));
+      struk.push(drawLine());
+
+      // 2. Informasi Transaksi
+      const formattedDate = moment(transaction.date)
+        .tz("Asia/Jakarta")
+        .format("DD/MM/YYYY HH:mm");
+      struk.push(`Nama: ${transaction.customer?.name || "Umum"}`);
+      struk.push(`Nota: ${transaction.receipt_no}`);
+      struk.push(`Tanggal: ${formattedDate}`);
+      struk.push(drawLine());
+
+      // 3. Item Produk
+      transaction.details.forEach((item) => {
+        // Nama Produk
+        struk.push(item.productName);
+
+        // Varian (jika ada dan berbeda dengan nama produk)
+        if (item.variantName && item.variantName !== item.productName) {
+          struk.push(` # ${item.variantName}`);
+        }
+
+        // Hitung baris harga: "x1 @20.000" di kiri, "20.000" di kanan
+        const qtyPriceLabel = ` x${item.qty} @${formatCurrency(item.price)}`;
+        const subtotalValue = formatCurrency(item.subtotal);
+
+        struk.push(formatLeftRight(qtyPriceLabel, subtotalValue));
+      });
+
+      struk.push(drawLine());
+
+      // 4. Ringkasan Pembayaran (Rata Kiri Kanan)
+      const paymentMethodStr = transaction.payment_method
+        ? transaction.payment_method.charAt(0).toUpperCase() +
+          transaction.payment_method.slice(1)
+        : "Cash";
+
+      struk.push(
+        formatLeftRight("Total", formatCurrency(transaction.total_amount)),
+      );
+      struk.push(
+        formatLeftRight(
+          `Bayar (${paymentMethodStr})`,
+          formatCurrency(transaction.payment_amount),
+        ),
+      );
+      struk.push(
+        formatLeftRight("Kembalian", formatCurrency(transaction.change_amount)),
+      );
+
+      struk.push(drawLine());
+
+      // 5. Footer
+      struk.push(formatCenter("Terima kasih"));
+      struk.push("\n\n"); // Beri space kosong di akhir agar tidak terpotong saat disobek
+
+      // 6. Kirim ke RawBT
+      const escPosData = encodeURIComponent(struk.join("\n"));
+
+      window.location.href = `rawbt://${escPosData}`;
+    },
+    error: function (xhr, status, error) {
+      console.error("Gagal mengambil data transaksi:", error);
+      alert("Gagal mencetak struk, silakan coba lagi.");
+    },
+  });
+}
