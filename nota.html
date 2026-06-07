@@ -33,6 +33,75 @@
       #paymentSelect,
       #customerSelect {
         text-align-last: right;
+        border-radius: 10px;
+      }
+      .badge {
+        background-color: #f1f3f5 !important;
+        color: #495057 !important;
+      }
+      /* Custom Table Styling */
+      .table {
+        margin-bottom: 0;
+      }
+      .table th {
+        font-weight: 600;
+        color: #495057;
+      }
+      /* Transaction Row Hover & Active State */
+      tr.transaction {
+        transition: all 0.2s ease;
+      }
+      tr.transaction:hover {
+        background-color: #f1f3f5 !important;
+      }
+      /* Mengganti background abu-abu #d7d7d7 lama ke soft highlight modern */
+      tr.transaction.active-row,
+      tr.transaction.active-row td {
+        background-color: #e9ecef !important;
+      }
+      /* Badges & Dropdown Controls inside Details */
+      .badge-type {
+        background-color: #f1f3f5;
+        color: #495057;
+        font-weight: 500;
+        padding: 6px 12px;
+        border-radius: 6px;
+      }
+      .form-select-custom {
+        border-radius: 6px;
+        border: 1px solid #dee2e6;
+        padding: 4px 8px;
+        font-size: 0.9rem;
+        background-color: #f8f9fa;
+        max-width: 200px;
+        display: inline-block;
+        text-align-last: right;
+        font-weight: 500;
+      }
+      .form-select-custom:focus {
+        border-color: #212529;
+        box-shadow: 0 0 0 0.15rem rgba(33, 37, 41, 0.15);
+      }
+      /* Area Subtitle/Section Text */
+      .section-title {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #6c757d;
+        font-weight: 600;
+        display: block;
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+      /* Summary Row Table */
+      .summary-table tr td {
+        padding: 8px 12px;
+      }
+      .total-highlight {
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: #212529;
+        background-color: #f8f9fa;
       }
     </style>
   </head>
@@ -41,15 +110,23 @@
     <div class="progress progress-striped rounded-0 active">
       <div class="progress-bar progress-bar-success" style="width: 0%"></div>
     </div>
-    <!-- Fixed sidebar -->
+
     <div id="FixedSidebar"></div>
-    <!-- ./Fixed sidebar -->
-    <div class="container-fluid vh-100">
-      <div class="main row h-100">
-        <div class="col col-md-5 h-100 px-0">
-          <div class="card h-100">
-            <h4 class="text-center mt-2">Transaksi</h4>
-            <hr style="margin: 0" />
+
+    <div class="container-fluid py-1 vh-100">
+      <div class="main row g-2 h-100 px-1">
+        <!-- Kolom Kiri -->
+        <div class="col-12 col-md-6 h-100">
+          <div class="card p-4 h-100">
+            <div class="pb-2 mb-2 border-bottom">
+              <h5 class="fw-bold mb-1">
+                <i class="bi-journal-text me-2"></i>Riwayat Transaksi
+              </h5>
+              <p class="text-muted small mb-0">
+                Klik pada salah satu baris untuk melihat detail nota
+              </p>
+            </div>
+
             <div class="overflow-y-auto">
               <table class="table table-hover">
                 <tbody id="list-transaction"></tbody>
@@ -57,72 +134,142 @@
             </div>
           </div>
         </div>
-        <div class="col col-md-7 h-100">
-          <div class="card h-100 p-3 overflow-y-scroll">
-            <div id="detail-transaction">
-              <div class="text-center mt-2 mb-3">
-                <button class="btn btn-dark" id="btn-print-receipt" data-id="">
-                  <i class="bi-printer"></i> Print Nota
+
+        <!-- Kolom Detail -->
+        <div class="col-12 col-md-6 h-100">
+          <div class="card p-4 h-100 d-flex flex-column overflow-hidden">
+            <div id="detail-placeholder" class="text-center my-auto p-5">
+              <i class="bi-receipt text-muted" style="font-size: 4rem"></i>
+              <h6 class="mt-3 text-secondary fw-medium">
+                Pilih Transaksi di Sebelah Kiri
+              </h6>
+              <p class="text-muted small">
+                Detail informasi penjualan dan pengaturan nota akan tampil di
+                sini.
+              </p>
+            </div>
+
+            <div
+              id="detail-transaction"
+              class="h-100 d-flex flex-column"
+              style="display: none !important"
+            >
+              <div
+                class="d-flex justify-content-between align-items-center pb-3 mb-3 border-bottom flex-shrink-0"
+              >
+                <div>
+                  <h5 class="fw-bold mb-0">Informasi Nota</h5>
+                </div>
+                <button
+                  class="btn btn-dark px-4"
+                  id="btn-print-receipt"
+                  data-id=""
+                  style="border-radius: 8px"
+                >
+                  <i class="bi-printer-fill me-2"></i> Print Nota
                 </button>
               </div>
 
-              <span class="ps-3 fw-semibold">Detail</span>
-              <hr style="margin: 0 0 0.5em 0" />
-              <table class="table table-sm">
-                <tbody>
-                  <tr>
-                    <td class="align-middle text-center">
-                      <i class="bi-receipt fs-4 text-secondary"></i>
-                    </td>
-                    <td class="align-middle">No Nota</td>
-                    <td class="text-end align-middle" id="receipt_no"></td>
-                  </tr>
-                  <tr>
-                    <td
-                      class="align-middle text-center"
-                      id="payment_method_icon"
-                    ></td>
-                    <td class="align-middle">Metode Pembayaran</td>
-                    <td class="text-end align-middle" id="payment_method"></td>
-                  </tr>
-                  <tr>
-                    <td class="align-middle text-center">
-                      <i class="bi-person fs-4 text-secondary"></i>
-                    </td>
-                    <td class="align-middle">Nama</td>
-                    <td class="text-end align-middle" id="customer_name"></td>
-                  </tr>
-                  <tr>
-                    <td class="align-middle text-center">
-                      <i class="bi-clock fs-4 text-secondary"></i>
-                    </td>
-                    <td class="align-middle">Tanggal Transaksi</td>
-                    <td class="text-end align-middle" id="date"></td>
-                  </tr>
-                </tbody>
-              </table>
-              <span class="ps-3 fw-semibold">item</span>
-              <hr style="margin: 0 0 0.5em 0" />
-              <table class="table table-sm">
-                <tbody id="detail_item"></tbody>
-                <tbody>
-                  <tr>
-                    <td></td>
-                    <td class="fw-bold">Total</td>
-                    <td class="text-end fw-bold" id="total_amount"></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td>Bayar</td>
-                    <td class="text-end" id="payment_amount"></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td>Kembalian</td>
-                    <td class="text-end" id="change_amount"></td>
-                  </tr>
-                </tbody>
-              </table>
+              <div
+                class="flex-grow-1 overflow-y-auto pe-2"
+                style="max-height: 100%"
+              >
+                <span class="section-title"
+                  ><i class="bi-info-circle me-1"></i> Ringkasan Utama</span
+                >
+                <table class="table table-sm align-middle mb-4">
+                  <tbody>
+                    <tr>
+                      <td class="text-muted py-2" style="width: 40px">
+                        <i class="bi-hash fs-5 text-secondary"></i>
+                      </td>
+                      <td class="text-secondary py-2">No Nota</td>
+                      <td
+                        class="text-end fw-semibold text-dark py-2"
+                        id="receipt_no"
+                      >
+                        -
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted py-2" id="payment_method_icon">
+                        <i class="bi-credit-card fs-5 text-secondary"></i>
+                      </td>
+                      <td class="text-secondary py-2">Metode Pembayaran</td>
+                      <td class="text-end py-2" id="payment_method">-</td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted py-2">
+                        <i class="bi-person fs-5 text-secondary"></i>
+                      </td>
+                      <td class="text-secondary py-2">Nama Pelanggan</td>
+                      <td class="text-end py-2" id="customer_name">-</td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted py-2">
+                        <i class="bi-clock fs-5 text-secondary"></i>
+                      </td>
+                      <td class="text-secondary py-2">Tanggal Transaksi</td>
+                      <td class="text-end text-dark py-2" id="date">-</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <span class="section-title"
+                  ><i class="bi-cash-coin me-1"></i> Rincian Pembayaran</span
+                >
+                <div
+                  class="border rounded-3 overflow-hidden shadow-sm bg-white mb-2"
+                >
+                  <table class="table table-sm align-middle summary-table">
+                    <tbody>
+                      <tr>
+                        <td class="text-secondary ps-3">Subtotal Pembelian</td>
+                        <td
+                          class="text-end fw-semibold pe-3 text-dark"
+                          id="total_amount"
+                        >
+                          Rp 0
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="text-secondary ps-3">Jumlah Uang Dibayar</td>
+                        <td
+                          class="text-end pe-3 text-muted"
+                          id="payment_amount"
+                        >
+                          Rp 0
+                        </td>
+                      </tr>
+                      <tr class="total-highlight">
+                        <td class="ps-3 border-top fw-bold">Kembalian Kasir</td>
+                        <td
+                          class="text-end pe-3 border-top fw-bold text-success"
+                          id="change_amount"
+                        >
+                          Rp 0
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <span class="section-title"
+                  ><i class="bi-box-seam me-1"></i> Item Terjual</span
+                >
+                <table class="table table-sm align-middle mb-4">
+                  <thead class="table-light small text-uppercase">
+                    <tr>
+                      <th style="width: 40px"></th>
+                      <th>Nama Item / Varian</th>
+                      <th class="text-end" style="padding-right: 12px">
+                        Subtotal
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="detail_item"></tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>

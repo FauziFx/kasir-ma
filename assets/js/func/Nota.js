@@ -1,6 +1,5 @@
 $(document).ready(function () {
   moment.locale("id");
-  $("#detail-transaction").hide();
 });
 let AUTH_HEADER = Cookies.get("user-token");
 let dataCustomers = [];
@@ -69,13 +68,19 @@ function renderTransaction(transactions, currentPage) {
 
     html += `
             <tr class="transaction" data-id="${item.id}" style="cursor:pointer">
-              <td class="item item-${item.id} text-center align-middle">${icon}</td>
-              <td class="item item-${item.id}">
-                ${formatRupiah(item.total_amount)}<br/>
-                <span class="text-secondary fw-normal">${item.receipt_no}</span><br/>
-                <span class="text-secondary fw-normal">${date || ""}</span>
+              <td class="item item-${item.id} text-center align-middle rounded-start-3" style="width: 50px;">
+                <div class="bg-light p-2 rounded-circle d-flex align-items-center justify-content-center" style="width:38px; height:38px;">
+                  ${icon}
+                </div>
               </td>
-              <td class="item item-${item.id} text-end align-middle">
+              <td class="item item-${item.id}">
+                <span class="fw-bold text-dark">
+                ${formatRupiah(item.total_amount)}
+                </span><br/>
+                <span class="text-muted small fw-medium">${item.receipt_no}</span><br/>
+                <span class="text-muted small">${date || ""}</span>
+              </td>
+              <td class="item item-${item.id} text-end align-middle rounded-end-3">
                 <span class="badge bg-secondary fw-normal">${item.transactionType.name}</span>
               </td>
             </tr>`;
@@ -83,9 +88,9 @@ function renderTransaction(transactions, currentPage) {
 
   html += `
           <tr id="btn-loadmore-row">
-            <td colspan="3">
-              <button class="btn btn-primary w-100" id="btn-loadmore" data-page="${parseInt(currentPage) + 1}">
-                Load More
+            <td colspan="3" class="border-0 pt-3">
+              <button class="btn btn-outline-dark btn-sm w-100 py-2" id="btn-loadmore" data-page="${parseInt(currentPage) + 1}" style="border-radius: 8px; font-weight:500;">
+                Tampilkan Lebih Banyak...
               </button>
             </td>
           </tr>`;
@@ -102,7 +107,7 @@ function renderTransactionDetail(data) {
     )
     .join("");
 
-  const paymentMethodSelect = `<select id="paymentSelect" data-id="${data.id}" class="form-select">${paymentOptions}</select>`;
+  const paymentMethodSelect = `<select id="paymentSelect" data-id="${data.id}" class="form-select form-select-sm">${paymentOptions}</select>`;
 
   let customerOptions = dataCustomers
     .map(
@@ -110,7 +115,7 @@ function renderTransactionDetail(data) {
         `<option value="${item.id}-${item.include_revenue}-${item.transactionTypeId}" ${data.customer.name === item.name ? "selected" : ""}>${item.name}</option>`,
     )
     .join("");
-  const customerNameSelect = `<select id="customerSelect" data-id="${data.id}" class="form-select">${customerOptions}</select>`;
+  const customerNameSelect = `<select id="customerSelect" data-id="${data.id}" class="form-select form-select-sm">${customerOptions}</select>`;
 
   // Populate DOM
   $("#payment_method_icon").html(getPaymentIcon(data.payment_method));
@@ -207,6 +212,7 @@ $(document).on("click", ".transaction", function () {
   $("#btn-print-receipt").attr("data-id", transactionId);
 
   $("#detail-transaction").show();
+  $("#detail-placeholder").hide();
   $(".item").css("background", "#ffffff");
   $(".item-" + transactionId).css("background", "#d7d7d7");
 

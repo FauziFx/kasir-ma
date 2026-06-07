@@ -115,6 +115,30 @@ input[type="number"] {
 .custom-card {
   background: #ffffff;
   border: 1px solid #e9ecef;
-  border-radius: 12px;
+  border-radius: 15px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+/* Scrollbar */
+/* 1. Modern Standard (Firefox) */
+* {
+  scrollbar-width: thin; /* Options: auto (default), thin, none */
+}
+
+/* 2. WebKit Browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 5px; /* Width of vertical scrollbar */
+  height: 5px; /* Height of horizontal scrollbar */
+}
+
+/* 1. Modern Standard (Firefox) */
+* {
+  scrollbar-color: #c7c7c7 #f5f5f5; /* thumb cerah | track sangat cerah */
 }
