@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <script>
@@ -18,423 +18,334 @@
     />
     <link rel="manifest" href="web.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kasir MA</title>
+    <title>Kasir MA - Laporan Harian</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/font/bootstrap-icons.min.css" />
-    <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="stylesheet" href="assets/css/sweetalert2.min.css" />
     <link rel="stylesheet" href="assets/css/jquery-ui.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+
+    <style>
+      /* Custom Styling Sidebar Kontrol */
+      .btn-filter-today {
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+      .btn-filter-today.active {
+        background-color: #212529 !important;
+        border-color: #212529 !important;
+        color: #fff !important;
+      }
+      .datepicker-custom {
+        border-radius: 8px 0 0 8px !important;
+        border-right: none !important;
+        font-weight: 500;
+        background-color: #fff !important;
+      }
+      .datepicker-icon {
+        border-radius: 0 8px 8px 0 !important;
+        background-color: #f1f3f5;
+        border-left: none !important;
+      }
+      /* Custom Styling Area Laporan */
+      .info-badge-box {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 12px 16px;
+        border: 1px solid #f1f3f5;
+      }
+      .badge-sold {
+        background-color: #e9ecef;
+        color: #495057;
+        font-weight: 600;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        transition: all 0.2s ease;
+      }
+      .badge-sold:hover {
+        background-color: #dee2e6;
+        color: #212529;
+      }
+      /* Dynamic Report Output Style */
+      #list-report .table {
+        margin-bottom: 1.5rem;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      #list-report th,
+      #list-report td {
+        padding: 10px 12px;
+        vertical-align: middle;
+      }
+      .transaction-type-header {
+        font-weight: 600;
+        color: #495057;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        background-color: #f1f3f5;
+        padding: 6px 12px;
+        border-radius: 6px;
+        display: inline-block;
+        margin-bottom: 8px;
+      }
+      .total-row {
+        background-color: #f8f9fa !important;
+        font-weight: 600;
+      }
+    </style>
   </head>
 
   <body>
-    <div class="progress progress-striped rounded-0 active">
-      <div class="progress-bar progress-bar-success" style="width: 0%"></div>
+    <div class="progress rounded-0 active">
+      <div class="progress-bar bg-success" style="width: 0%"></div>
     </div>
-    <!-- <?php include("./component/FixedSidebar.php") ?> -->
-    <!-- Fixed sidebar -->
-    <div
-      class="d-flex flex-column flex-shrink-0 bg-body-tertiary sidenav"
-      style="width: 4.5rem"
-    >
-      <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
-        <li class="nav-item">
-          <a
-            href="index.html"
-            class="btn btn-outline-dark border-0 py-3 border-bottom ps-1 rounded-0 fs-4"
-            aria-current="page"
-            title="Home"
-            data-bs-toggle="tooltip"
-            data-bs-placement="right"
-          >
-            <i class="bi-grid"></i>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a
-            href="nota.html"
-            class="btn btn-outline-dark border-0 py-3 border-bottom ps-1 rounded-0 fs-4"
-            aria-current="page"
-            title="Home"
-            data-bs-toggle="tooltip"
-            data-bs-placement="right"
-          >
-            <i class="bi-receipt"></i>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a
-            href="laporan.html"
-            class="btn btn-outline-dark active border-0 py-3 border-bottom ps-1 rounded-0 fs-4"
-            aria-current="page"
-            title="Home"
-            data-bs-toggle="tooltip"
-            data-bs-placement="right"
-          >
-            <i class="bi-printer"></i>
-          </a>
-        </li>
-      </ul>
-      <div>
-        <a
-          id="btn-menu-mobile"
-          class="nav-link px-4 py-2 fs-3"
-          data-bs-toggle="offcanvas"
-          href="#offcanvasExample"
-          role="button"
-          aria-controls="offcanvasExample"
-        >
-          <i class="bi-justify"></i>
-        </a>
-      </div>
-    </div>
-    <!-- ./Fixed sidebar -->
-    <div class="container-fluid vh-100">
-      <div class="main row h-100">
-        <div class="col col-md-5 h-100 px-0">
-          <div class="card h-100 pt-4">
-            <i class="bi-printer text-center" style="font-size: 100px"></i>
-            <button
-              class="btn btn-outline-dark rounded-0 py-3 active"
-              id="btn-hari-ini"
-            >
-              Laporan Hari Ini
-            </button>
-            <div class="input-group mt-2">
-              <input
-                type="text"
-                class="form-control rounded-0 text-center py-3 border border-dark fs-5"
-                id="datepicker"
-                readonly
-              />
-              <span
-                class="input-group-text rounded-0 border border-black"
-                id="basic-addon1"
-                ><i class="bi-calendar-event fs-4 mx-2"></i
-              ></span>
-            </div>
-          </div>
-        </div>
-        <div class="col col-md-7 h-100 px-0">
-          <div class="card h-100 overflow-y-auto px-4">
-            <div class="text-center mt-3">
-              <button class="btn btn-dark" id="btn-tutup-laporan">
-                <i class="bi-printer"></i> Cetak Laporan
-              </button>
-            </div>
-            <h3 class="text-center">Laporan Harian</h3>
-            <table class="table table-sm mt-2">
-              <tbody>
-                <tr>
-                  <td>Nama Toko</td>
-                  <td>:</td>
-                  <td>UD MURTI AJI</td>
-                </tr>
-                <tr>
-                  <td>Tanggal</td>
-                  <td>:</td>
-                  <td id="tanggal"></td>
-                </tr>
-                <tr>
-                  <td>Item Terjual</td>
-                  <td>:</td>
-                  <td
-                    class="justify-content-between"
-                    id="btn-item-sold"
-                    style="cursor: pointer"
-                  >
-                    <button class="btn btn-secondary p-1 py-0">
-                      <span id="item-sold">0</span> Item
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div id="list-report"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      class="sidebar-mobile offcanvas offcanvas-start"
-      tabindex="-1"
-      id="offcanvasExample"
-      style="width: 280px"
-      aria-labelledby="offcanvasExampleLabel"
-    >
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasExampleLabel">KASIR MA</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="offcanvas"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="offcanvas-body sidebar-body">
-        <div class="img-profile">
-          <div class="avatar-profile">
-            <img
-              class="rounded-circle"
-              src="https://picsum.photos/128"
-              width="64px"
-            />
-          </div>
-          <p class="mb-0 mt-3">Username</p>
-        </div>
-        <nav class="mt-3">
-          <ul class="nav nav-pills flex-column">
-            <li class="nav-item">
-              <button
-                type="button"
-                class="link-dark p-3 w-100 text-start btn btn-outline-secondary"
-                id="btn-logout"
+
+    <div id="FixedSidebar"></div>
+
+    <div class="container-fluid py-1" style="min-height: calc(100vh - 4px)">
+      <div class="main row g-2 h-100">
+        <div class="col-10 col-md-4">
+          <div class="custom-card p-4 text-center">
+            <div class="mb-4 mt-2">
+              <div
+                class="d-inline-flex align-items-center justify-content-center bg-light text-dark rounded-circle"
+                style="width: 80px; height: 80px"
               >
-                <i class="bi-box-arrow-right me-2"></i>Logout
+                <i class="bi-printer" style="font-size: 36px"></i>
+              </div>
+              <h5 class="mt-3 fw-bold mb-1">Panel Laporan</h5>
+              <p class="text-muted small">
+                Pilih tanggal untuk melihat rekapitulasi data penjualan kasir.
+              </p>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button
+                class="btn btn-outline-dark btn-filter-today py-25 active"
+                id="btn-hari-ini"
+              >
+                <i class="bi-calendar-check me-2"></i> Laporan Hari Ini
               </button>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </div>
-    <!-- ./Sidebar off canvas -->
 
-    <!-- Modal Pemasukan -->
-    <div
-      class="modal fade"
-      id="modal-masuk"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-labelledby="staticBackdropLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header d-flex justify-content-center py-1">
-            <h5 class="modal-title" id="modal-title-bayar">Pemasukan</h5>
-          </div>
-          <div class="modal-body px-4 py-4 mb-5">
-            <div class="row mb-3 form-input-kas">
-              <div class="col-3 mb-3">
-                <label for="" class="col-form-label">Total</label>
-              </div>
-              <div class="col-9">
-                <input
-                  type="number"
-                  class="form-control"
-                  name=""
-                  id="input-total-masuk"
-                  placeholder="Total"
-                />
-              </div>
-              <div class="col-3">
-                <label for="" class="col-form-label">Keterangan</label>
-              </div>
-              <div class="col-9">
+              <div class="input-group mt-1">
                 <input
                   type="text"
-                  class="form-control"
-                  name=""
-                  id="input-keterangan-masuk"
-                  placeholder="Keterangan"
+                  class="form-control text-center py-25 datepicker-custom border-secondary-subtle"
+                  id="datepicker"
+                  readonly
                 />
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6 d-flex">
-                <button
-                  class="w-100 btn btn-outline-dark"
-                  data-bs-dismiss="modal"
+                <span
+                  class="input-group-text datepicker-icon border-secondary-subtle"
+                  id="basic-addon1"
                 >
-                  Batal
-                </button>
-              </div>
-              <div class="col-6 d-flex">
-                <button
-                  class="w-100 btn btn-dark btn-simpan-kas"
-                  data-jenis="masuk"
-                >
-                  Simpan
-                </button>
+                  <i class="bi-calendar-event text-secondary"></i>
+                </span>
               </div>
             </div>
-            <div class="row mt-2">
-              <table class="table">
-                <tbody id="list-data-masuk"></tbody>
-              </table>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-8">
+          <div
+            class="custom-card p-4 h-100 d-flex flex-column"
+            style="min-height: 500px"
+          >
+            <div
+              class="d-flex flex-column flex-sm-row justify-content-between align-items-center pb-3 mb-4 border-bottom gap-3"
+            >
+              <div>
+                <h4 class="fw-bold mb-1 text-center text-sm-start">
+                  Laporan Harian
+                </h4>
+                <p class="text-muted small mb-0 text-center text-sm-start">
+                  Manajemen data pendapatan real-time toko
+                </p>
+              </div>
+              <button
+                class="btn btn-dark px-4 py-2"
+                id="btn-tutup-laporan"
+                style="border-radius: 8px; font-weight: 500"
+              >
+                <i class="bi-printer-fill me-2"></i> Cetak Laporan
+              </button>
             </div>
+
+            <div class="info-badge-box mb-4">
+              <div class="row text-center text-sm-start g-3">
+                <div class="col-sm-4">
+                  <span class="text-muted d-block small uppercase text-tracking"
+                    >Nama Toko</span
+                  >
+                  <span class="fw-semibold text-dark">UD MURTI AJI</span>
+                </div>
+                <div class="col-sm-4">
+                  <span class="text-muted d-block small">Tanggal Laporan</span>
+                  <span class="fw-semibold text-dark" id="tanggal">-</span>
+                </div>
+                <div class="col-sm-4">
+                  <span class="text-muted d-block small mb-1"
+                    >Item Terjual</span
+                  >
+                  <div
+                    id="btn-item-sold"
+                    style="cursor: pointer; display: inline-block"
+                  >
+                    <span class="badge-sold">
+                      <i class="bi-box-seam me-1"></i>
+                      <span id="item-sold">0</span> Item
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              id="list-report"
+              class="flex-grow-1 overflow-y-auto"
+              style="max-height: 500px; padding-right: 4px"
+            ></div>
           </div>
         </div>
       </div>
     </div>
-    <!-- ./Modal Pemasukan -->
 
-    <!-- Modal Pengeluaran -->
-    <div
-      class="modal fade"
-      id="modal-keluar"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-labelledby="staticBackdropLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header d-flex justify-content-center py-1">
-            <h5 class="modal-title" id="modal-title-bayar">Pengeluaran</h5>
-          </div>
-          <div class="modal-body px-4 py-4 mb-5">
-            <div class="row mb-3 form-input-kas">
-              <div class="col-3 mb-3">
-                <label for="" class="col-form-label">Total</label>
-              </div>
-              <div class="col-9">
-                <input
-                  type="number"
-                  class="form-control"
-                  name=""
-                  id="input-total-keluar"
-                  placeholder="Total"
-                />
-              </div>
-              <div class="col-3">
-                <label for="" class="col-form-label">Keterangan</label>
-              </div>
-              <div class="col-9">
-                <input
-                  type="text"
-                  class="form-control"
-                  name=""
-                  id="input-keterangan-keluar"
-                  placeholder="Keterangan"
-                />
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6 d-flex">
-                <button
-                  class="w-100 btn btn-outline-dark"
-                  data-bs-dismiss="modal"
-                >
-                  Batal
-                </button>
-              </div>
-              <div class="col-6 d-flex">
-                <button
-                  class="w-100 btn btn-dark btn-simpan-kas"
-                  data-jenis="keluar"
-                >
-                  Simpan
-                </button>
-              </div>
-            </div>
-            <div class="row mt-2">
-              <table class="table">
-                <tbody id="list-data-keluar"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- ./Modal Pengeluaran -->
-
-    <!-- Modal Cetak -->
     <div
       class="modal fade"
       id="modal-tutup-laporan"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
       tabindex="-1"
-      aria-labelledby="staticBackdropLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header d-flex justify-content-center py-1">
-            <h5 class="modal-title" id="modal-title-bayar">Cetak laporan</h5>
+          <div class="modal-header justify-content-center border-0 pt-4">
+            <h5 class="modal-title fw-bold" id="modal-title-bayar">
+              Konfirmasi Cetak Laporan
+            </h5>
           </div>
-          <div class="modal-body px-4 py-4 mb-5">
-            <table class="table table-sm mt-2 table-hover">
-              <tbody>
-                <tr class="fw-bold">
-                  <td>Total Uang diharapkan</td>
-                  <td class="text-end" id="total-expected">Rp. 0</td>
-                </tr>
-              </tbody>
-            </table>
-            <input
-              type="number"
-              class="form-control fs-5"
-              name=""
-              id="input-total-earned"
-              placeholder="Total uang yang didapatkan"
-            />
-            <table class="table">
-              <tr>
-                <td class="text-start">Selisih</td>
-                <td class="text-end" id="difference">Rp. 0</td>
-              </tr>
-            </table>
-            <div class="row mt-3">
-              <div class="col-6 d-flex">
-                <button
-                  class="w-100 btn btn-outline-dark"
-                  data-bs-dismiss="modal"
+          <div class="modal-body px-4 py-2">
+            <div class="p-3 bg-light rounded-3 mb-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-muted small"
+                  >Total Uang Diharapkan (Sistem)</span
                 >
-                  Batal
-                </button>
+                <span class="fw-bold text-dark fs-5" id="total-expected"
+                  >Rp. 0</span
+                >
               </div>
-              <div class="col-6 d-flex">
-                <button class="w-100 btn btn-dark" id="btn-print-report">
-                  <i class="bi-printer"></i> Cetak
-                </button>
+            </div>
+
+            <div class="mb-3">
+              <label
+                for="input-total-earned"
+                class="form-label small fw-medium text-secondary"
+                >Masukkan Fisik Uang yang Didapat</label
+              >
+              <div class="input-group">
+                <span
+                  class="input-group-text bg-white border-end-0 text-muted fw-semibold"
+                  >Rp</span
+                >
+                <input
+                  type="number"
+                  class="form-control fs-5 fw-semibold border-start-0 ps-1"
+                  id="input-total-earned"
+                  placeholder="0"
+                />
               </div>
+            </div>
+
+            <div
+              class="d-flex justify-content-between align-items-center py-2 px-1 border-top border-bottom border-dashed my-3"
+            >
+              <span class="text-muted small fw-medium"
+                >Selisih Fisik vs Sistem</span
+              >
+              <span class="fw-bold text-danger fs-5" id="difference"
+                >Rp. 0</span
+              >
+            </div>
+          </div>
+          <div class="modal-footer border-0 pb-4 px-4 row g-2">
+            <div class="col-6 m-0">
+              <button
+                class="w-100 btn btn-outline-secondary py-2"
+                data-bs-dismiss="modal"
+                style="border-radius: 8px"
+              >
+                Batal
+              </button>
+            </div>
+            <div class="col-6 m-0">
+              <button
+                class="w-100 btn btn-dark py-2"
+                id="btn-print-report"
+                style="border-radius: 8px"
+              >
+                <i class="bi-printer me-1"></i> Cetak
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- ./Modal Cetak -->
 
-    <!-- Modal Item terjual -->
     <div
       class="modal fade"
       id="modal-item-sold"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
       tabindex="-1"
-      aria-labelledby="staticBackdropLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
-          <div class="modal-header d-flex justify-content-center py-1">
-            <h5 class="modal-title" id="modal-title-bayar">Item Terjual</h5>
+          <div class="modal-header justify-content-center border-0 pt-4">
+            <h5 class="modal-title fw-bold">Detail Item Terjual</h5>
           </div>
-          <div class="modal-body px-4 py-4 mb-2">
-            <table class="table table-sm mt-2 table-hover">
-              <tbody id="list-item-sold"></tbody>
-            </table>
+          <div class="modal-body px-4 py-0">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-light small text-uppercase">
+                  <tr>
+                    <th>Nama Produk / Varian</th>
+                    <th class="text-center" style="width: 80px">Qty</th>
+                  </tr>
+                </thead>
+                <tbody id="list-item-sold" class="small"></tbody>
+              </table>
+            </div>
           </div>
-          <div class="modal-footer">
-            <button class="w-100 btn btn-outline-dark" data-bs-dismiss="modal">
-              Tutup
+          <div class="modal-footer border-0 pb-4 px-4">
+            <button
+              class="w-100 btn btn-outline-dark py-2"
+              data-bs-dismiss="modal"
+              style="border-radius: 8px"
+            >
+              Tutup Jendela
             </button>
           </div>
         </div>
       </div>
     </div>
-    <!-- ./Modal Item terjual -->
+
     <script src="register.js"></script>
     <script src="assets/js/jquery.min.js"></script>
+    <script>
+      $("#FixedSidebar").load("component/FixedSidebar.html");
+    </script>
     <script src="assets/js/config.js"></script>
     <script src="assets/js/jquery-ui.min.js"></script>
     <script src="assets/js/js.cookie.min.js"></script>
@@ -444,76 +355,5 @@
     <script src="assets/js/moment-timezone-with-data.js"></script>
     <script src="assets/js/func/index.js"></script>
     <script src="assets/js/func/laporan.js"></script>
-    <script>
-      let printReport = {
-        store: "// UD MURTI AJI ////",
-        address:
-          "Jl. Karang Kencana No.51, Panjunan, Kec. Lemahwungkuk, Kota Cirebon, Jawa Barat 45112",
-        phone: "Telp/WA 0853 1457 9001",
-        date: moment().tz("Asia/Jakarta").format("DD/MM/YYYY HH:mm"),
-        totalCash: 0,
-        totalEarned: 0,
-        difference: 0,
-        transactions: [],
-      };
-
-      $(document).on("click", "#btn-print-report", function () {
-        printReport.totalCash = 0;
-        printReport.totalEarned = 0;
-        printReport.difference = 0;
-        printReport.transactions = [];
-        const data = JSON.parse(Cookies.get("report-summary"));
-        printReport.totalCash = data.totalCash;
-        printReport.totalEarned = data.totalEarned;
-        printReport.difference = data.difference;
-        printReport.transactions = data.transaction;
-
-        console.log(data);
-        console.log(printReport);
-
-        let struk = [];
-
-        struk.push(printReport.store);
-        struk.push(printReport.address);
-        struk.push(printReport.phone);
-        struk.push("");
-        struk.push("LAPORAN");
-        struk.push("Tanggal: " + printReport.date);
-        struk.push("--------------------------------");
-        struk.push(
-          "Total Tunai         " +
-            formatRupiah(printReport.totalCash ? printReport.totalCash : 0)
-        );
-        struk.push(
-          "Total didapatkan    " +
-            formatRupiah(printReport.totalEarned ? printReport.totalEarned : 0)
-        );
-        struk.push(
-          "Selisih             " +
-            formatRupiah(printReport.difference ? printReport.difference : 0)
-        );
-        struk.push("--------------------------------");
-
-        printReport.transactions.forEach((item) => {
-          struk.push("//" + item.transactionTypeName.toUpperCase());
-
-          item.payments.forEach((i) => {
-            struk.push(
-              i.payment_method.charAt(0).toUpperCase() +
-                i.payment_method.slice(1) +
-                `: ${formatRupiah(i.total)}`
-            );
-          });
-
-          struk.push(""); // baris kosong antar item
-        });
-        struk.push("--------------------------------");
-        struk.push("");
-        struk.push("Terima kasih");
-
-        let escPosData = encodeURIComponent(struk.join("\n"));
-        window.location.href = "rawbt://" + escPosData;
-      });
-    </script>
   </body>
 </html>

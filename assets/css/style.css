@@ -1,8 +1,9 @@
 body {
-  font-family: "Poppins", "open sans", "segoe ui", "arial";
+  font-family: "Poppins", sans-serif;
   font-weight: 400;
   font-size: 15px !important;
-  background: #f1f4f6;
+  background-color: #f8f9fa;
+  color: #212529;
 }
 
 .hover-button:hover {
@@ -91,4 +92,29 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+.progress {
+  height: 4px;
+  margin-bottom: 0;
+}
+
+/* Modal Modernization */
+.modal-content {
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+.modal-header {
+  border-bottom: 1px solid #f1f3f5;
+}
+.modal-footer {
+  border-top: 1px solid #f1f3f5;
+}
+
+.custom-card {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
