@@ -233,13 +233,24 @@ $(document).on("change", "#paymentSelect", function () {
   const id = $el.data("id");
   const newValue = $el.val();
 
-  if (confirm("Yakin ingin mengganti Metode Pembayaran?")) {
-    updateTransactionPatch(id, { payment_method: newValue }, () => {
+  Swal.fire({
+    text: "Yakin ingin mengganti Metode Pembayaran?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Ya, Ubah",
+    cancelButtonText: "Batal",
+    reverseButtons: true,
+  }).then((result) => {
+    // Jika Kasir Mengetuk Tombol "Ya, Ubah"
+    if (result.isConfirmed) {
+      updateTransactionPatch(id, { payment_method: newValue }, () => {
+        $el.val(previousValues.payment);
+      });
+    } else {
+      // Jika Kasir Mengetuk "Batal" atau Menutup Modal
       $el.val(previousValues.payment);
-    });
-  } else {
-    $el.val(previousValues.payment);
-  }
+    }
+  });
 });
 
 // Handle Customer Change
@@ -251,14 +262,25 @@ $(document).on("change", "#customerSelect", function () {
   const id = $el.data("id");
   const [customerId, include_revenue, transactionTypeId] = $el.val().split("-");
 
-  if (confirm("Yakin ingin mengganti customer?")) {
-    const payload = { customerId, include_revenue, transactionTypeId };
-    updateTransactionPatch(id, payload, () => {
-      $el.val(previousValues.customer); // Fix Bug: Sebelumnya salah panggil previousValuePayment
-    });
-  } else {
-    $el.val(previousValues.customer);
-  }
+  Swal.fire({
+    text: "Yakin ingin mengganti customer?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Ya, Ubah",
+    cancelButtonText: "Batal",
+    reverseButtons: true,
+  }).then((result) => {
+    // Jika Kasir Mengetuk Tombol "Ya, Ubah"
+    if (result.isConfirmed) {
+      const payload = { customerId, include_revenue, transactionTypeId };
+      updateTransactionPatch(id, payload, () => {
+        $el.val(previousValues.customer); // Fix Bug: Sebelumnya salah panggil previousValuePayment
+      });
+    } else {
+      // Jika Kasir Mengetuk "Batal" atau Menutup Modal
+      $el.val(previousValues.customer);
+    }
+  });
 });
 
 // Print Nota

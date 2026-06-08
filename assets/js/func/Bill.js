@@ -218,6 +218,7 @@ $(document).on("click", ".btn-delete-bill-item", function () {
     showCancelButton: true,
     showConfirmButton: false,
     denyButtonText: "Hapus",
+    reverseButtons: true,
   }).then((result) => {
     /* Read more about isConfirmed, isDenied below */
     if (result.isDenied) {

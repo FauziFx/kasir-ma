@@ -170,6 +170,15 @@ input[type="number"] {
   transition: all 0.2s ease;
 }
 
+.swal2-styled.swal2-deny {
+  border-radius: 8px !important;
+  padding: 10px 24px !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  box-shadow: none !important;
+  transition: all 0.2s ease;
+}
+
 .swal2-styled.swal2-confirm:hover {
   background-color: #000000 !important;
 }
