@@ -1,16 +1,17 @@
-<!-- Fixed sidebar -->
 <div
-  class="d-flex flex-column flex-shrink-0 bg-body-tertiary sidenav ms-1"
-  style="width: 4.5rem"
+  class="d-flex flex-column flex-shrink-0 bg-white border-end border-light-subtle h-100 position-fixed start-0 top-0 align-items-center py-3"
+  style="width: 4.6rem; z-index: 1030"
 >
-  <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
+  <ul
+    class="nav nav-pills flex-column mb-auto text-center gap-2 w-100 px-2 shadow-none"
+  >
     <li class="nav-item">
       <a
         id="btn-index"
         href="index.html"
-        class="btn btn-outline-dark border-0 py-3 ps-2 rounded-0 fs-4 rounded-3 mb-2"
-        aria-current="page"
-        title="index"
+        class="btn btn-outline-dark border-0 py-3 w-100 d-flex align-items-center justify-content-center fs-4 transitions-all"
+        style="border-radius: 10px"
+        title="Kasir"
         data-bs-toggle="tooltip"
         data-bs-placement="right"
       >
@@ -21,9 +22,9 @@
       <a
         id="btn-nota"
         href="nota.html"
-        class="btn btn-outline-dark border-0 py-3 ps-2 rounded-0 fs-4 rounded-3 mb-2"
-        aria-current="page"
-        title="nota"
+        class="btn btn-outline-dark border-0 py-3 w-100 d-flex align-items-center justify-content-center fs-4 transitions-all"
+        style="border-radius: 10px"
+        title="Riwayat Nota"
         data-bs-toggle="tooltip"
         data-bs-placement="right"
       >
@@ -34,9 +35,9 @@
       <a
         id="btn-laporan"
         href="laporan.html"
-        class="btn btn-outline-dark border-0 py-3 ps-2 rounded-0 fs-4 rounded-3 mb-2"
-        aria-current="page"
-        title="laporan"
+        class="btn btn-outline-dark border-0 py-3 w-100 d-flex align-items-center justify-content-center fs-4 transitions-all"
+        style="border-radius: 10px"
+        title="Laporan Harian"
         data-bs-toggle="tooltip"
         data-bs-placement="right"
       >
@@ -44,32 +45,33 @@
       </a>
     </li>
   </ul>
-  <div>
+
+  <div class="w-100 px-2 mt-auto">
     <a
       id="btn-menu-mobile"
-      class="nav-link p-4 py-3 fs-3"
+      class="btn btn-outline-dark border-0 py-3 w-100 d-flex align-items-center justify-content-center fs-4"
+      style="border-radius: 10px"
       data-bs-toggle="offcanvas"
-      href="#offcanvasExample"
+      href="#offcanvasSettings"
       role="button"
-      aria-controls="offcanvasExample"
     >
       <i class="bi-justify"></i>
     </a>
   </div>
 </div>
-<!-- ./Fixed sidebar -->
 
-<!-- Sidebar off canvas -->
+<div style="width: 4.5rem" class="d-none d-md-block flex-shrink-0"></div>
+
 <div
-  class="sidebar-mobile offcanvas offcanvas-start"
+  class="offcanvas offcanvas-start border-0 shadow-lg"
   tabindex="-1"
-  id="offcanvasExample"
-  style="width: 280px"
-  id="btn-h5"
-  aria-labelledby="offcanvasExampleLabel"
+  id="offcanvasSettings"
+  style="width: 290px; border-radius: 0 16px 16px 0"
 >
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="offcanvasExampleLabel">KASIR MA</h5>
+  <div class="offcanvas-header pt-4 px-4">
+    <h5 class="offcanvas-title fw-bold text-dark" id="offcanvasSettingsLabel">
+      🖥️ Kasir MA
+    </h5>
     <button
       type="button"
       class="btn-close"
@@ -77,67 +79,102 @@
       aria-label="Close"
     ></button>
   </div>
-  <div class="offcanvas-body sidebar-body">
-    <div class="img-profile">
-      <div class="avatar-profile">
+
+  <div class="offcanvas-body px-4">
+    <div class="text-center bg-light p-3 rounded-3 mb-4">
+      <div class="position-relative d-inline-block">
         <img
-          class="rounded-circle"
+          class="rounded-circle border border-2 border-white shadow-sm"
           src="https://picsum.photos/128"
           width="64px"
+          height="64px"
+          alt="Avatar"
         />
       </div>
-      <p class="mb-0 mt-3">Kasir</p>
+      <p class="mb-0 mt-2 fw-bold text-dark">Petugas Kasir</p>
+      <span class="text-muted small">UD MURTI AJI</span>
     </div>
-    <nav class="my-4">
-      <ul class="nav nav-pills flex-column">
-        <li class="nav-item mb-2">
+
+    <span
+      class="text-uppercase tracking-wider text-muted small fw-bold d-block mb-2 font-monospace"
+      style="font-size: 0.7rem"
+      >Sistem Utilitas</span
+    >
+    <nav class="mb-4">
+      <ul class="nav nav-pills flex-column gap-1">
+        <li class="nav-item">
           <button
             type="button"
-            class="link-dark p-3 w-100 text-start btn btn-outline-secondary"
+            class="btn btn-light text-start w-100 p-3 text-dark fw-medium border-0 d-flex align-items-center gap-2"
             onclick="fetchAndRefreshData()"
             data-bs-dismiss="offcanvas"
+            style="border-radius: 8px"
           >
-            <i class="bi-arrow-repeat me-2"></i>Sync Data
+            <i class="bi-arrow-repeat text-secondary fs-5"></i> Sync Cloud Data
           </button>
         </li>
         <li class="nav-item">
           <a
             href="backup.html"
-            class="link-dark p-3 w-100 text-start btn btn-outline-secondary"
+            class="btn btn-light text-start w-100 p-3 text-dark fw-medium border-0 d-flex align-items-center gap-2"
+            style="border-radius: 8px"
           >
-            <i class="bi-database-down me-2"></i>Import/Exoprt Data
+            <i class="bi-database-down text-secondary fs-5"></i> Import / Export
+            JSON
           </a>
         </li>
       </ul>
     </nav>
-    <hr />
-    <nav class="mt-4">
+
+    <hr class="text-muted opacity-25 my-3" />
+
+    <nav>
       <ul class="nav nav-pills flex-column">
         <li class="nav-item">
           <button
             type="button"
-            class="link-dark p-3 w-100 text-start btn btn-outline-secondary"
+            class="btn btn-outline-danger text-start w-100 p-3 fw-medium d-flex align-items-center gap-2"
             id="btn-logout"
+            style="border-radius: 8px"
           >
-            <i class="bi-box-arrow-right me-2"></i>Logout
+            <i class="bi-box-arrow-right fs-5"></i> Keluar (Logout)
           </button>
         </li>
       </ul>
     </nav>
   </div>
 </div>
-<!-- ./Sidebar off canvas -->
 
 <script>
   $(document).ready(function () {
-    $("#btn-sync-data").hide();
-    if (window.location.href.includes("index.html")) {
-      $("#btn-index").addClass("active");
-      $("#btn-sync-data").show();
-    } else if (window.location.href.includes("nota.html")) {
-      $("#btn-nota").addClass("active");
-    } else if (window.location.href.includes("laporan.html")) {
-      $("#btn-laporan").addClass("active");
+    const currentUrl = window.location.href;
+
+    // Bersihkan semua status active bawaan terlebih dahulu
+    $(".nav-item a")
+      .removeClass("active btn-dark")
+      .addClass("btn-outline-dark");
+
+    // Deteksi halaman aktif secara dinamis dan set style button eksekusinya
+    if (currentUrl.includes("index.html") || currentUrl.endsWith("/")) {
+      $("#btn-index")
+        .addClass("active btn-dark")
+        .removeClass("btn-outline-dark");
+    } else if (currentUrl.includes("nota.html")) {
+      $("#btn-nota")
+        .addClass("active btn-dark")
+        .removeClass("btn-outline-dark");
+    } else if (currentUrl.includes("laporan.html")) {
+      $("#btn-laporan")
+        .addClass("active btn-dark")
+        .removeClass("btn-outline-dark");
     }
+
+    // Inisialisasi Tooltip Bootstrap agar memandu kasir saat kursor melayang di sidebar
+    const tooltipTriggerList = [].slice.call(
+      document.querySelectorAll('[data-bs-toggle="tooltip"]'),
+    );
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
   });
 </script>

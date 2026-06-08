@@ -72,7 +72,7 @@ function showProducts(categoryId = null, searchQuery = "") {
       const product = cursor.value;
       if (query === "" || product.name.toLowerCase().includes(query)) {
         html += `<tr class="row-products" data-id="${product.id}">
-                  <td class="py-3">${product.name}</td>
+                  <td class="ps-2 py-3">${product.name}</td>
                 </tr>`;
       }
       cursor.continue();
@@ -103,20 +103,23 @@ function showProductDetail(productId) {
     if (variants.length > 0) {
       variants.forEach((variant) => {
         // Menggunakan standard format data-attribute agar dibaca otomatis oleh jQuery .data()
-        variantHtml += `<li class="nav-item col-6 px-1 mb-1" role="presentation">
-                          <button
-                            class="btn btn-outline-dark w-100 border border-dark py-2 btn-variant-choice"
-                            type="button"
-                            role="tab"
-                            data-bs-toggle="tab"
-                            data-productid="${product.id}"
-                            data-variantid="${variant.id}"
-                            data-productname="${product.name}"
-                            data-variantname="${variant.name}"
-                            data-price="${variant.price}">
-                            ${variant.name}
-                          </button>
-                        </li>`;
+        variantHtml += `
+          <div class="col-6 mb-1" role="presentation">
+            <button
+              class="btn btn-outline-dark w-100 py-2 btn-variant-choice text-truncate fw-medium"
+              type="button"
+              role="tab"
+              data-bs-toggle="tab"
+              data-productid="${product.id}"
+              data-variantid="${variant.id}"
+              data-productname="${product.name}"
+              data-variantname="${variant.name}"
+              data-price="${variant.price}"
+              style="border-radius: 8px; font-size: 0.9rem;"
+            >
+              ${variant.name}
+            </button>
+          </div>`;
       });
     } else {
       variantHtml = `<p class="text-muted small p-3">Produk ini tidak memiliki varian.</p>`;

@@ -80,23 +80,30 @@ function showListBill() {
       (total, item) => total + Number(item.subtotal),
       0,
     );
-    html += `<tr class="bill-items ${activeBill == i ? "table-active pe-none opacity-50" : ""}" data-indexbill="${i}">
-              <td class="rounded-start">
-                ${item.billName}<br>
-                <span class="text-secondary" style="font-size:12px">
-                ${moment(item.date).tz("Asia/Jakarta").format("llll")}
-                </span>
-                
-              </td>
-              <td class="align-middle">
-                ${formatRupiah(totalBill)}
-              </td>
-              <td class="text-end align-middle rounded-end">
-                <button class="btn btn-sm btn-outline-danger btn-delete-bill-item" data-indexbill="${i}" data-name="${item.billName}">
-                  <i class="bi-trash"></i>
-                </button>
-              </td>
-            </tr>`;
+    html += `
+      <tr class="bill-items ${activeBill == i ? "bg-light text-muted pe-none opacity-75" : ""}" data-indexbill="${i}" style="cursor: pointer;">
+        <td class="ps-4 py-3 align-middle">
+          <div class="fw-semibold ${activeBill == i ? "text-secondary" : "text-dark"}">${item.billName}</div>
+          <span class="text-muted small" style="font-size: 0.75rem;">
+            ${moment(item.date).tz("Asia/Jakarta").format("lll")}
+          </span>
+        </td>
+        
+        <td class="align-middle fw-bold text-dark">
+          ${formatRupiah(totalBill)}
+        </td>
+        
+        <td class="text-end align-middle pe-4">
+          <button 
+            class="btn btn-sm btn-light border text-danger btn-delete-bill-item px-2" 
+            data-indexbill="${i}" 
+            data-name="${item.billName}"
+            style="border-radius: 6px;"
+          >
+            <i class="bi-trash"></i>
+          </button>
+        </td>
+      </tr>`;
   });
 
   $("#list-bill").html(html);

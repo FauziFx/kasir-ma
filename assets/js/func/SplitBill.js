@@ -56,37 +56,63 @@ function showListSplitItem() {
   let html = "";
   const dataCart = JSON.parse(localStorage.getItem("cart"));
   dataCart.forEach((item, index) => {
-    html += `<div class="row align-items-center mb-2 pe-0"> 
-              <div class="col-8 d-flex flex-column justify-content-center pe-0">
-                <p class="mb-0">${item.productName}</p>
-                <p class="mb-0 fw-light text-secondary" style="font-size:11px">
-                  ${item.variantName} @${formatCurrency(item.price)}
-                </p>
-                <p class="mb-0 fw-semibold" style="font-size:14px">
-                  ${formatRupiah(item.subtotal)}
-                </p>
-              </div>
-              <div class="col-3 p-0">
-                <div class="input-group">
-                  <button class="btn btn-dark btn-sm input-group-text btn-increment-split btn-increment-${index}" data-diff="-1" data-index="${index}" disabled>
-                    <i class="bi-dash-circle"></i>
-                  </button>
-                  <input type="number" class="form-control form-control-sm text-center px-0 input-split-qty" 
-                    id="input-qty-split-${index}" 
-                    value="${item.qty}" 
-                    min="1" 
-                    max="${item.qty}" 
-                    readonly>
-                  <button class="btn btn-dark btn-sm input-group-text btn-increment-split btn-increment-${index}" data-diff="1" data-index="${index}" disabled>
-                    <i class="bi-plus-circle"></i>
-                  </button>
-                </div>
-              </div>
-              <div class="col-1 text-end p-0">
-                <input type="checkbox" class="larger checkbox-split" data-index="${index}">
-              </div>
-            </div>
-            <hr />`;
+    html += `
+      <div class="row align-items-center py-2 border-bottom border-light-subtle mx-0"> 
+        
+        <div class="col-6 px-0">
+          <p class="mb-0 fw-semibold text-dark text-truncate" style="font-size: 0.9rem;">${item.productName}</p>
+          <p class="mb-0 text-muted" style="font-size: 11px;">
+            ${item.variantName} <span class="font-monospace">@${formatCurrency(item.price)}</span>
+          </p>
+          <p class="mb-0 fw-bold text-secondary mt-05" style="font-size: 13px;">
+            ${formatRupiah(item.subtotal)}
+          </p>
+        </div>
+        
+        <div class="col-5 px-1">
+          <div class="input-group input-group-sm">
+            <button 
+              class="btn btn-outline-dark border-secondary-subtle px-2 btn-increment-split btn-increment-${index}" 
+              data-diff="-1" 
+              data-index="${index}" 
+              type="button"
+              disabled
+            >
+              <i class="bi-dash-lg"></i>
+            </button>
+            
+            <input 
+              type="number" 
+              class="form-control text-center fw-bold bg-light border-secondary-subtle px-0 input-split-qty" 
+              id="input-qty-split-${index}" 
+              value="${item.qty}" 
+              min="1" 
+              max="${item.qty}" 
+              readonly
+            >
+            
+            <button 
+              class="btn btn-outline-dark border-secondary-subtle px-2 btn-increment-split btn-increment-${index}" 
+              data-diff="1" 
+              data-index="${index}" 
+              type="button"
+              disabled
+            >
+              <i class="bi-plus-lg"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="col-1 text-end px-0">
+          <input 
+            type="checkbox" 
+            class="form-check-input checkbox-split shadow-sm border-secondary-subtle" 
+            data-index="${index}"
+            style="width: 1.3rem; height: 1.3rem; cursor: pointer;"
+          >
+        </div>
+
+      </div>`;
   });
 
   $("#list-item-split-bill").html(html);

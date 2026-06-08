@@ -1,80 +1,101 @@
-<!-- Simpan Bill -->
 <div
   class="modal fade"
   id="modal-save-bill"
   data-bs-backdrop="static"
   data-bs-keyboard="false"
   tabindex="-1"
-  aria-labelledby="staticBackdropLabel"
   aria-hidden="true"
 >
   <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content">
+    <div class="modal-content border-0 shadow-lg" style="border-radius: 16px">
       <div
-        class="modal-header position-relative d-flex align-items-center justify-content-center py-3"
+        class="modal-header position-relative d-flex align-items-center justify-content-center py-3 border-bottom-0"
       >
         <button
           type="button"
-          class="btn btn-outline-secondary py-2 position-absolute start-0 ms-3"
+          class="btn btn-outline-secondary btn-sm px-3 py-2 position-absolute start-0 ms-3"
           data-bs-dismiss="modal"
+          style="border-radius: 8px"
         >
           Batal
         </button>
-        <h5 class="modal-title">Simpan Bill</h5>
+
+        <h5 class="modal-title fw-bold text-dark">Simpan Bill</h5>
+
         <button
           type="button"
-          class="btn btn-dark py-2 position-absolute end-0 me-3"
+          class="btn btn-dark btn-sm px-3 py-2 position-absolute end-0 me-3"
           id="btn-submit-bill"
           data-bs-dismiss="modal"
+          style="border-radius: 8px; font-weight: 500"
         >
           Simpan
         </button>
       </div>
-      <div class="modal-body px-4 py-4 mb-5">
-        <div class="mb-3 text-center">
+
+      <div class="modal-body px-4 py-4">
+        <div class="mb-2">
+          <label
+            for="input-bill-name"
+            class="form-label small fw-medium text-secondary ps-1"
+            >Masukkan Nama atau Penanda Bill</label
+          >
           <input
             type="text"
-            class="form-control fs-5 text-center"
+            class="form-control fs-5 text-center bg-light border-0 py-2"
             id="input-bill-name"
-            placeholder="Nama Bill"
+            placeholder="Contoh: Bahlil.."
+            style="border-radius: 8px"
           />
         </div>
       </div>
     </div>
   </div>
 </div>
-<!-- ./Simpan Bill -->
-
-<!-- List Bill -->
 <div
   class="modal fade"
   id="modal-list-bill"
   data-bs-backdrop="static"
   data-bs-keyboard="false"
   tabindex="-1"
-  aria-labelledby="staticBackdropLabel"
   aria-hidden="true"
 >
   <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content">
+    <div class="modal-content border-0 shadow-lg" style="border-radius: 16px">
       <div
-        class="modal-header positon-relative d-flex align-items-center justify-content-center py-3"
+        class="modal-header position-relative d-flex align-items-center justify-content-center py-3 border-0"
       >
         <button
           type="button"
-          class="btn btn-outline-secondary position-absolute py-2 ms-3 start-0"
+          class="btn btn-outline-secondary btn-sm px-3 py-2 position-absolute start-0 ms-3"
           data-bs-dismiss="modal"
+          style="border-radius: 8px"
         >
           Tutup
         </button>
-        <h5 class="modal-title" id="modal-title-bayar">Daftar Bill</h5>
+
+        <h5 class="modal-title fw-bold text-dark">Daftar Bill Tersimpan</h5>
+
+        <div class="position-absolute end-0 me-3 p-3"></div>
       </div>
-      <div class="modal-body px-4 py-4 mb-5">
-        <table class="table table-hover">
-          <tbody id="list-bill"></tbody>
-        </table>
+
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0 small">
+            <thead
+              class="table-light text-uppercase font-monospace"
+              style="font-size: 0.75rem"
+            >
+              <tr>
+                <th class="ps-4 py-2 text-secondary">Nama Identitas Bill</th>
+                <th class="text-end pe-4 py-2 text-secondary">Aksi / Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="list-bill"></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
 </div>
-<!-- ./List Bill -->

@@ -1,94 +1,123 @@
 <div
-  class="modal fade"
+  class="modal modal-lg fade"
   id="modal-product"
   data-bs-backdrop="static"
   data-bs-keyboard="false"
   tabindex="-1"
-  aria-labelledby="staticBackdropLabel"
   aria-hidden="true"
 >
-  <div class="modal-dialog modal-lg modal-dialog-scrollable">
-    <div class="modal-content">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content border-0 shadow-lg" style="border-radius: 16px">
       <div
-        class="modal-header position-relative d-flex align-items-center justify-content-center py-3"
+        class="modal-header position-relative d-flex align-items-center justify-content-center py-3 border-bottom-0"
       >
         <button
           type="button"
-          class="btn btn-outline-secondary py-2 position-absolute start-0 ms-3"
+          class="btn btn-outline-secondary btn-sm px-3 py-2 position-absolute start-0 ms-3"
           data-bs-dismiss="modal"
+          style="border-radius: 8px"
         >
           Batal
         </button>
+
         <div class="text-center modal-title">
-          <div class="d-flex justify-content-between gap-2">
-            <div class="mb-0 fw-semibold" id="modal-product-title"></div>
-            <div class="fw-light mb-0" id="modal-variant-title"></div>
+          <div
+            class="d-flex align-items-center justify-content-center gap-1 mb-05"
+          >
+            <span class="fw-bold text-dark fs-5" id="modal-product-title"
+              >-</span
+            >
+            <span
+              class="text-muted small fw-medium"
+              id="modal-variant-title"
+            ></span>
           </div>
-          <div class="mb-0" id="modal-subtotal-title"></div>
+          <span class="fw-bold text-success fs-6" id="modal-subtotal-title"
+            >Rp 0</span
+          >
         </div>
+
         <button
           type="button"
-          class="btn btn-dark px-4 py-2 position-absolute end-0 me-3"
+          class="btn btn-dark btn-sm px-3 py-2 position-absolute end-0 me-3"
           id="btn-add-to-cart"
           data-bs-dismiss="modal"
+          style="border-radius: 8px; font-weight: 500"
         >
           Tambah
         </button>
       </div>
-      <div class="modal-body px-4 py-4 mb-5 pb-5" id="container-variant">
-        <span class="ps-3 fw-semibold">Varian </span>|
-        <i class="text-secondary">Pilih satu</i>
-        <hr style="margin: 0 0 0.5em 0" />
-        <ul
-          class="nav nav-pills px-4 row"
-          id="list-variants"
-          role="tablist"
-        ></ul>
-        <div class="row mt-3 mb-5 px-3">
-          <div class="col col-6 mb-5">
-            <div class="mb-5">
-              <span class="ps-3 fw-semibold">Harga</span>
-              <hr style="margin: 0 0 0.5em 0" />
-              <div class="input-group mb-3">
-                <span class="input-group-text py-2 px-3" style="font-size: 20px"
-                  >Rp .</span
-                >
-                <input
-                  type="number"
-                  class="form-control"
-                  placeholder="Harga"
-                  id="input-price"
-                  min="0"
-                  value="0"
-                />
-              </div>
+
+      <div class="modal-body px-4 pt-2 pb-4" id="container-variant">
+        <div class="mb-4">
+          <label class="form-label small fw-semibold text-secondary mb-2">
+            <i class="bi-tags me-1"></i> Varian
+            <span class="fw-normal text-muted font-monospace"
+              >| Pilih satu</span
+            >
+          </label>
+
+          <div class="row g-2 px-1" id="list-variants" role="tablist"></div>
+        </div>
+
+        <div class="row g-3 mb-5">
+          <div class="col-6 mb-5">
+            <label
+              for="input-price"
+              class="form-label small fw-semibold text-secondary mb-2"
+            >
+              <i class="bi-cash me-1"></i> Harga
+            </label>
+            <div class="input-group mb-5">
+              <span
+                class="input-group-text bg-light border-secondary-subtle text-muted small fw-medium"
+                >Rp</span
+              >
+              <input
+                type="number"
+                class="form-control py-2 fw-semibold border-secondary-subtle"
+                placeholder="Harga"
+                id="input-price"
+                min="0"
+                value="0"
+                style="border-radius: 0 8px 8px 0"
+              />
             </div>
           </div>
-          <div class="col col-6 mb-5">
-            <div class="mb-5">
-              <span class="ps-3 fw-semibold">Kuantitas</span>
-              <hr style="margin: 0 0 0.5em 0" />
-              <div class="input-group mb-3">
-                <button
-                  class="btn btn-outline-dark input-group-text py-2 px-3 btn-increment"
-                  data-increment="-1"
-                >
-                  <i class="bi-dash-circle" style="font-size: 20px"></i>
-                </button>
-                <input
-                  type="number"
-                  class="form-control text-center"
-                  value="1"
-                  id="input-qty"
-                  min="1"
-                />
-                <button
-                  class="btn btn-outline-dark input-group-text py-2 px-3 btn-increment"
-                  data-increment="1"
-                >
-                  <i class="bi-plus-circle" style="font-size: 20px"></i>
-                </button>
-              </div>
+
+          <div class="col-6 mb-5">
+            <label
+              for="input-qty"
+              class="form-label small fw-semibold text-secondary mb-2"
+            >
+              <i class="bi-box me-1"></i> Kuantitas
+            </label>
+            <div class="input-group mb-5">
+              <button
+                class="btn btn-outline-dark border-secondary-subtle px-3 btn-increment d-flex align-items-center justify-content-center"
+                data-increment="-1"
+                type="button"
+                style="border-radius: 8px 0 0 8px"
+              >
+                <i class="bi-dash-lg"></i>
+              </button>
+
+              <input
+                type="number"
+                class="form-control text-center py-2 fw-bold border-secondary-subtle"
+                value="1"
+                id="input-qty"
+                min="1"
+              />
+
+              <button
+                class="btn btn-outline-dark border-secondary-subtle px-3 btn-increment d-flex align-items-center justify-content-center"
+                data-increment="1"
+                type="button"
+                style="border-radius: 0 8px 8px 0"
+              >
+                <i class="bi-plus-lg"></i>
+              </button>
             </div>
           </div>
         </div>

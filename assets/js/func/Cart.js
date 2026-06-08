@@ -50,28 +50,27 @@ function getCart() {
   let htmlContent = "";
   items.forEach((item, index) => {
     htmlContent += `
-            <div class="cart-item pt-2" data-index="${index}">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <h6 class="mb-0 text-dark">${item.productName}</h6>
-                        <span class="text-muted">${item.variantName}</span>
-                    </div>
-                    <!-- TOMBOL HAPUS: Simpan variantid dan price di data-attribute -->
-                    <button 
-                        type="button" 
-                        class="btn-delete-cart-item btn btn-sm btn-link text-danger p-1 px-2 border-0"
-                        data-index="${index}"
-                    >
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </div>
-                <div class="d-flex justify-content-between text-muted small mt-1">
-                    <span>${item.qty} x ${formatCurrency(item.price)}</span>
-                    <strong>${formatRupiah(item.subtotal)}</strong>
-                </div>
-            </div>
-            <hr class="my-1">
-        `;
+      <div class="cart-item py-2 border-bottom border-light-subtle" data-index="${index}">
+          <div class="d-flex justify-content-between align-items-start">
+              <div class="pe-2">
+                  <h6 class="mb-0 text-dark fw-semibold" style="font-size: 0.9rem;">${item.productName}</h6>
+                  <span class="text-muted d-block small" style="font-size: 0.8rem;">${item.variantName || "-"}</span>
+              </div>
+              <button 
+                  type="button" 
+                  class="btn-delete-cart-item btn btn-sm rounded-circle text-danger border-0"
+                  data-index="${index}"
+              >
+                  <i class="bi bi-trash"></i>
+              </button>
+          </div>
+          
+          <div class="d-flex justify-content-between align-items-center mt-1" style="font-size: 0.85rem;">
+              <span class="text-secondary">${item.qty} x ${formatCurrency(item.price)}</span>
+              <span class="fw-bold text-dark">${formatRupiah(item.subtotal)}</span>
+          </div>
+      </div>
+  `;
   });
 
   // Tampilkan ke layar
@@ -89,12 +88,11 @@ function getCustomers() {
 
     if (cursor) {
       const customer = cursor.value;
-      html += `<tr>
-                <td>${customer.name} | <span class="text-secondary">${customer.transactionType.name}</span></td>
-                <td class="text-end">
-                  <button
-                    data-id='${customer.id}'
-                    class="btn btn-dark btn-sm btn-customer-choice">Pilih</button></td>
+      html += `<tr class="customer-select-trigger btn-customer-choice" data-id="${customer.id}" style="cursor: pointer;">
+                <td class="ps-4 py-2">
+                  <div class="fw-semibold text-dark">${customer.name}</div>
+                  <span class="text-muted small">${customer.transactionType.name}</span>
+                </td>
               </tr>`;
       cursor.continue();
     } else {
@@ -156,7 +154,7 @@ function renderCashSuggestions(grandTotal) {
                   autocomplete="off"
                   data-amount="${cash}"
                 />
-                <label class="btn btn-outline-dark py-3 flex-fill ${i === 0 ? "fw-semibold" : ""}" for="tunai${i}">
+                <label class="btn btn-outline-dark rounded-3 py-3 flex-fill ${i === 0 ? "fw-semibold" : ""}" for="tunai${i}">
                   ${formatRupiah(cash)}
                 </label>`;
   });
@@ -207,8 +205,8 @@ function updatePaymentState(changes) {
 
   // Tampilkan nama metode di judul modal (jika ada)
   const methodTitle = transactionPayment.paymentMethod
-    ? `${transactionPayment.paymentMethod.toUpperCase()} -`
-    : "";
+    ? `${transactionPayment.paymentMethod.toUpperCase()}`
+    : "Total Tagihan";
   $("#modal-payment-method-title").html(methodTitle);
 
   if (
