@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="id">
   <head>
     <script>
       function getCookie(name) {
@@ -12,86 +12,189 @@
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
+    <title>Kasir MA - Masuk Sistem</title>
     <link
       rel="shortcut icon"
       href="assets/img/icon192x192.png"
       type="image/x-icon"
     />
     <link rel="manifest" href="web.webmanifest" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      href="https://fonts.googleapis.com/css2 family=Poppins:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="assets/css/sweetalert2.min.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
+
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f4f6f8;
+        color: #212529;
+      }
+      .progress {
+        height: 4px;
+        margin-bottom: 0;
+      }
+      /* Login Wrapper Box */
+      .login-card {
+        background: #ffffff;
+        border: 1px solid #eef1f5;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+      }
+      /* Input Group Customization */
+      .input-custom {
+        border-radius: 8px !important;
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        padding: 12px 14px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+      .input-custom:focus {
+        background-color: #ffffff;
+        border-color: #212529;
+        box-shadow: 0 0 0 0.2rem rgba(33, 37, 41, 0.06);
+      }
+      .input-group-addon-custom {
+        border-radius: 0 8px 8px 0 !important;
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-left: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .input-group-addon-custom:hover {
+        background-color: #e9ecef;
+      }
+      /* Main Action Button */
+      .btn-login-main {
+        background-color: #212529 !important;
+        border: none !important;
+        color: #ffffff !important;
+        border-radius: 8px !important;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        padding: 12px;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(33, 37, 41, 0.1);
+      }
+      .btn-login-main:hover {
+        background-color: #000000 !important;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(33, 37, 41, 0.15);
+      }
+      .btn-login-main:active {
+        transform: translateY(0);
+      }
+    </style>
   </head>
 
   <body>
-    <div class="progress progress-striped rounded-0 active">
-      <div class="progress-bar progress-bar-success" style="width: 0%"></div>
+    <div class="progress rounded-0 active">
+      <div class="progress-bar bg-success" style="width: 0%"></div>
     </div>
-    <section class="h-100">
-      <div class="h-100 container">
-        <div class="justify-content-sm-center h-100 row">
-          <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
-            <div class="text-center my-5">
-              <h1>Kasir MA</h1>
+
+    <section class="vh-100 d-flex align-items-center">
+      <div class="container py-4">
+        <div class="row justify-content-center w-100 m-0">
+          <div class="col-12 col-sm-9 col-md-7 col-lg-5 col-xl-4 px-0">
+            <div class="text-center mb-4">
+              <div
+                class="d-inline-flex align-items-center justify-content-center bg-dark text-white rounded-3 mb-2 shadow-sm"
+                style="width: 54px; height: 54px"
+              >
+                <i class="bi-grid-fill fs-3"></i>
+              </div>
+              <h2 class="fw-bold text-dark tracking-tight mb-1">Kasir MA</h2>
+              <p class="text-muted small">
+                Manajemen Sistem POS & Inventori Toko
+              </p>
             </div>
-            <div class="shadow-lg card">
-              <div class="p-5 card-body">
-                <h1 class="fs-4 card-title fw-bold mb-4">Login</h1>
-                <form autocomplete="off" class="" id="formLogin">
-                  <div class="mb-3 text-start">
-                    <label class="mb-2 text-muted" for="username"
-                      >Username</label
-                    >
-                    <input
-                      id="username"
-                      type="text"
-                      class="form-control"
-                      name="username"
-                      required=""
-                      placeholder="Username/Email"
-                    />
-                    <div class="invalid-feedback">Username is invalid</div>
-                  </div>
-                  <div class="mb-3 text-start">
-                    <label class="text-muted" for="password">Password</label>
+
+            <div class="login-card p-4 p-sm-5 mx-2">
+              <h4 class="fw-bold text-dark mb-1">Selamat Datang</h4>
+              <p class="text-muted small mb-4">
+                Silakan masuk menggunakan akun kasir aktif Anda.
+              </p>
+
+              <form autocomplete="off" id="formLogin" onsubmit="return false;">
+                <div class="mb-3">
+                  <label
+                    class="form-label small fw-semibold text-secondary mb-1"
+                    for="username"
+                    >Username / Email</label
+                  >
+                  <input
+                    id="username"
+                    type="text"
+                    class="form-control input-custom"
+                    name="username"
+                    required
+                    placeholder="Masukkan nama pengguna..."
+                  />
+                </div>
+
+                <div class="mb-4">
+                  <label
+                    class="form-label small fw-semibold text-secondary mb-1"
+                    for="password"
+                    >Kata Sandi (Password)</label
+                  >
+                  <div class="input-group">
                     <input
                       id="password"
                       type="password"
-                      class="form-control"
+                      class="form-control input-custom"
                       name="password"
-                      required=""
-                      placeholder="******"
+                      required
+                      placeholder="••••••••"
+                      style="border-radius: 8px 0 0 8px !important"
                     />
-                    <div class="invalid-feedback">Password is required</div>
+                    <span
+                      class="input-group-text input-group-addon-custom px-3"
+                      id="togglePassword"
+                    >
+                      <i class="bi-eye text-muted fs-5"></i>
+                    </span>
                   </div>
-                  <button type="submit" class="btn btn-primary w-100">
+                </div>
+
+                <div class="d-grid">
+                  <button
+                    type="submit"
+                    id="btn-submit-login"
+                    class="btn btn-login-main"
+                  >
                     Masuk
                   </button>
-                </form>
-              </div>
+                </div>
+              </form>
             </div>
-            <div class="text-center mt-3 text-muted">
-              By
+
+            <div class="text-center mt-4 text-muted small">
+              Dikembangkan oleh
               <a
                 href="https://github.com/fauziFx"
                 target="_blank"
                 rel="noopener noreferrer"
+                class="text-decoration-none fw-semibold text-dark border-bottom border-secondary"
                 >Ahmad Fauzi</a
-              ><br />
-              <!-- © No Copyright. Hak Cipta hanya Milik Allah -->
+              >
             </div>
           </div>
         </div>
       </div>
     </section>
+
     <script src="register.js"></script>
     <script src="assets/js/config.js"></script>
     <script src="assets/js/jquery.min.js"></script>
@@ -99,48 +202,94 @@
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/sweetalert2.all.min.js"></script>
     <script src="assets/js/func/index.js"></script>
+
     <script>
       $(document).ready(function () {
-        $("button[type=submit]").on("click", function () {
-          const URL = config.ENV_URL + "/login";
-          let username = $("#username").val();
-          let password = $("#password").val();
+        const $formLogin = $("#formLogin");
+        const $btnSubmit = $("#btn-submit-login");
 
-          if (username.length == "") {
-            Swal.fire("Username Wajib diisi!");
-          } else if (password.length == "") {
-            Swal.fire("Password Wajib diisi!");
+        // 1. Fitur Interaktif: Intip / Lihat Password (Toggle Visibility)
+        $("#togglePassword").on("click", function () {
+          const $passwordInput = $("#password");
+          const $icon = $(this).find("i");
+
+          if ($passwordInput.attr("type") === "password") {
+            $passwordInput.attr("type", "text");
+            $icon.removeClass("bi-eye").addClass("bi-eye-slash");
           } else {
-            $(this).attr("disabled", true);
-            $(this).html(`
-                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                    <span role="status">Loading...</span>
-                  `);
-            $.ajax({
-              url: URL,
-              method: "POST",
-              data: {
-                email: username,
-                password: password,
-              },
-              success: function (data) {
-                if (data.success) {
-                  Cookies.set("user-token", data.data.token, {
-                    expires: 90,
-                  });
-                  progressBar("index.html");
-                } else {
-                  Swal.fire(data.message);
-                  $("button[type=submit]").attr("disabled", false);
-                  $("button[type=submit]").html(`Masuk`);
-                }
-              },
-              error: function (error) {
-                console.log(error);
-              },
-            });
+            $passwordInput.attr("type", "password");
+            $icon.removeClass("bi-eye-slash").addClass("bi-eye");
           }
         });
+
+        // 2. Eksekusi Kirim Data Ajax Form Submit
+        $formLogin.on("submit", function (e) {
+          e.preventDefault(); // Mencegah reload halaman bawaan form browser
+
+          const URL = config.ENV_URL + "/login";
+          const username = $("#username").val().trim();
+          const password = $("#password").val().trim();
+
+          if (username === "") {
+            Swal.fire({
+              icon: "warning",
+              title: "Perhatian",
+              text: "Username wajib diisi!",
+            });
+            return;
+          }
+          if (password === "") {
+            Swal.fire({
+              icon: "warning",
+              title: "Perhatian",
+              text: "Password wajib diisi!",
+            });
+            return;
+          }
+
+          // Ubah state tombol ke mode loading
+          $btnSubmit.prop("disabled", true);
+          $btnSubmit.html(`
+            <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+            <span>Memverifikasi Akun...</span>
+          `);
+
+          $.ajax({
+            url: URL,
+            method: "POST",
+            data: {
+              email: username,
+              password: password,
+            },
+            success: function (data) {
+              if (data.success) {
+                Cookies.set("user-token", data.data.token, { expires: 90 });
+                progressBar("index.html");
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Akses Ditolak",
+                  text: data.message || "Username atau password salah!",
+                });
+                resetLoginButton();
+              }
+            },
+            error: function (xhr, status, error) {
+              console.error(error);
+              Swal.fire({
+                icon: "error",
+                title: "Gangguan Jaringan",
+                text: "Gagal terhubung ke server backend!",
+              });
+              resetLoginButton();
+            },
+          });
+        });
+
+        function resetLoginButton() {
+          $btnSubmit.prop("disabled", false);
+          $btnSubmit.html(`Masuk`);
+        }
       });
     </script>
   </body>
