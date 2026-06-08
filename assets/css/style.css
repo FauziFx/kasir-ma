@@ -142,3 +142,42 @@ input[type="number"] {
 * {
   scrollbar-color: #c7c7c7 #ffffff; /* thumb cerah | track sangat cerah */
 }
+
+/* Ganti font SweetAlert2 agar serasi dengan aplikasi */
+.swal2-popup {
+  font-family: "Poppins", sans-serif !important;
+  border-radius: 16px !important;
+  padding: 2rem !important;
+}
+
+/* Mengubah teks alert (jika Anda hanya pakai opsi text saja tanpa title) */
+.swal2-html-container {
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+  color: #212529 !important;
+  margin-top: 15px !important;
+}
+
+/* Mengubah Tombol Konfirmasi (OK / Success) menjadi Hitam Pekat */
+.swal2-styled.swal2-confirm {
+  background-color: #212529 !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  padding: 10px 24px !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  box-shadow: none !important;
+  transition: all 0.2s ease;
+}
+
+.swal2-styled.swal2-confirm:hover {
+  background-color: #000000 !important;
+}
+
+/* Mengubah Tombol Batal / Cancel (Jika suatu saat Anda pakai) */
+.swal2-styled.swal2-cancel {
+  border-radius: 8px !important;
+  padding: 10px 24px !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+}
