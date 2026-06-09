@@ -63,20 +63,36 @@ function showProducts(categoryId = null, searchQuery = "") {
     ? storeProd.index("categoryId").openCursor(IDBKeyRange.only(categoryId))
     : storeProd.openCursor();
 
-  let html = "";
+  // 1. Siapkan wadah array kosong untuk menampung objek produk
+  let productsArray = [];
   const query = searchQuery.toLowerCase();
 
   source.onsuccess = function (e) {
     const cursor = e.target.result;
+
     if (cursor) {
       const product = cursor.value;
+
+      // Filter pencarian tetap dilakukan di sini agar array tidak kepenuhan
       if (query === "" || product.name.toLowerCase().includes(query)) {
-        html += `<tr class="row-products" data-id="${product.id}">
-                  <td class="ps-2 py-3">${product.name}</td>
-                </tr>`;
+        productsArray.push(product); // Masukkan objek ke array
       }
       cursor.continue();
     } else {
+      // 2. KONDISI KETIKA DATA SUDAH TERKUMPUL SEMUA (CURSOR SELESAI)
+
+      // Jalankan fungsi pengurutan abjad A-Z berdasarkan nama produk
+      productsArray.sort((a, b) => a.name.localeCompare(b.name));
+
+      // 3. Baru buat HTML-nya dari array yang sudah berurutan
+      let html = "";
+      productsArray.forEach((product) => {
+        html += `<tr class="row-products" data-id="${product.id}">
+                  <td class="ps-2 py-3">${product.name}</td>
+                </tr>`;
+      });
+
+      // Tampilkan ke layar
       $("#list-products").html(html);
     }
   };
